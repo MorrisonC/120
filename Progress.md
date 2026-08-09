@@ -9,15 +9,15 @@
 - [x] Complete pre-commit steps.
 - [x] Submit changes.
 
-## Milestone 2: Core Time-Loop Engine - IN PROGRESS
-- [ ] Implement `TimeManager.gd` with 120s loop, signals, and pause/resume mechanics.
-- [ ] Implement `GameState.gd` with loop state, run state, movement speed modifiers, and respawn logic.
-- [ ] Write GUT tests for time loop reset lifecycle and speed/capability state management.
-- [ ] Update `Progress.md` and verify GUT tests pass headlessly.
-- [ ] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
-- [ ] Submit the change for Milestone 2.
+## Milestone 2: Core Time-Loop Engine - COMPLETED
+- [x] Implement `TimeManager.gd` with 120s loop, signals, and pause/resume mechanics.
+- [x] Implement `GameState.gd` with loop state, run state, movement speed modifiers, and respawn logic.
+- [x] Write GUT tests for time loop reset lifecycle and speed/capability state management.
+- [x] Update `Progress.md` and verify GUT tests pass headlessly.
+- [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
+- [x] Submit the change for Milestone 2.
 
-## Milestone 3: Procedural World Generator & Solver
+## Milestone 3: Procedural World Generator & Solver - IN PROGRESS
 - [ ] Implement `ProceduralWorldGenerator.gd` Macro-DAG logic (biome layout and checkpoints).
 - [ ] Implement Micro-Room graph generator and logic for item gating matrices.
 - [ ] Implement the Speed-Aware Solvability Engine (travel-time calculations based on modifiers).
