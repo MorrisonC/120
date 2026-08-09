@@ -1,0 +1,8 @@
+{
+  "test_dirs": ["res://tests"],
+  "include_subdirs": true,
+  "should_exit": true,
+  "should_maximize": true,
+  "inner_class_prefix": "Test",
+  "log_level": 1
+}
