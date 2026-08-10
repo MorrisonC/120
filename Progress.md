@@ -17,16 +17,16 @@
 - [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
 - [x] Submit the change for Milestone 2.
 
-## Milestone 3: Procedural World Generator & Solver - IN PROGRESS
-- [ ] Implement `ProceduralWorldGenerator.gd` Macro-DAG logic (biome layout and checkpoints).
-- [ ] Implement Micro-Room graph generator and logic for item gating matrices.
-- [ ] Implement the Speed-Aware Solvability Engine (travel-time calculations based on modifiers).
-- [ ] Write GUT tests for multi-biome solver and item-gated solvability logic.
-- [ ] Update `Progress.md` and verify GUT tests pass headlessly.
-- [ ] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
-- [ ] Submit the change for Milestone 3.
+## Milestone 3: Procedural World Generator & Solver - COMPLETED
+- [x] Implement `ProceduralWorldGenerator.gd` Macro-DAG logic (biome layout and checkpoints).
+- [x] Implement Micro-Room graph generator and logic for item gating matrices.
+- [x] Implement the Speed-Aware Solvability Engine (travel-time calculations based on modifiers).
+- [x] Write GUT tests for multi-biome solver and item-gated solvability logic.
+- [x] Update `Progress.md` and verify GUT tests pass headlessly.
+- [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
+- [x] Submit the change for Milestone 3.
 
-## Milestone 4: Modular Puzzle Templates
+## Milestone 4: Modular Puzzle Templates - IN PROGRESS
 - [ ] Implement puzzle templates: BlockPush, DigSpot, VineCut, WaterDrain, LightReflector, TimedLever.
 - [ ] Create mock room scenes or scripts to integrate these puzzles.
 - [ ] Write tests to ensure puzzles interact correctly with player capabilities.
