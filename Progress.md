@@ -26,15 +26,15 @@
 - [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
 - [x] Submit the change for Milestone 3.
 
-## Milestone 4: Modular Puzzle Templates - IN PROGRESS
-- [ ] Implement puzzle templates: BlockPush, DigSpot, VineCut, WaterDrain, LightReflector, TimedLever.
-- [ ] Create mock room scenes or scripts to integrate these puzzles.
-- [ ] Write tests to ensure puzzles interact correctly with player capabilities.
-- [ ] Update `Progress.md` and verify GUT tests pass headlessly.
-- [ ] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
-- [ ] Submit the change for Milestone 4.
+## Milestone 4: Modular Puzzle Templates - COMPLETED
+- [x] Implement puzzle templates: BlockPush, DigSpot, VineCut, WaterDrain, LightReflector, TimedLever.
+- [x] Create mock room scenes or scripts to integrate these puzzles.
+- [x] Write tests to ensure puzzles interact correctly with player capabilities.
+- [x] Update `Progress.md` and verify GUT tests pass headlessly.
+- [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
+- [x] Submit the change for Milestone 4.
 
-## Milestone 5: Assets, CI/CD, and Export Configuration
+## Milestone 5: Assets, CI/CD, and Export Configuration - IN PROGRESS
 - [ ] Download Kenney CC0 assets via curl, document in `ASSETS.md`.
 - [ ] Setup basic Godot TileMaps with collision polygons and layers.
 - [ ] Create GitHub Actions workflow (`.github/workflows/build.yml`) for GUT tests and Web/Android exports.
