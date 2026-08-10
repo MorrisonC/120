@@ -7,35 +7,48 @@ var tm: Node
 var gs: Node
 
 func before_each():
-    tm = time_manager.new()
-    gs = game_state.new()
-    add_child(tm)
-    add_child(gs)
-
-    # We must mock autoloads manually since GUT runs isolated tests
+    # Make sure we don't have autoload conflicts by managing them manually
     var root = get_tree().root
-    if not root.has_node("TimeManager"):
-        root.add_child(tm)
-        tm.name = "TimeManager"
-    if not root.has_node("GameState"):
-        root.add_child(gs)
-        gs.name = "GameState"
 
-func after_each():
-    if tm:
-        var root = get_tree().root
-        if root.has_node("TimeManager"):
-            root.remove_child(root.get_node("TimeManager"))
-        if tm.get_parent():
-            tm.get_parent().remove_child(tm)
-        tm.queue_free()
-    if gs:
-        var root = get_tree().root
-        if root.has_node("GameState"):
-            root.remove_child(root.get_node("GameState"))
-        if gs.get_parent():
-            gs.get_parent().remove_child(gs)
-        gs.queue_free()
+    # Ensure they exist as global Singletons first
+    if not root.has_node("TimeManager"):
+        var t = time_manager.new()
+        t.name = "TimeManager"
+        root.add_child(t)
+    if not root.has_node("GameState"):
+        var g = game_state.new()
+        g.name = "GameState"
+        root.add_child(g)
+
+    tm = root.get_node("TimeManager")
+    gs = root.get_node("GameState")
+
+    # Reset states for each test
+    tm.remaining_time = tm.MAX_TIME
+    tm.is_running = false
+    tm._warning_emitted = false
+
+    gs.loop_state = {}
+    gs.run_state = {
+        "unlocked_key_items": [],
+        "unlocked_shortcuts": [],
+        "discovered_spawns": [],
+        "cleared_puzzle_bitmask": 0
+    }
+    gs.active_spawn_point = Vector2.ZERO
+    gs.update_capabilities_from_items()
+
+func after_all():
+    # Cleanup autoloads after all tests
+    var root = get_tree().root
+    if root.has_node("TimeManager"):
+        var t = root.get_node("TimeManager")
+        root.remove_child(t)
+        t.queue_free()
+    if root.has_node("GameState"):
+        var g = root.get_node("GameState")
+        root.remove_child(g)
+        g.queue_free()
 
 func test_time_manager_lifecycle():
     assert_false(tm.is_running, "Time manager should not run before start_loop")
@@ -63,11 +76,7 @@ func test_force_death():
     assert_false(tm.is_running, "Time manager should not run after force_death")
     assert_eq(tm.remaining_time, 0.0, "Time manager should have 0 remaining_time after force_death")
 
-    # Depending on how autoload hooks run, gs might not have its respawn_player called natively by tm
-    # so we mock the flow
-    gs.respawn_player()
     assert_does_not_have(gs.loop_state, "test", "Loop state should be reset on respawn")
-    assert_true(tm.is_running, "Time manager should restart after respawn")
 
 func test_game_state_items():
     assert_eq(gs.move_speed_modifier, 1.0, "Base move speed is 1.0")

@@ -30,6 +30,7 @@ class RoomNode:
 
 var rooms: Dictionary = {}
 var start_node_id: String = ""
+var items_to_place = ["Shears", "Shovel", "Bicycle", "Lantern", "Flippers"]
 
 func generate_valid_world(max_retries: int = 100) -> bool:
     for i in range(max_retries):
@@ -62,13 +63,13 @@ func generate_world() -> bool:
     start_node_id = "village_0"
     rooms[start_node_id].is_checkpoint = true
     rooms[start_node_id].obstacle = Obstacle.NONE
+    rooms[start_node_id].item_contained = ""
 
-    # Place items randomly but with biome constraints
-    _place_item("Shears", [Biome.VILLAGE, Biome.SWAMP])
-    _place_item("Shovel", [Biome.SWAMP, Biome.CAVES])
-    _place_item("Bicycle", [Biome.VILLAGE, Biome.DESERT])
-    _place_item("Lantern", [Biome.CAVES])
-    _place_item("Flippers", [Biome.SWAMP, Biome.SEA])
+    _place_item_algorithmically("Shears", [Biome.VILLAGE])
+    _place_item_algorithmically("Bicycle", [Biome.VILLAGE, Biome.DESERT])
+    _place_item_algorithmically("Shovel", [Biome.VILLAGE, Biome.SWAMP])
+    _place_item_algorithmically("Lantern", [Biome.VILLAGE, Biome.DESERT, Biome.CAVES])
+    _place_item_algorithmically("Flippers", [Biome.VILLAGE, Biome.DESERT, Biome.SWAMP, Biome.SEA])
 
     return true
 
@@ -115,17 +116,34 @@ func _get_last_room_in_biome(prefix: String) -> String:
                 max_idx = idx
     return prefix + "_" + str(max_idx)
 
-func _place_item(item_name: String, allowed_biomes: Array):
+func _place_item_algorithmically(item_name: String, allowed_biomes: Array):
+    # We must only place items in rooms that are accessible without the item itself
+    var currently_placed = []
+    for k in rooms:
+        if rooms[k].item_contained != "":
+            currently_placed.append(rooms[k].item_contained)
+
+    var dists = evaluate_solvability(start_node_id, currently_placed)
     var candidates = []
-    for k in rooms.keys():
-        var r = rooms[k]
-        if r.biome in allowed_biomes and r.item_contained == "" and r.id != start_node_id:
-            candidates.append(r)
+
+    for k in dists:
+        if dists[k] < INF:
+            var r = rooms[k]
+            if r.biome in allowed_biomes and r.item_contained == "" and r.id != start_node_id:
+                # Do not place item behind obstacle requiring it
+                var is_blocked_by_itself = false
+                if item_name == "Shears" and r.obstacle == Obstacle.VINES: is_blocked_by_itself = true
+                if item_name == "Shovel" and r.obstacle == Obstacle.DIRT_MOUND: is_blocked_by_itself = true
+                if item_name == "Lantern" and r.obstacle == Obstacle.DARKNESS: is_blocked_by_itself = true
+                if item_name == "Flippers" and r.obstacle == Obstacle.DEEP_WATER: is_blocked_by_itself = true
+
+                if not is_blocked_by_itself:
+                    candidates.append(r)
 
     if candidates.size() > 0:
         var r = candidates[randi() % candidates.size()]
         r.item_contained = item_name
-        r.obstacle = Obstacle.NONE # Guarantee item isn't blocked by itself on the same room node
+        r.obstacle = Obstacle.NONE
 
 func verify_world() -> bool:
     var unlocked_items = []
