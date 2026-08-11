@@ -34,11 +34,11 @@
 - [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
 - [x] Submit the change for Milestone 4.
 
-## Milestone 5: Assets, CI/CD, and Export Configuration - IN PROGRESS
-- [ ] Download Kenney CC0 assets via curl, document in `ASSETS.md`.
-- [ ] Setup basic Godot TileMaps with collision polygons and layers.
-- [ ] Create GitHub Actions workflow (`.github/workflows/build.yml`) for GUT tests and Web/Android exports.
-- [ ] Configure Web export and Android export profiles in `export_presets.cfg`.
-- [ ] Update `Progress.md`.
-- [ ] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
-- [ ] Submit the change for Milestone 5.
+## Milestone 5: Assets, CI/CD, and Export Configuration - COMPLETED
+- [x] Download Kenney CC0 assets via curl, document in `ASSETS.md`.
+- [x] Setup basic Godot TileMaps with collision polygons and layers.
+- [x] Create GitHub Actions workflow (`.github/workflows/build.yml`) for GUT tests and Web/Android exports.
+- [x] Configure Web export and Android export profiles in `export_presets.cfg`.
+- [x] Update `Progress.md`.
+- [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
+- [x] Submit the change for Milestone 5.
