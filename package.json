@@ -1,0 +1,26 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MorrisonC/120.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MorrisonC/120/issues"
+  },
+  "homepage": "https://github.com/MorrisonC/120#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "http-server": "^14.1.1",
+    "playwright": "^1.62.1"
+  }
+}

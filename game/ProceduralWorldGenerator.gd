@@ -36,6 +36,8 @@ func generate_valid_world(max_retries: int = 100) -> bool:
     for i in range(max_retries):
         if generate_world():
             if verify_world():
+                if has_node("/root/TelemetryLogger"):
+                    get_node("/root/TelemetryLogger").log_event("world_generated", {"retries": i, "rooms": rooms.size()})
                 return true
     return false
 

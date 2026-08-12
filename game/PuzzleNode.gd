@@ -14,7 +14,12 @@ func interact(player_state: Node) -> bool:
 func solve():
     if not is_solved:
         is_solved = true
+        TelemetryLogger.log_event("puzzle_solved", {"id": puzzle_id, "time_taken": 0.0}) # Replace 0.0 with actual time tracking later if feasible at node level
         emit_signal("puzzle_solved", puzzle_id)
+
+func failed_attempt():
+    TelemetryLogger.log_event("puzzle_failed_attempt", {"id": puzzle_id})
+    emit_signal("puzzle_failed", puzzle_id)
 
 func reset():
     is_solved = false

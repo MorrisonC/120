@@ -1,1 +1,6 @@
 game/.godot/
+node_modules/
+game/web_build/
+playwright-report/
+test-results/
+game/telemetry/

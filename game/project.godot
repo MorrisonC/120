@@ -6,5 +6,6 @@ config/name="Procedural Time-Loop"
 config/features=PackedStringArray("4.3", "Forward Plus")
 
 [autoload]
+TelemetryLogger="*res://TelemetryLogger.gd"
 TimeManager="*res://TimeManager.gd"
 GameState="*res://GameState.gd"

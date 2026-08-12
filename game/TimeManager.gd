@@ -36,6 +36,7 @@ func start_loop():
     remaining_time = MAX_TIME
     is_running = true
     _warning_emitted = false
+    TelemetryLogger.log_event("loop_started", {"max_time": MAX_TIME})
 
 func pause_loop():
     is_running = false
@@ -48,9 +49,12 @@ func force_death(reason: String):
     print("Player died: " + reason)
     is_running = false
     remaining_time = 0.0
+    TelemetryLogger.log_event("player_death", {"cause": reason, "time_remaining": 0.0})
     emit_signal("loop_expired")
     _on_loop_expired()
 
 func _on_loop_expired():
+    if remaining_time <= 0.0:
+        TelemetryLogger.log_event("loop_expired", {})
     if GameState != null and GameState.has_method("respawn_player"):
         GameState.respawn_player()
