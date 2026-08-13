@@ -4,3 +4,9 @@ game/web_build/
 playwright-report/
 test-results/
 game/telemetry/
+
+game/assets/kenney_*
+
+
+game/assets/kenney_*
+assets/
