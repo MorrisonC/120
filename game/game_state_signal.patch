@@ -1,0 +1,14 @@
+<<<<<<< SEARCH
+func add_key_item(item_id: String):
+    if not item_id in run_state.unlocked_key_items:
+        run_state.unlocked_key_items.append(item_id)
+        update_capabilities_from_items()
+=======
+signal inventory_changed
+
+func add_key_item(item_id: String):
+    if not item_id in run_state.unlocked_key_items:
+        run_state.unlocked_key_items.append(item_id)
+        update_capabilities_from_items()
+        emit_signal("inventory_changed")
+>>>>>>> REPLACE

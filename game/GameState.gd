@@ -29,7 +29,6 @@ func reset_loop_state():
     }
 
 func update_capabilities_from_items():
-    # Base speeds
     move_speed_modifier = 1.0
     terrain_capabilities.can_swim = false
     terrain_capabilities.can_dig = false
@@ -52,23 +51,38 @@ func update_capabilities_from_items():
 func respawn_player():
     reset_loop_state()
     update_capabilities_from_items()
-    if TimeManager != null and TimeManager.has_method("start_loop"):
-        TimeManager.start_loop()
+    var tm = get_node_or_null("/root/TimeManager")
+    if tm and tm.has_method("start_loop"):
+        tm.start_loop()
 
 func set_active_spawn_point(pos: Vector2, spawn_id: String):
     active_spawn_point = pos
     if not spawn_id in run_state.discovered_spawns:
         run_state.discovered_spawns.append(spawn_id)
-        TelemetryLogger.log_event("checkpoint_reached", {"id": spawn_id})
+        var tl = get_node_or_null("/root/TelemetryLogger")
+        if tl and tl.has_method("log_event"):
+            tl.log_event("checkpoint_reached", {"id": spawn_id})
+
+signal inventory_changed
 
 func add_key_item(item_id: String):
     if not item_id in run_state.unlocked_key_items:
         run_state.unlocked_key_items.append(item_id)
         update_capabilities_from_items()
-        TelemetryLogger.log_event("item_collected", {"id": item_id})
+        emit_signal("inventory_changed")
+        var tl = get_node_or_null("/root/TelemetryLogger")
+        if tl and tl.has_method("log_event"):
+            tl.log_event("item_collected", {"id": item_id})
+        var am = get_node_or_null("/root/AudioManager")
+        if am and am.has_method("play_sound"):
+            am.play_sound("item_pickup")
 
 func run_completed(total_time: float, deaths: int):
-    TelemetryLogger.log_event("run_completed", {"total_time": total_time, "deaths": deaths})
+    var tl = get_node_or_null("/root/TelemetryLogger")
+    if tl and tl.has_method("log_event"):
+        tl.log_event("run_completed", {"total_time": total_time, "deaths": deaths})
 
 func run_abandoned(reason: String):
-    TelemetryLogger.log_event("run_abandoned", {"reason": reason})
+    var tl = get_node_or_null("/root/TelemetryLogger")
+    if tl and tl.has_method("log_event"):
+        tl.log_event("run_abandoned", {"reason": reason})

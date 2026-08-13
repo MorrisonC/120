@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://cfmxmjd01m4e"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_x8q1b"]
+[ext_resource type="Texture2D" path="res://assets/kenney_tiny_dungeon/Tiles/tile_0084.png" id="2_c7v2d"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(14, 14)
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+script = ExtResource("1_x8q1b")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_c7v2d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_player")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)

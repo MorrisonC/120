@@ -1,0 +1,72 @@
+Godot Engine v4.3.stable.official.77dcf97d8 - https://godotengine.org
+
+---  GUT  ---
+[1m[INFO]:  [0musing [/home/jules/.local/share/godot/app_userdata/Procedural Time-Loop] for temporary output.
+Godot version:  4.3.0
+GUT version:  9.3.0
+[4m
+
+res://tests/test_bulk_playthrough.gd
+[0m* test_bulk_simulation
+[33m[WARNING]:  [0mTest script has 3 unfreed children.  Increase log level for more details.
+[1m1/1 passed.
+[0m[4m
+
+res://tests/test_core_engine.gd
+[0m* test_time_manager_lifecycle
+* test_time_warning
+* test_force_death
+Player died: Test death
+* test_game_state_items
+* test_respawn_persists_run_state
+[1m5/5 passed.
+[0m[4m
+
+res://tests/test_initialization.gd
+[0m* test_godot_project_initialized
+[1m1/1 passed.
+[0m[4m
+
+res://tests/test_puzzles.gd
+[0m* test_block_push_puzzle
+* test_dig_spot_puzzle
+* test_vine_cut_puzzle
+* test_water_drain_puzzle
+* test_light_reflector_puzzle
+* test_timed_lever_sequence
+[33m[WARNING]:  [0mTest script has 15 unfreed children.  Increase log level for more details.
+[1m6/6 passed.
+[0m[4m
+
+res://tests/test_world_solver.gd
+[0m* test_procedural_generation_100_seeds
+* test_item_gated_solvability
+* test_bicycle_speed_boost
+[33m[WARNING]:  [0mTest script has 3 unfreed children.  Increase log level for more details.
+[1m3/3 passed.
+[0m
+
+
+
+[33m==============================================
+[0m[33m= Run Summary
+[0m[33m==============================================
+[0m
+---- Totals ----
+Warnings          3
+
+Scripts           5
+Tests             16
+  Passing         16
+Asserts           247
+Time              1.256s
+
+
+[33m[Orphans]:  [0mTotal orphans in run 1
+Note:  This count does not include GUT objects that will be freed upon exit.
+       It also does not include any orphans created by global scripts
+       loaded before tests were ran.
+Total orphans = 6
+
+[32m---- All tests passed! ----
+[0m
