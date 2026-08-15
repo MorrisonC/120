@@ -10,3 +10,7 @@ game/assets/kenney_*
 
 game/assets/kenney_*
 assets/
+
+
+gauntlet_runs/
+tests/playwright/node_modules/

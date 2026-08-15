@@ -1,0 +1,17 @@
+<<<<<<< SEARCH
+config/features=PackedStringArray("4.3", "Forward Plus")
+run/main_scene="res://TitleScreen.tscn"
+
+[autoload]
+=======
+config/features=PackedStringArray("4.3", "GL Compatibility")
+run/main_scene="res://TitleScreen.tscn"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+renderer/rendering_method.web="gl_compatibility"
+
+[autoload]
+>>>>>>> REPLACE
