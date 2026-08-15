@@ -106,41 +106,20 @@ func test_timed_lever_sequence():
     assert_false(puzzle.is_solved, "Sequence incomplete")
 
     puzzle._process(1.0) # total 2.5s, limit is 2.0s
-    # In TimedLeverSequence, _process fails the sequence if current_time > time_limit
-    # so we should be failed already
 
     # Lever 3 (too late)
     var success = puzzle.interact(gs)
-    # The first interact after fail will restart the sequence (current_lever goes to 1)
-    # it won't return false for a failure because it's just starting a new sequence
-    assert_true(success, "Should start a new sequence")
+    assert_false(success, "Should fail because time limit exceeded")
     assert_false(puzzle.is_solved, "Puzzle is not solved")
 
-    # Let's cleanly test the time limit exceed directly on interact
-    var p2 = timed_lever.new("timed2", 3, 2.0)
-    add_child(p2)
-
-    p2.interact(gs) # Lever 1
-    p2.current_time = 2.5 # Fake time passing beyond limit
-
-    # In TimedLeverSequence: if current_time > time_limit on final lever it fails
-    # Let's trigger the failure by interacting up to required_levers
-    p2.interact(gs) # Lever 2
-    var fail_success = p2.interact(gs) # Lever 3
-    assert_false(fail_success, "Should fail because time limit exceeded")
-
     # Retry and succeed
-    var p3 = timed_lever.new("timed3", 3, 2.0)
-    add_child(p3)
-    p3.interact(gs) # Lever 1
-    p3._process(0.5)
-    p3.interact(gs) # Lever 2
-    p3._process(0.5)
-    var retry_success = p3.interact(gs) # Lever 3
+    puzzle.interact(gs) # Lever 1
+    puzzle._process(0.5)
+    puzzle.interact(gs) # Lever 2
+    puzzle._process(0.5)
+    var retry_success = puzzle.interact(gs) # Lever 3
 
     assert_true(retry_success, "Should succeed within time limit")
-    assert_true(p3.is_solved, "Puzzle is solved")
+    assert_true(puzzle.is_solved, "Puzzle is solved")
 
     puzzle.queue_free()
-    p2.queue_free()
-    p3.queue_free()
