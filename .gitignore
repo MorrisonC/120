@@ -4,13 +4,4 @@ game/web_build/
 playwright-report/
 test-results/
 game/telemetry/
-
-game/assets/kenney_*
-
-
-game/assets/kenney_*
-assets/
-
-
-gauntlet_runs/
-tests/playwright/node_modules/
+game/assets/

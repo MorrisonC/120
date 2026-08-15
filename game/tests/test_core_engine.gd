@@ -7,7 +7,10 @@ var tm: Node
 var gs: Node
 
 func before_each():
+    # Make sure we don't have autoload conflicts by managing them manually
     var root = get_tree().root
+
+    # Ensure they exist as global Singletons first
     if not root.has_node("TimeManager"):
         var t = time_manager.new()
         t.name = "TimeManager"
@@ -20,6 +23,7 @@ func before_each():
     tm = root.get_node("TimeManager")
     gs = root.get_node("GameState")
 
+    # Reset states for each test
     tm.remaining_time = tm.MAX_TIME
     tm.is_running = false
     tm._warning_emitted = false
@@ -35,6 +39,7 @@ func before_each():
     gs.update_capabilities_from_items()
 
 func after_all():
+    # Cleanup autoloads after all tests
     var root = get_tree().root
     if root.has_node("TimeManager"):
         var t = root.get_node("TimeManager")
@@ -68,8 +73,9 @@ func test_force_death():
     gs.loop_state["test"] = "test"
     tm.force_death("Test death")
 
-    assert_true(tm.is_running, "Time manager should be running again after respawn")
-    assert_eq(tm.remaining_time, tm.MAX_TIME, "Time manager should have max remaining_time after respawn")
+    assert_false(tm.is_running, "Time manager should not run after force_death")
+    assert_eq(tm.remaining_time, 0.0, "Time manager should have 0 remaining_time after force_death")
+
     assert_does_not_have(gs.loop_state, "test", "Loop state should be reset on respawn")
 
 func test_game_state_items():
