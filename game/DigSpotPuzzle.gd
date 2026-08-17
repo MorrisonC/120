@@ -1,21 +1,14 @@
-extends "res://PuzzleNode.gd"
+extends Node
 class_name DigSpotPuzzle
 
-var item_contained: String
+var spot_id: String
+var is_dug: bool = false
 
-func _init(id: String, item: String = ""):
-    puzzle_id = id
-    item_contained = item
+func _init(id: String = ""):
+    spot_id = id
 
-func interact(player_state: Node) -> bool:
-    if is_solved:
-        return false
-
-    if player_state.terrain_capabilities.get("can_dig", false):
-        solve()
-        if item_contained != "":
-            player_state.add_key_item(item_contained)
+func try_dig(caps: Dictionary) -> bool:
+    if caps.has("can_dig") and caps["can_dig"]:
+        is_dug = true
         return true
-
-    emit_signal("puzzle_failed", puzzle_id)
     return false

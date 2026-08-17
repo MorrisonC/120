@@ -1,16 +1,10 @@
-extends "res://PuzzleNode.gd"
+extends Node
 class_name VineCutPuzzle
 
-func _init(id: String):
-    puzzle_id = id
+var vine_id: String
 
-func interact(player_state: Node) -> bool:
-    if is_solved:
-        return false
+func _init(id: String = ""):
+    vine_id = id
 
-    if player_state.terrain_capabilities.get("can_cut_vines", false):
-        solve()
-        return true
-
-    emit_signal("puzzle_failed", puzzle_id)
-    return false
+func try_cut(caps: Dictionary) -> bool:
+    return caps.has("can_cut_vines") and caps["can_cut_vines"]
