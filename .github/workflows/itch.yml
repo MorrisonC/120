@@ -54,11 +54,10 @@ jobs:
           name: web
           path: build/web
 
+      - name: Setup Butler
+        uses: remarkablegames/setup-butler@v1
+
       - name: Deploy to Itch.io
-        uses: Kikobeats/itchio-action@v2.2.0
-        with:
-          build: build/web
-          game: 120
-          user: pionee
-          api_key: ${{ secrets.ITCH_API_KEY }}
-          target: web
+        run: butler push build/web pionee/120:web
+        env:
+          BUTLER_API_KEY: ${{ secrets.ITCH_API_KEY }}
