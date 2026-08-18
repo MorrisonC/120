@@ -4,16 +4,21 @@ var log_file_path: String
 var _file: FileAccess
 
 func _ready() -> void:
+    if OS.has_feature("web"):
+        return
+
     var time_dict = Time.get_datetime_dict_from_system()
     var timestamp = "%04d%02d%02d_%02d%02d%02d" % [
         time_dict["year"], time_dict["month"], time_dict["day"],
         time_dict["hour"], time_dict["minute"], time_dict["second"]
     ]
-    DirAccess.make_dir_absolute("res://telemetry")
-    log_file_path = "res://telemetry/run_%s.jsonl" % timestamp
+    DirAccess.make_dir_absolute("user://telemetry")
+    log_file_path = "user://telemetry/run_%s.jsonl" % timestamp
     _file = FileAccess.open(log_file_path, FileAccess.WRITE)
 
 func log_event(event: String, data: Dictionary = {}) -> void:
+    if OS.has_feature("web"):
+        return
     if not _file:
         push_warning("TelemetryLogger: File not open.")
         return

@@ -5,6 +5,12 @@ var tcp_server: TCPServer = TCPServer.new()
 var peers = []
 
 func _ready():
+    if OS.has_feature("web"):
+        print("Web export detected, disabling NetworkStateDispatcher TCPServer")
+        set_process(false)
+        set_physics_process(false)
+        return
+
     if name == "NetworkStateDispatcher":
         if tcp_server.listen(port) != OK:
             print("Unable to start WebSocket server on port ", port)
