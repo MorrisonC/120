@@ -1,0 +1,9 @@
+suites:
+  tests/test_bulk_playthrough.gd: passed
+  tests/test_core_engine.gd: passed
+  tests/test_initialization.gd: passed
+  tests/test_puzzles.gd: passed
+  tests/test_room_camera.gd: passed
+  tests/test_visual_juice.gd: passed
+  tests/test_websocket.gd: passed
+  tests/test_world_solver.gd: passed

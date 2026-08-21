@@ -1,0 +1,12 @@
+project_path: "game"                     # Godot project subfolder relative to repo root
+godot_binary: "godot4"                   # override if your Godot 4.3 binary has a different name
+web_export_preset: "Web"                 # must match a preset name in export_presets.cfg
+web_build_dir: "build/web"
+serve_port: 8070
+state_dir: "skills/gauntlet-loop-120/state"
+targets_file: "skills/gauntlet-loop-120/assets/targets.yaml"
+lane_a_status_file: "skills/gauntlet-loop-120/state/lane_a_status.yaml"
+gut_junit_file: "skills/gauntlet-loop-120/state/gut-results.xml"
+stop_file: "STOP"
+capture_dir: "skills/gauntlet-loop-120/state/captures"
+task_queue_file: "TASK_QUEUE.md"          # at repo root, per the user's request

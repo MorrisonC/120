@@ -42,3 +42,11 @@
 - [x] Update `Progress.md`.
 - [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
 - [x] Submit the change for Milestone 5.
+
+## Web Export Gray Screen Resolution & Gauntlet Diagnostics - COMPLETED
+- [x] Audit export preset threading configuration (`variant/export_type=0`).
+- [x] Configure COOP/COEP headers (`Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp`) for Web export servers.
+- [x] Verify main scene configuration (`run/main_scene="res://Main.tscn"`).
+- [x] Run `diagnose_gray_screen.sh` and verify zero browser console errors or asset 404s.
+- [x] Execute end-to-end automated Playwright Web test (`serve_and_test.js`) and capture WebGL rendering screenshots.
+- [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.

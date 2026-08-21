@@ -1,5 +1,7 @@
 game/.godot/
 node_modules/
+build/
+logs/
 game/web_build/
 playwright-report/
 test-results/

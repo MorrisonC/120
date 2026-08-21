@@ -56,6 +56,18 @@ async function runTest() {
     const context = await browser.newContext();
     const page = await context.newPage();
 
+    // Patch WebGL context creation to preserve drawing buffer for screenshots
+    await page.addInitScript(() => {
+        const origGetContext = HTMLCanvasElement.prototype.getContext;
+        HTMLCanvasElement.prototype.getContext = function (type, attributes) {
+            if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
+                attributes = attributes || {};
+                attributes.preserveDrawingBuffer = true;
+            }
+            return origGetContext.call(this, type, attributes);
+        };
+    });
+
     let hasErrors = false;
 
     page.on('pageerror', error => {
