@@ -108,12 +108,13 @@ big. Pick the next task by taking the first `TODO` with no unmet
 - Note: Walked seed 120 via `capture_web_e2e.sh` — 0 console errors and zero missing-texture indicators observed across captured frames.
 - Depends on: GRAY-8
 
-## [TODO] E2E-2: Verify impassable terrain actually blocks movement
+## [DONE] E2E-2: Verify impassable terrain actually blocks movement
 - Scope: whichever terrain/collision layer marks rocks/obstacles as
   non-navigable (check existing TileMap collision polygons from
   Milestone 5 first — this may already work and just need a test).
 - Acceptance: a GUT test asserting the player's nav/movement query
   returns blocked for a known obstacle tile.
+- Note: Added `test_impassable_terrain_blocks_movement` to `game/tests/test_puzzles.gd` asserting player CharacterBody2D movement is blocked by obstacle collision.
 - Depends on: none
 
 ## [TODO] E2E-3: Verify each of the 6 puzzle templates gives item-use feedback

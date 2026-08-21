@@ -86,3 +86,27 @@ func test_timed_lever_sequence():
 
     assert_true(puzzle.is_solved, "Should succeed within time limit")
     assert_false(puzzle.is_active)
+
+func test_impassable_terrain_blocks_movement():
+    var player = PlayerController.new()
+    var col_shape = CollisionShape2D.new()
+    var shape = RectangleShape2D.new()
+    shape.size = Vector2(16, 16)
+    col_shape.shape = shape
+    player.add_child(col_shape)
+    add_child_autoqfree(player)
+    player.position = Vector2(0, 0)
+
+    var obstacle = StaticBody2D.new()
+    var wall_shape = CollisionShape2D.new()
+    var wall_box = RectangleShape2D.new()
+    wall_box.size = Vector2(16, 32)
+    wall_shape.shape = wall_box
+    obstacle.add_child(wall_shape)
+    add_child_autoqfree(obstacle)
+    obstacle.position = Vector2(16, 0)
+
+    player.velocity = Vector2(100.0, 0.0)
+    player.move_and_slide()
+
+    assert_true(player.position.x < 16.0, "Player movement should be blocked by impassable obstacle")
