@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites name="GutTests" failures="0" tests="23" >
-  <testsuite name="tests/test_bulk_playthrough.gd" tests="1" failures="0" skipped="0" time="0.849573" >
-      <testcase name="test_bulk_simulation" assertions="102" status="pass" classname="tests/test_bulk_playthrough.gd" time="0.849573" >
+  <testsuite name="tests/test_bulk_playthrough.gd" tests="1" failures="0" skipped="0" time="0.836134" >
+      <testcase name="test_bulk_simulation" assertions="102" status="pass" classname="tests/test_bulk_playthrough.gd" time="0.836134" >
       </testcase>
       </testsuite>
-  <testsuite name="tests/test_core_engine.gd" tests="5" failures="0" skipped="0" time="0.509858" >
-      <testcase name="test_time_manager_lifecycle" assertions="7" status="pass" classname="tests/test_core_engine.gd" time="0.095599" >
+  <testsuite name="tests/test_core_engine.gd" tests="5" failures="0" skipped="0" time="0.509781" >
+      <testcase name="test_time_manager_lifecycle" assertions="7" status="pass" classname="tests/test_core_engine.gd" time="0.095312" >
       </testcase>
-      <testcase name="test_time_warning" assertions="1" status="pass" classname="tests/test_core_engine.gd" time="0.103525" >
+      <testcase name="test_time_warning" assertions="1" status="pass" classname="tests/test_core_engine.gd" time="0.103714" >
       </testcase>
-      <testcase name="test_force_death" assertions="2" status="pass" classname="tests/test_core_engine.gd" time="0.103614" >
+      <testcase name="test_force_death" assertions="2" status="pass" classname="tests/test_core_engine.gd" time="0.10356" >
       </testcase>
-      <testcase name="test_game_state_items" assertions="4" status="pass" classname="tests/test_core_engine.gd" time="0.103462" >
+      <testcase name="test_game_state_items" assertions="4" status="pass" classname="tests/test_core_engine.gd" time="0.103637" >
       </testcase>
-      <testcase name="test_respawn_persists_run_state" assertions="3" status="pass" classname="tests/test_core_engine.gd" time="0.103658" >
-      </testcase>
-      </testsuite>
-  <testsuite name="tests/test_initialization.gd" tests="1" failures="0" skipped="0" time="0.000127" >
-      <testcase name="test_godot_project_initialized" assertions="1" status="pass" classname="tests/test_initialization.gd" time="0.000127" >
+      <testcase name="test_respawn_persists_run_state" assertions="3" status="pass" classname="tests/test_core_engine.gd" time="0.103558" >
       </testcase>
       </testsuite>
-  <testsuite name="tests/test_puzzles.gd" tests="7" failures="0" skipped="0" time="0.669645" >
-      <testcase name="test_block_push_puzzle" assertions="1" status="pass" classname="tests/test_puzzles.gd" time="0.089306" >
-      </testcase>
-      <testcase name="test_dig_spot_puzzle" assertions="5" status="pass" classname="tests/test_puzzles.gd" time="0.096652" >
-      </testcase>
-      <testcase name="test_vine_cut_puzzle" assertions="2" status="pass" classname="tests/test_puzzles.gd" time="0.096788" >
-      </testcase>
-      <testcase name="test_water_drain_puzzle" assertions="2" status="pass" classname="tests/test_puzzles.gd" time="0.096735" >
-      </testcase>
-      <testcase name="test_light_reflector_puzzle" assertions="3" status="pass" classname="tests/test_puzzles.gd" time="0.096664" >
-      </testcase>
-      <testcase name="test_timed_lever_sequence" assertions="4" status="pass" classname="tests/test_puzzles.gd" time="0.096809" >
-      </testcase>
-      <testcase name="test_impassable_terrain_blocks_movement" assertions="1" status="pass" classname="tests/test_puzzles.gd" time="0.096691" >
+  <testsuite name="tests/test_initialization.gd" tests="1" failures="0" skipped="0" time="0.000128" >
+      <testcase name="test_godot_project_initialized" assertions="1" status="pass" classname="tests/test_initialization.gd" time="0.000128" >
       </testcase>
       </testsuite>
-  <testsuite name="tests/test_room_camera.gd" tests="1" failures="0" skipped="0" time="0.100806" >
-      <testcase name="test_camera_room_transition" assertions="6" status="pass" classname="tests/test_room_camera.gd" time="0.100806" >
+  <testsuite name="tests/test_puzzles.gd" tests="7" failures="0" skipped="0" time="0.667804" >
+      <testcase name="test_block_push_puzzle" assertions="4" status="pass" classname="tests/test_puzzles.gd" time="0.087763" >
+      </testcase>
+      <testcase name="test_dig_spot_puzzle" assertions="5" status="pass" classname="tests/test_puzzles.gd" time="0.096581" >
+      </testcase>
+      <testcase name="test_vine_cut_puzzle" assertions="2" status="pass" classname="tests/test_puzzles.gd" time="0.096824" >
+      </testcase>
+      <testcase name="test_water_drain_puzzle" assertions="2" status="pass" classname="tests/test_puzzles.gd" time="0.096651" >
+      </testcase>
+      <testcase name="test_light_reflector_puzzle" assertions="3" status="pass" classname="tests/test_puzzles.gd" time="0.096675" >
+      </testcase>
+      <testcase name="test_timed_lever_sequence" assertions="4" status="pass" classname="tests/test_puzzles.gd" time="0.096628" >
+      </testcase>
+      <testcase name="test_impassable_terrain_blocks_movement" assertions="1" status="pass" classname="tests/test_puzzles.gd" time="0.096682" >
       </testcase>
       </testsuite>
-  <testsuite name="tests/test_visual_juice.gd" tests="3" failures="0" skipped="0" time="0.310347" >
-      <testcase name="test_particles_spawn" assertions="1" status="pass" classname="tests/test_visual_juice.gd" time="0.102854" >
-      </testcase>
-      <testcase name="test_screen_shake" assertions="2" status="pass" classname="tests/test_visual_juice.gd" time="0.10381" >
-      </testcase>
-      <testcase name="test_vignette_low_time" assertions="4" status="pass" classname="tests/test_visual_juice.gd" time="0.103683" >
+  <testsuite name="tests/test_room_camera.gd" tests="1" failures="0" skipped="0" time="0.100758" >
+      <testcase name="test_camera_room_transition" assertions="6" status="pass" classname="tests/test_room_camera.gd" time="0.100758" >
       </testcase>
       </testsuite>
-  <testsuite name="tests/test_websocket.gd" tests="2" failures="0" skipped="0" time="0.20635" >
-      <testcase name="test_server_starts" assertions="1" status="pass" classname="tests/test_websocket.gd" time="0.102675" >
+  <testsuite name="tests/test_visual_juice.gd" tests="3" failures="0" skipped="0" time="0.309765" >
+      <testcase name="test_particles_spawn" assertions="1" status="pass" classname="tests/test_visual_juice.gd" time="0.102746" >
       </testcase>
-      <testcase name="test_broadcast_no_peers" assertions="1" status="pass" classname="tests/test_websocket.gd" time="0.103675" >
+      <testcase name="test_screen_shake" assertions="2" status="pass" classname="tests/test_visual_juice.gd" time="0.103629" >
+      </testcase>
+      <testcase name="test_vignette_low_time" assertions="4" status="pass" classname="tests/test_visual_juice.gd" time="0.10339" >
       </testcase>
       </testsuite>
-  <testsuite name="tests/test_world_solver.gd" tests="3" failures="0" skipped="0" time="0.490445" >
-      <testcase name="test_procedural_generation_100_seeds" assertions="101" status="pass" classname="tests/test_world_solver.gd" time="0.476917" >
+  <testsuite name="tests/test_websocket.gd" tests="2" failures="0" skipped="0" time="0.206255" >
+      <testcase name="test_server_starts" assertions="1" status="pass" classname="tests/test_websocket.gd" time="0.102677" >
       </testcase>
-      <testcase name="test_item_gated_solvability" assertions="1" status="pass" classname="tests/test_world_solver.gd" time="0.008353" >
+      <testcase name="test_broadcast_no_peers" assertions="1" status="pass" classname="tests/test_websocket.gd" time="0.103578" >
       </testcase>
-      <testcase name="test_bicycle_speed_boost" assertions="2" status="pass" classname="tests/test_world_solver.gd" time="0.005175" >
+      </testsuite>
+  <testsuite name="tests/test_world_solver.gd" tests="3" failures="0" skipped="0" time="0.513466" >
+      <testcase name="test_procedural_generation_100_seeds" assertions="101" status="pass" classname="tests/test_world_solver.gd" time="0.499434" >
+      </testcase>
+      <testcase name="test_item_gated_solvability" assertions="1" status="pass" classname="tests/test_world_solver.gd" time="0.009168" >
+      </testcase>
+      <testcase name="test_bicycle_speed_boost" assertions="2" status="pass" classname="tests/test_world_solver.gd" time="0.004864" >
       </testcase>
       </testsuite>
   </testsuites>

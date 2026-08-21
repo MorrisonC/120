@@ -15,12 +15,18 @@ func before_each():
     add_child_autoqfree(game_st)
 
 func test_block_push_puzzle():
-    var puzzle = BlockPushPuzzle.new("test_block", Vector2.ZERO, false)
-    add_child_autoqfree(puzzle)
+    var unpushable = BlockPushPuzzle.new("unpushable_block", Vector2.ZERO, false)
+    add_child_autoqfree(unpushable)
+    assert_false(unpushable.try_push(Vector2.RIGHT), "Unpushable block should return false")
 
-    puzzle.block_id = "test_block"
-    puzzle.try_push(Vector2.RIGHT)
-    assert_true(true)
+    var pushable_block = BlockPushPuzzle.new("pushable_block", Vector2.ZERO, true)
+    add_child_autoqfree(pushable_block)
+    watch_signals(pushable_block)
+
+    var res = pushable_block.try_push(Vector2.RIGHT)
+    assert_true(res, "Pushable block should return true")
+    assert_eq(pushable_block.position, Vector2(16, 0), "Block position should shift on push")
+    assert_signal_emitted_with_parameters(pushable_block, "block_pushed", [Vector2.RIGHT])
 
 func test_dig_spot_puzzle():
     var puzzle = DigSpotPuzzle.new("test_spot")

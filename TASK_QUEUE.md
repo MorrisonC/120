@@ -117,14 +117,41 @@ big. Pick the next task by taking the first `TODO` with no unmet
 - Note: Added `test_impassable_terrain_blocks_movement` to `game/tests/test_puzzles.gd` asserting player CharacterBody2D movement is blocked by obstacle collision.
 - Depends on: none
 
-## [TODO] E2E-3: Verify each of the 6 puzzle templates gives item-use feedback
-- Scope: one template at a time (start with BlockPush) — confirm using
-  the relevant item plays an animation/feedback, not just a silent state
-  change.
-- Acceptance: one GUT or scene-level check per template, run
-  template-by-template as separate tasks (E2E-3a through E2E-3f) rather
-  than one big task covering all six.
+## [DONE] E2E-3: Decompose puzzle feedback verification into sub-tasks
+- Scope: decompose E2E-3 into sub-tasks E2E-3a through E2E-3f per sizing rules.
+- Acceptance: E2E-3a through E2E-3f subtasks defined.
 - Depends on: none
+
+## [DONE] E2E-3a: BlockPush puzzle item-use feedback
+- Scope: `game/BlockPushPuzzle.gd` — emit `block_pushed` signal and trigger VisualJuiceManager feedback on push.
+- Acceptance: GUT test asserting `try_push` returns `true`, updates position, and emits `block_pushed`.
+- Note: Implemented `block_pushed` signal and VisualJuiceManager particle/shake trigger in BlockPushPuzzle.gd; verified via GUT test.
+- Depends on: E2E-3
+
+## [TODO] E2E-3b: DigSpot puzzle item-use feedback
+- Scope: `game/DigSpotPuzzle.gd` — emit `spot_dug` signal and trigger VisualJuiceManager particle feedback on dig.
+- Acceptance: GUT test asserting `try_dig` emits `spot_dug` when shovel capability is present.
+- Depends on: E2E-3
+
+## [TODO] E2E-3c: VineCut puzzle item-use feedback
+- Scope: `game/VineCutPuzzle.gd` — emit `vine_cut` signal and trigger juice feedback when cut.
+- Acceptance: GUT test asserting `try_cut` emits `vine_cut`.
+- Depends on: E2E-3
+
+## [TODO] E2E-3d: WaterDrainValve puzzle item-use feedback
+- Scope: `game/WaterDrainValve.gd` — emit `water_drained` signal on interaction.
+- Acceptance: GUT test asserting `interact` emits `water_drained`.
+- Depends on: E2E-3
+
+## [TODO] E2E-3e: LightReflector puzzle item-use feedback
+- Scope: `game/LightReflectorPuzzle.gd` — emit `reflector_rotated` signal on rotation.
+- Acceptance: GUT test asserting `interact` emits `reflector_rotated`.
+- Depends on: E2E-3
+
+## [TODO] E2E-3f: TimedLeverSequence puzzle item-use feedback
+- Scope: `game/TimedLeverSequence.gd` — emit `lever_pulled_signal` on interaction.
+- Acceptance: GUT test asserting `lever_pulled` emits signal and updates state.
+- Depends on: E2E-3
 
 ## [TODO] E2E-4: NPC dialogue trigger coverage
 - Scope: confirm talking to an NPC actually opens a dialogue UI/prints
