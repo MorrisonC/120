@@ -99,12 +99,13 @@ big. Pick the next task by taking the first `TODO` with no unmet
 
 ## Epic: End-to-end experience coverage (unblocked once gray screen is fixed)
 
-## [TODO] E2E-1: Audit for missing-texture placeholders across one full seed
+## [DONE] E2E-1: Audit for missing-texture placeholders across one full seed
 - Scope: one deterministic seed, walked via
   `skills/gauntlet-loop-120/scripts/capture_web_e2e.sh`, screenshots
   checked for Godot's magenta/checkerboard missing-texture indicator.
 - Acceptance: zero missing-texture indicators found, or a list of exactly
   which nodes/scenes need art (feeds new tasks, doesn't fix them here).
+- Note: Walked seed 120 via `capture_web_e2e.sh` — 0 console errors and zero missing-texture indicators observed across captured frames.
 - Depends on: GRAY-8
 
 ## [TODO] E2E-2: Verify impassable terrain actually blocks movement
