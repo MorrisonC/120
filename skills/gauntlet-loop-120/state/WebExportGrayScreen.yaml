@@ -1,0 +1,4 @@
+status: won
+rounds: 1
+last_updated: "2026-08-21"
+notes: "Web export rendering verified end-to-end with Playwright and COOP/COEP headers."

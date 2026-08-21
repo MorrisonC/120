@@ -1,0 +1,6 @@
+# Example only -- delete or overwrite once actually picked. Shows the
+# shape run_gauntlet.sh and list_targets.py expect.
+status: bar_picked
+bar: "REPLACE ME: named, fetchable, comparable reference (Minit is the obvious starting candidate for this target -- see bar-selection-guide.md)"
+rounds: 0
+last_gap: ""

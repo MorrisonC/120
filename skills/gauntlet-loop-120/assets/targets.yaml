@@ -1,0 +1,66 @@
+# Lane B (critic-judged) targets for 120. Each depends on Lane A work
+# being done first -- both the GUT suites in lane_a_prerequisite AND,
+# for most of these, the TASK_QUEUE.md epics being complete (gray
+# screen fixed, e2e coverage tasks done). See SKILL.md for the full
+# Lane A/B split rationale.
+#
+# lane_a_prerequisite entries are GUT testsuite names as they'll appear
+# in gut-results.xml -- verify actual names against the real test files
+# once they exist; these are best-guess based on Progress.md's
+# milestone descriptions, not confirmed file names.
+
+targets:
+  - id: ProceduralVarietyFeel
+    depends_on_task_queue_epic: "End-to-end experience coverage"
+    lane_a_prerequisite: [tests/test_world_solver.gd]
+    capture_method: screenshot_sequence
+    notes: >
+      Judge across several different seeds' captured runs (see
+      capture_web_e2e.sh), not just one. The question is whether
+      different seeds feel meaningfully different from each other, not
+      whether any single seed looks good in isolation.
+
+  - id: ArtThemeConsistency
+    depends_on_task_queue_epic: "End-to-end experience coverage"
+    lane_a_prerequisite: [E2E-1]   # TASK_QUEUE.md task, not a GUT suite --
+                                    # see note below
+    capture_method: screenshot_sequence
+    notes: >
+      Checks the OPPOSITE concern from ProceduralVarietyFeel: despite
+      seed-to-seed variety, does the game still read as one coherent
+      world using assets from ASSET_LINKS.md consistently, not a
+      grab-bag of mismatched styles.
+
+  - id: DifficultyPacingFeel
+    depends_on_task_queue_epic: "Fix web export gray screen"
+    lane_a_prerequisite: [tests/test_world_solver.gd]
+    capture_method: screenshot_sequence
+    notes: >
+      Per COMPLEXITY_GRAPH.md Section 3 -- this is the ONE Lane B
+      target that also has an automatable pre-check (the batch
+      critical-path-time analysis described there). Run that analysis
+      first; only bring genuinely ambiguous cases (ones the numeric
+      thresholds don't clearly resolve) to the critic loop.
+
+  - id: NPCDialogueQuality
+    depends_on_task_queue_epic: "End-to-end experience coverage"
+    lane_a_prerequisite: [E2E-4]
+    capture_method: text
+    notes: >
+      Critic receives generated dialogue text (via DIALOGUE_AND_HINTS.md
+      prompts) plus the bar -- this is the one target that doesn't need
+      a screenshot at all, just the text output.
+
+  - id: HintSystemClarity
+    depends_on_task_queue_epic: "End-to-end experience coverage"
+    lane_a_prerequisite: [E2E-5]
+    capture_method: text
+    notes: >
+      Same text-only capture as NPCDialogueQuality. Bar should be a
+      specific named game well-regarded for its hint/nudge system
+      (not just "good puzzle game") -- see bar-selection-guide.md.
+
+# NOTE on lane_a_prerequisite mixing GUT suite names and TASK_QUEUE.md
+# task IDs: run_gauntlet.sh treats these differently -- a name matching
+# a TASK_QUEUE.md task ID is checked as DONE status in that file, not
+# looked up in lane_a_status.yaml. See run_gauntlet.sh's gate logic.
