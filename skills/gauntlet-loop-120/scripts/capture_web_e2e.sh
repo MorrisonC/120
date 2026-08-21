@@ -19,17 +19,20 @@ CONFIG="${SKILL_ROOT}/assets/config.yaml"
 get_cfg () { yq -r ".$1" "$CONFIG"; }
 
 GODOT_BIN="$(get_cfg godot_binary)"
+PROJECT_PATH="$(get_cfg project_path)"
 EXPORT_PRESET="$(get_cfg web_export_preset)"
-WEB_BUILD_DIR="$(get_cfg web_build_dir)"
+WEB_BUILD_DIR_REL="$(get_cfg web_build_dir)"
+WEB_BUILD_DIR="$(pwd)/${WEB_BUILD_DIR_REL}"
 SERVE_PORT="$(get_cfg serve_port)"
-CAPTURE_DIR="$(get_cfg capture_dir)/${TARGET}"
+CAPTURE_DIR="$(pwd)/$(get_cfg capture_dir)/${TARGET}"
 mkdir -p "$CAPTURE_DIR"
+mkdir -p "$WEB_BUILD_DIR"
 
 echo "[capture_web_e2e] Exporting web build..."
-"$GODOT_BIN" --headless --export-release "$EXPORT_PRESET" "${WEB_BUILD_DIR}/index.html"
+"$GODOT_BIN" --path "$PROJECT_PATH" --headless --export-release "$EXPORT_PRESET" "${WEB_BUILD_DIR}/index.html"
 
 echo "[capture_web_e2e] Serving on port ${SERVE_PORT}..."
-( cd "$WEB_BUILD_DIR" && python3 -m http.server "$SERVE_PORT" >/tmp/120_serve.log 2>&1 & echo $! > /tmp/120_serve.pid )
+( node "${SKILL_ROOT}/scripts/serve_with_headers.js" "$SERVE_PORT" "$WEB_BUILD_DIR" >/tmp/120_serve.log 2>&1 & echo $! > /tmp/120_serve.pid )
 sleep 2
 trap 'kill "$(cat /tmp/120_serve.pid)" 2>/dev/null || true' EXIT
 

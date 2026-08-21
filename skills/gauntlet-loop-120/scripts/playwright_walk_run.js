@@ -33,6 +33,18 @@ function parseArgs() {
   const consoleErrors = [];
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+
+  await page.addInitScript(() => {
+    const origGetContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (type, attributes) {
+      if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
+        attributes = attributes || {};
+        attributes.preserveDrawingBuffer = true;
+      }
+      return origGetContext.call(this, type, attributes);
+    };
+  });
+
   page.on('console', (msg) => {
     if (msg.type() === 'error') consoleErrors.push(msg.text());
   });
