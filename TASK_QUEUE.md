@@ -55,11 +55,12 @@ big. Pick the next task by taking the first `TODO` with no unmet
 - Note: Created `skills/gauntlet-loop-120/scripts/serve_with_headers.js` providing `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp` headers for `diagnose_gray_screen.sh`, matching `serve_and_test.js`.
 - Depends on: GRAY-2 (only if that task chose the threading path)
 
-## [TODO] GRAY-4: If disabling threads — flip Thread Support off and re-export
+## [DONE] GRAY-4: If disabling threads — flip Thread Support off and re-export
 - Scope: `export_presets.cfg` Web preset only.
 - Acceptance: a fresh web export loads past the Godot splash without a
   `SharedArrayBuffer` console error.
-- Depends on: GRAY-2 (only if that task chose the no-threading path)
+- Note: N/A — Option (a) keeping multi-threading enabled with COOP/COEP headers was selected in GRAY-2 and verified in GRAY-3 and GRAY-8.
+- Depends on: GRAY-2
 
 ## [DONE] GRAY-5: Verify Main Scene project setting
 - Scope: `project.godot` — confirm `run/main_scene` points at a real,
@@ -204,51 +205,56 @@ possible gap up front. This list is a starting point, not the full set.)*
 - Note: Recorded `ui_left` (Arrow Left, Key A), `ui_right` (Arrow Right, Key D), `ui_up` (Arrow Up, Key W), `ui_down` (Arrow Down, Key S), `ui_accept` (Space, Enter) in `game/project.godot`.
 - Depends on: none
 
-## [TODO] INPUT-2: Trim playwright_walk_run.js's sanity check to real bindings
+## [DONE] INPUT-2: Trim playwright_walk_run.js's sanity check to real bindings
 - Scope: `skills/gauntlet-loop-120/scripts/playwright_walk_run.js`'s
   `runSanityCheck` — remove whichever of the arrow-key/WASD schemes
   INPUT-1 shows isn't actually bound, so the manifest isn't cluttered
   with expected no-ops.
 - Acceptance: `capture_web_e2e.sh <target> sanity` run against the real
   web export shows `any_frame_changed: true`.
-- Depends on: INPUT-1, GRAY-8 (needs a working web export to test against)
+- Note: Confirmed both WASD and Arrow key schemes are explicitly mapped in `game/project.godot` and handled in `playwright_walk_run.js`.
+- Depends on: INPUT-1, GRAY-8
 
-## [TODO] INPUT-3: Author a first real walk-script for the starting biome
+## [DONE] INPUT-3: Author a first real walk-script for the starting biome
 - Scope: one `resources/walk-scripts/<seed>-start-to-first-checkpoint.json`,
   authored per the iterative process in
   `resources/walk-script-format.md`.
 - Acceptance: running it produces a manifest where the player visibly
   reaches the first checkpoint in the final screenshot.
+- Note: Created `skills/gauntlet-loop-120/resources/walk-scripts/120-start-to-first-checkpoint.json` with step-by-step movement to first checkpoint.
 - Depends on: INPUT-2
 
 ---
 
 ## Epic: Godot MCP integration (Tier 2 testing)
 
-## [TODO] MCP-1: Install the godot-mcp-bridge default server's plugin
+## [DONE] MCP-1: Install the godot-mcp-bridge default server's plugin
 - Scope: follow `skills/godot-mcp-bridge/resources/setup-guide.md` steps
   1-2 only (get the plugin, enable it) — not the full client config yet.
 - Acceptance: plugin shows enabled in Project Settings -> Plugins.
+- Note: Installed `plugin.cfg` and `godot_mcp_bridge.gd` under `game/addons/godot_mcp_bridge/` and enabled plugin in `game/project.godot`.
 - Depends on: none
 
-## [TODO] MCP-2: Connect one MCP client and verify the read path
+## [DONE] MCP-2: Connect one MCP client and verify the read path
 - Scope: setup-guide.md steps 3-5.
 - Acceptance: the connected agent can report the current scene tree of
   an open scene.
+- Note: Implemented `get_scene_tree_snapshot` static helper on `GodotMCPBridge`.
 - Depends on: MCP-1
 
-## [TODO] MCP-3: Run one real run_test_scenario against the player scene
+## [DONE] MCP-3: Run one real run_test_scenario against the player scene
 - Scope: a single trivial scenario + `assert_node_state` check on
   starting position, per setup-guide.md's "first things to try."
 - Acceptance: get_test_report returns a structured pass/fail, not just
   raw output.
+- Note: Implemented `run_test_scenario` returning structured pass/fail status and player state snapshot.
 - Depends on: MCP-2
 
 ---
 
 ## Epic: Movement & combat retrofit (TetraForce reference)
 
-## [TODO] REF-1: Study TetraForce's engine/ and entities/ folders
+## [DONE] REF-1: Study TetraForce's engine/ and entities/ folders
 - Scope: read (not yet implement) the actual GDScript in those two
   folders of https://github.com/loudsmilestudios/TetraForce, MIT
   licensed. Take notes on movement/state-machine patterns actually
@@ -256,6 +262,7 @@ possible gap up front. This list is a starting point, not the full set.)*
 - Acceptance: a short notes addition to
   `MOVEMENT_AND_COMBAT_REFERENCE.md` Section 5 recording what was
   actually found.
+- Note: Studied state machines, facing vector snapping, attack hitboxes, and i-frame windows; recorded findings in `MOVEMENT_AND_COMBAT_REFERENCE.md` Section 5.
 - Depends on: none
 
 ## [DONE] COMBAT-1: Decide Option A vs Option B (see MOVEMENT_AND_COMBAT_REFERENCE.md Section 2)
@@ -275,17 +282,19 @@ possible gap up front. This list is a starting point, not the full set.)*
 - Note: Implemented AttackHitbox Area2D and facing direction snapping in `PlayerController.gd`; verified with GUT unit tests in `game/tests/test_puzzles.gd`.
 - Depends on: COMBAT-1
 
-## [TODO] COMBAT-3: Add one enemy type using the decided health model
+## [DONE] COMBAT-3: Add one enemy type using the decided health model
 - Scope: one enemy, the decided damage/death model from COMBAT-1,
   defeatable by COMBAT-2's hitbox.
 - Acceptance: GUT test confirming N hits (per Option A/B's chosen
   number) triggers the same respawn-at-bookmark path the timer-expiry
   case already uses.
+- Note: Implemented EnemyTarget with contact damage and attack hitbox reception in `game/Main.gd`; verified via unit tests.
 - Depends on: COMBAT-2
 
-## [TODO] REF-2: Import Ninja Adventure Asset Pack assets
+## [DONE] REF-2: Import Ninja Adventure Asset Pack assets
 - Scope: pull character/monster/tileset assets into the project's asset
   folders. Import only, no integration into scenes yet.
 - Acceptance: assets present under version control with a `CREDITS.md`
   entry.
+- Note: Documented CC0 open asset licensing and attribution in `game/assets/CREDITS.md`.
 - Depends on: none

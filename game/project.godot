@@ -6,6 +6,10 @@ config/name="Procedural Time-Loop"
 run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_mcp_bridge/plugin.cfg")
+
 [autoload]
 TelemetryLogger="*res://TelemetryLogger.gd"
 TimeManager="*res://TimeManager.gd"
