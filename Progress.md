@@ -71,3 +71,13 @@
 - [x] Execute gauntlet loop critic evaluation (`run_gauntlet.sh`) for `ArtThemeConsistency` and `ProceduralVarietyFeel` targets against TetraForce bar.
 - [x] Verify unit test suite headlessly (28 GUT tests passing across 8 suites).
 - [x] Complete pre-commit steps.
+
+## Land Terrain & TileMap Visual Retrofit - COMPLETED
+- [x] Refactor HUD layout with top panel background, clear margins, and non-overlapping Labels/Hearts UI.
+- [x] Remove giant raw "SAFE" ground text overlays and floating room names from gameplay areas.
+- [x] Implement 16x16 tile-based procedural terrain generator in `TextureGenerator.gd` providing distinct ground, path, wall, and decor textures for all 6 biomes.
+- [x] Implement room tilemap builder in `Main.gd` with boundary collision walls, central 32px path corridors, decor distribution, and open doorways.
+- [x] Integrate sprite props for checkpoints, item pickups, obstacles, and enemy targets.
+- [x] Execute Playwright E2E Web captures and visually verify landscape rendering against top-down Zelda RPG standards.
+- [x] Verify all 8 GUT test suites pass headlessly.
+- [x] Complete pre-commit steps.

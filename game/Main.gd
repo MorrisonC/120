@@ -9,7 +9,7 @@ var health_label: Label
 var checkpoint_nodes: Dictionary = {}
 
 func _ready():
-    RenderingServer.set_default_clear_color(Color(0.12, 0.25, 0.15))
+    RenderingServer.set_default_clear_color(Color(0.08, 0.12, 0.15))
 
     # 1. Instantiate and generate world
     world_gen = load("res://ProceduralWorldGenerator.gd").new()
@@ -47,78 +47,156 @@ func _build_world_visuals():
 
     var room_size = Vector2(320, 180)
     var room_index = 0
+    var total_rooms = world_gen.rooms.size()
     var tex_gen = load("res://assets/TextureGenerator.gd")
 
     for room_id in world_gen.rooms:
         var room_data = world_gen.rooms[room_id]
         var room_pos = Vector2(room_index * room_size.x, 0)
 
-        # Room Ground Tiled Texture
-        var bg = TextureRect.new()
-        bg.size = room_size
-        bg.position = room_pos
-        if is_instance_valid(tex_gen) and tex_gen.has_method("create_grass_texture"):
-            bg.texture = tex_gen.create_grass_texture()
-            bg.stretch_mode = TextureRect.STRETCH_TILE
-        else:
-            bg.modulate = _get_biome_color(room_data.biome)
-        biomes_node.add_child(bg)
-
-        # Decorative grid lines (GBC aesthetic)
-        var border = ReferenceRect.new()
-        border.size = room_size
-        border.position = room_pos
-        border.editor_only = false
-        border.border_color = Color(1.0, 1.0, 1.0, 0.15)
-        border.border_width = 2.0
-        biomes_node.add_child(border)
-
-        # Room Label/Obstacle info
-        var label = Label.new()
-        label.text = room_id.capitalize() + "\n" + _get_obstacle_name(room_data.obstacle)
-        label.position = room_pos + Vector2(10, 10)
-        label.add_theme_color_override("font_color", Color.WHITE)
-        biomes_node.add_child(label)
+        # Build 2D tilemap landscape for this room
+        _build_room_tilemap(biomes_node, room_data, room_pos, room_index, total_rooms, tex_gen)
 
         # Checkpoint Safe Location Marker
         if room_data.is_checkpoint:
-            var cp_area = Area2D.new()
-            cp_area.name = "Checkpoint_" + room_id
-            cp_area.position = room_pos + Vector2(160, 90)
+            _spawn_checkpoint(biomes_node, room_id, room_pos + Vector2(160, 90), tex_gen)
 
-            var cp_shape = CollisionShape2D.new()
-            var shape = RectangleShape2D.new()
-            shape.size = Vector2(32, 32)
-            cp_shape.shape = shape
-            cp_area.add_child(cp_shape)
-
-            if is_instance_valid(tex_gen) and tex_gen.has_method("create_checkpoint_texture"):
-                var cp_sprite = Sprite2D.new()
-                cp_sprite.texture = tex_gen.create_checkpoint_texture()
-                cp_area.add_child(cp_sprite)
-
-            var cp_label = Label.new()
-            cp_label.text = "SAFE"
-            cp_label.position = Vector2(-16, -28)
-            cp_label.add_theme_color_override("font_color", Color.GREEN_YELLOW)
-            cp_area.add_child(cp_label)
-
-            cp_area.connect("body_entered", Callable(self, "_on_checkpoint_entered").bind(room_id, cp_area.global_position))
-            biomes_node.add_child(cp_area)
-            checkpoint_nodes[room_id] = cp_area
-
+        # Item Prop
         if room_data.item_contained != "":
-            var item_label = Label.new()
-            item_label.text = "[ " + room_data.item_contained + " ]"
-            item_label.position = room_pos + Vector2(120, 130)
-            item_label.add_theme_color_override("font_color", Color.YELLOW)
-            biomes_node.add_child(item_label)
+            _spawn_item_prop(biomes_node, room_data.item_contained, room_pos + Vector2(160, 140))
+
+        # Obstacle Prop
+        if room_data.obstacle != 0:
+            _spawn_obstacle_prop(biomes_node, room_data.obstacle, room_pos + Vector2(240, 130))
 
         # Add an interactive enemy target in non-checkpoint rooms
         if room_index > 0 and not room_data.is_checkpoint:
-            _spawn_enemy_target(biomes_node, room_pos + Vector2(220, 90))
+            _spawn_enemy_target(biomes_node, room_pos + Vector2(240, 55))
 
         room_index += 1
+
+func _build_room_tilemap(parent: Node, room_data, room_pos: Vector2, room_index: int, total_rooms: int, tex_gen):
+    var biome = room_data.biome
+    var ground_tex = tex_gen.create_biome_ground_texture(biome)
+    var path_tex = tex_gen.create_biome_path_texture(biome)
+    var wall_tex = tex_gen.create_biome_wall_texture(biome)
+    var decor_tex = tex_gen.create_biome_decor_texture(biome)
+
+    var room_node = Node2D.new()
+    room_node.name = "Room_" + room_data.id
+    room_node.position = room_pos
+    parent.add_child(room_node)
+
+    # 20 columns x 11 rows of 16x16 tiles = 320x176
+    for row in range(11):
+        for col in range(20):
+            var tile_pos = Vector2(col * 16, row * 16 + 4)
+            var is_wall = false
+            var is_path = false
+            var is_decor = false
+
+            if row == 0 or row == 10:
+                is_wall = true
+            elif col == 0 and room_index > 0:
+                if not (row == 5 or row == 6):
+                    is_wall = true
+            elif col == 19 and room_index < total_rooms - 1:
+                if not (row == 5 or row == 6):
+                    is_wall = true
+            elif col == 0 or col == 19:
+                is_wall = true
+
+            if not is_wall and (row == 5 or row == 6):
+                is_path = true
+            elif not is_wall and ((col * 5 + row * 11) % 13 == 0):
+                is_decor = true
+
+            var sprite = Sprite2D.new()
+            sprite.centered = false
+            sprite.position = tile_pos
+
+            if is_wall:
+                sprite.texture = wall_tex
+                var static_body = StaticBody2D.new()
+                static_body.position = tile_pos + Vector2(8, 8)
+                var col_shape = CollisionShape2D.new()
+                var rect = RectangleShape2D.new()
+                rect.size = Vector2(16, 16)
+                col_shape.shape = rect
+                static_body.add_child(col_shape)
+                room_node.add_child(static_body)
+            elif is_path:
+                sprite.texture = path_tex
+            elif is_decor:
+                sprite.texture = decor_tex
+            else:
+                sprite.texture = ground_tex
+
+            room_node.add_child(sprite)
+
+func _spawn_checkpoint(parent: Node, room_id: String, pos: Vector2, tex_gen):
+    var cp_area = Area2D.new()
+    cp_area.name = "Checkpoint_" + room_id
+    cp_area.position = pos
+
+    var cp_shape = CollisionShape2D.new()
+    var shape = RectangleShape2D.new()
+    shape.size = Vector2(32, 32)
+    cp_shape.shape = shape
+    cp_area.add_child(cp_shape)
+
+    var cp_sprite = Sprite2D.new()
+    if is_instance_valid(tex_gen) and tex_gen.has_method("create_checkpoint_texture"):
+        cp_sprite.texture = tex_gen.create_checkpoint_texture()
+    cp_area.add_child(cp_sprite)
+
+    cp_area.connect("body_entered", Callable(self, "_on_checkpoint_entered").bind(room_id, cp_area.global_position))
+    parent.add_child(cp_area)
+    checkpoint_nodes[room_id] = cp_area
+
+func _spawn_item_prop(parent: Node, item_name: String, pos: Vector2):
+    var item_node = Node2D.new()
+    item_node.name = "Item_" + item_name
+    item_node.position = pos
+
+    var sprite = Sprite2D.new()
+    if ResourceLoader.exists("res://assets/sprites/props/anchor_stone_16.png"):
+        sprite.texture = load("res://assets/sprites/props/anchor_stone_16.png")
+    item_node.add_child(sprite)
+
+    var label = Label.new()
+    label.text = item_name
+    label.position = Vector2(-20, -22)
+    label.add_theme_font_size_override("font_size", 10)
+    label.add_theme_color_override("font_color", Color.YELLOW)
+    item_node.add_child(label)
+
+    parent.add_child(item_node)
+
+func _spawn_obstacle_prop(parent: Node, obs_type: int, pos: Vector2):
+    var obs_node = Node2D.new()
+    obs_node.name = "ObstacleProp"
+    obs_node.position = pos
+
+    var sprite = Sprite2D.new()
+    var path = ""
+    match obs_type:
+        1: path = "res://assets/sprites/props/swamp_obstacle.png"
+        2: path = "res://assets/sprites/props/swamp_obstacle.png"
+        3: path = "res://assets/sprites/props/desert_hazard_quicksand.png"
+        4: path = "res://assets/sprites/props/desert_hazard_cactus.png"
+    if path != "" and ResourceLoader.exists(path):
+        sprite.texture = load(path)
+    obs_node.add_child(sprite)
+
+    var obs_label = Label.new()
+    obs_label.text = _get_obstacle_name(obs_type)
+    obs_label.position = Vector2(-30, -20)
+    obs_label.add_theme_font_size_override("font_size", 9)
+    obs_label.add_theme_color_override("font_color", Color(1.0, 0.6, 0.2))
+    obs_node.add_child(obs_label)
+
+    parent.add_child(obs_node)
 
 func _spawn_enemy_target(parent: Node, pos: Vector2):
     var enemy = Area2D.new()
@@ -163,24 +241,36 @@ func _on_checkpoint_entered(body: Node2D, room_id: String, cp_pos: Vector2):
         if is_instance_valid(game_state):
             game_state.set_active_spawn_point(cp_pos, room_id)
             if is_instance_valid(room_label):
-                room_label.text = "SAFE: " + room_id.capitalize()
+                var room_data = world_gen.rooms.get(room_id)
+                var biome_name = _get_biome_name(room_data.biome) if room_data else "Village"
+                room_label.text = "BIOME: " + biome_name
+
+func _get_biome_name(biome: int) -> String:
+    match biome:
+        0: return "Village"
+        1: return "Desert"
+        2: return "Swamp"
+        3: return "Caves"
+        4: return "Sea"
+        5: return "Factory"
+        _: return "Unknown"
 
 func _get_biome_color(biome: int) -> Color:
     match biome:
-        0: return Color(0.2, 0.5, 0.2) # Village (green)
-        1: return Color(0.7, 0.6, 0.3) # Desert (sand)
-        2: return Color(0.3, 0.4, 0.2) # Swamp (mud)
-        3: return Color(0.3, 0.3, 0.4) # Caves (dark blue/gray)
-        4: return Color(0.1, 0.3, 0.6) # Sea (water blue)
-        5: return Color(0.4, 0.4, 0.4) # Factory (steel gray)
+        0: return Color(0.2, 0.5, 0.2)
+        1: return Color(0.7, 0.6, 0.3)
+        2: return Color(0.3, 0.4, 0.2)
+        3: return Color(0.3, 0.3, 0.4)
+        4: return Color(0.1, 0.3, 0.6)
+        5: return Color(0.4, 0.4, 0.4)
         _: return Color(0.2, 0.2, 0.2)
 
 func _get_obstacle_name(obs: int) -> String:
     match obs:
-        1: return "Obstacle: Vines"
-        2: return "Obstacle: Dirt Mound"
-        3: return "Obstacle: Darkness"
-        4: return "Obstacle: Deep Water"
+        1: return "Vines"
+        2: return "Dirt Mound"
+        3: return "Darkness"
+        4: return "Deep Water"
         _: return ""
 
 func _spawn_player():
@@ -208,16 +298,24 @@ func _create_ui():
     var ui_layer = CanvasLayer.new()
     ui_layer.name = "HUD"
 
+    # Top HUD Bar Panel
+    var hud_bg = ColorRect.new()
+    hud_bg.size = Vector2(320, 18)
+    hud_bg.color = Color(0.05, 0.08, 0.12, 0.85)
+    ui_layer.add_child(hud_bg)
+
     timer_label = Label.new()
     timer_label.text = "TIME: 120s"
-    timer_label.position = Vector2(10, 10)
-    timer_label.add_theme_color_override("font_color", Color.YELLOW)
+    timer_label.position = Vector2(6, 1)
+    timer_label.add_theme_font_size_override("font_size", 11)
+    timer_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
     ui_layer.add_child(timer_label)
 
     health_label = Label.new()
-    health_label.text = "HP:"
-    health_label.position = Vector2(90, 10)
-    health_label.add_theme_color_override("font_color", Color.RED)
+    health_label.text = "HP: 3/3"
+    health_label.position = Vector2(95, 1)
+    health_label.add_theme_font_size_override("font_size", 11)
+    health_label.add_theme_color_override("font_color", Color(1.0, 0.35, 0.35))
     ui_layer.add_child(health_label)
 
     var tex_gen = load("res://assets/TextureGenerator.gd")
@@ -225,13 +323,14 @@ func _create_ui():
         var heart_icon = TextureRect.new()
         heart_icon.name = "HeartsUI"
         heart_icon.texture = tex_gen.create_heart_texture()
-        heart_icon.position = Vector2(120, 10)
+        heart_icon.position = Vector2(150, 1)
         ui_layer.add_child(heart_icon)
 
     room_label = Label.new()
     room_label.text = "BIOME: Village"
-    room_label.position = Vector2(200, 10)
-    room_label.add_theme_color_override("font_color", Color.WHITE)
+    room_label.position = Vector2(195, 1)
+    room_label.add_theme_font_size_override("font_size", 11)
+    room_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.95))
     ui_layer.add_child(room_label)
 
     add_child(ui_layer)
@@ -242,10 +341,9 @@ func _on_second_ticked(remaining_time: float):
 
 func _on_player_health_changed(hp: int, max_hp: int):
     if is_instance_valid(health_label):
-        health_label.text = "HP: [" + str(hp) + "/" + str(max_hp) + "]"
+        health_label.text = "HP: " + str(hp) + "/" + str(max_hp)
 
 func _on_loop_expired():
-    # Respawn player at current active spawn point
     var game_state = get_node_or_null("/root/GameState")
     var spawn_pos = Vector2(160, 90)
     if is_instance_valid(game_state) and game_state.active_spawn_point != Vector2.ZERO:
