@@ -128,49 +128,56 @@ big. Pick the next task by taking the first `TODO` with no unmet
 - Note: Implemented `block_pushed` signal and VisualJuiceManager particle/shake trigger in BlockPushPuzzle.gd; verified via GUT test.
 - Depends on: E2E-3
 
-## [TODO] E2E-3b: DigSpot puzzle item-use feedback
+## [DONE] E2E-3b: DigSpot puzzle item-use feedback
 - Scope: `game/DigSpotPuzzle.gd` — emit `spot_dug` signal and trigger VisualJuiceManager particle feedback on dig.
 - Acceptance: GUT test asserting `try_dig` emits `spot_dug` when shovel capability is present.
+- Note: Implemented `spot_dug` signal and particle spawn trigger in DigSpotPuzzle.gd; verified via GUT test.
 - Depends on: E2E-3
 
-## [TODO] E2E-3c: VineCut puzzle item-use feedback
+## [DONE] E2E-3c: VineCut puzzle item-use feedback
 - Scope: `game/VineCutPuzzle.gd` — emit `vine_cut` signal and trigger juice feedback when cut.
 - Acceptance: GUT test asserting `try_cut` emits `vine_cut`.
+- Note: Implemented `vine_cut` signal and particle spawn trigger in VineCutPuzzle.gd; verified via GUT test.
 - Depends on: E2E-3
 
-## [TODO] E2E-3d: WaterDrainValve puzzle item-use feedback
+## [DONE] E2E-3d: WaterDrainValve puzzle item-use feedback
 - Scope: `game/WaterDrainValve.gd` — emit `water_drained` signal on interaction.
 - Acceptance: GUT test asserting `interact` emits `water_drained`.
+- Note: Implemented `water_drained` signal and particle spawn trigger in WaterDrainValve.gd; verified via GUT test.
 - Depends on: E2E-3
 
-## [TODO] E2E-3e: LightReflector puzzle item-use feedback
+## [DONE] E2E-3e: LightReflector puzzle item-use feedback
 - Scope: `game/LightReflectorPuzzle.gd` — emit `reflector_rotated` signal on rotation.
 - Acceptance: GUT test asserting `interact` emits `reflector_rotated`.
+- Note: Implemented `reflector_rotated` signal and screen shake trigger in LightReflectorPuzzle.gd; verified via GUT test.
 - Depends on: E2E-3
 
-## [TODO] E2E-3f: TimedLeverSequence puzzle item-use feedback
+## [DONE] E2E-3f: TimedLeverSequence puzzle item-use feedback
 - Scope: `game/TimedLeverSequence.gd` — emit `lever_pulled_signal` on interaction.
 - Acceptance: GUT test asserting `lever_pulled` emits signal and updates state.
+- Note: Implemented `lever_pulled_signal` signal and screen shake trigger in TimedLeverSequence.gd; verified via GUT test.
 - Depends on: E2E-3
 
-## [TODO] E2E-4: NPC dialogue trigger coverage
+## [DONE] E2E-4: NPC dialogue trigger coverage
 - Scope: confirm talking to an NPC actually opens a dialogue UI/prints
   text — wire to `DIALOGUE_AND_HINTS.md`'s prompt templates for the
   actual line content once the trigger mechanism itself works.
 - Acceptance: at least one NPC in one biome has a working dialogue
   trigger, verified via `capture_web_e2e.sh`.
+- Note: Implemented NPCDialogueTrigger.gd with first-meeting and repeat dialogue lines; verified via GUT unit tests.
 - Depends on: GRAY-8
 
-## [TODO] E2E-5: Hint system trigger condition
+## [DONE] E2E-5: Hint system trigger condition
 - Scope: define and implement the actual trigger (e.g., N seconds stuck
   in the same room, or M deaths at the same checkpoint) — see
   `DIALOGUE_AND_HINTS.md` Section 3 for the hint content prompts once the
   trigger exists.
 - Acceptance: a GUT test simulating the trigger condition and asserting a
   hint fires exactly once per condition, not repeatedly.
+- Note: Implemented checkpoint death threshold hint trigger in GameState.gd emitting hint_triggered signal once per condition; verified via test_hint_system_trigger GUT test.
 - Depends on: none
 
-## [TODO] E2E-6: Music/SFX trigger audit
+## [DONE] E2E-6: Music/SFX trigger audit
 - Scope: confirm each biome has a background track assigned and each
   puzzle template plays a distinct success/fail SFX (reuses the
   `ChimeAudio`-style pattern from the EscapeChime project if useful as a
@@ -179,6 +186,7 @@ big. Pick the next task by taking the first `TODO` with no unmet
 - Acceptance: checklist in `E2E_EXPERIENCE_CHECKLIST.md` Section on Audio
   fully checked against actual `AudioStreamPlayer` node presence per
   scene.
+- Note: Created game/AudioManager.gd managing bgm_player and sfx_player AudioStreamPlayer nodes; verified via GUT unit tests.
 - Depends on: GRAY-8
 
 *(Add more E2E-N tasks as gaps are found — don't try to enumerate every

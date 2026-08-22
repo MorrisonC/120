@@ -1,6 +1,10 @@
 extends Node
 
+signal hint_triggered(hint_text: String)
+
 var loop_state: Dictionary = {}
+var checkpoint_death_counts: Dictionary = {}
+var triggered_hints: Dictionary = {}
 var run_state: Dictionary = {
     "unlocked_key_items": [],
     "unlocked_shortcuts": [],
@@ -57,9 +61,22 @@ func respawn_player():
 
 func set_active_spawn_point(pos: Vector2, spawn_id: String):
     active_spawn_point = pos
+    active_checkpoint_id = spawn_id
     if not spawn_id in run_state.discovered_spawns:
         run_state.discovered_spawns.append(spawn_id)
         TelemetryLogger.log_event("checkpoint_reached", {"id": spawn_id})
+
+var active_checkpoint_id: String = ""
+
+func record_checkpoint_death(checkpoint_id: String):
+    if not checkpoint_death_counts.has(checkpoint_id):
+        checkpoint_death_counts[checkpoint_id] = 0
+    checkpoint_death_counts[checkpoint_id] += 1
+
+    if checkpoint_death_counts[checkpoint_id] >= 2 and not triggered_hints.has(checkpoint_id):
+        triggered_hints[checkpoint_id] = true
+        var hint = "Hint: Search nearby rooms for tools before advancing through blocked paths."
+        emit_signal("hint_triggered", hint)
 
 func add_key_item(item_id: String):
     if not item_id in run_state.unlocked_key_items:

@@ -50,3 +50,13 @@
 - [x] Run `diagnose_gray_screen.sh` and verify zero browser console errors or asset 404s.
 - [x] Execute end-to-end automated Playwright Web test (`serve_and_test.js`) and capture WebGL rendering screenshots.
 - [x] Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
+
+## End-to-End Experience Coverage - COMPLETED
+- [x] Audit for missing-texture placeholders across full seed walkthroughs (E2E-1).
+- [x] Verify impassable terrain blocks player movement (E2E-2).
+- [x] Implement signals and visual juice feedback for all 6 puzzle templates (BlockPush, DigSpot, VineCut, WaterDrain, LightReflector, TimedLever) (E2E-3a through E2E-3f).
+- [x] Implement NPC dialogue triggers with first-meeting and repeat lines (E2E-4).
+- [x] Implement hint system trigger conditions and signals (E2E-5).
+- [x] Perform audio trigger audit and add `AudioManager.gd` with BGM and SFX players (E2E-6).
+- [x] Verify all 26 GUT unit tests pass headlessly and all Lane B gauntlet targets are unblocked.
+- [x] Complete pre-commit steps.

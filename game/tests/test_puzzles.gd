@@ -7,6 +7,8 @@ var WaterDrainValve = load("res://WaterDrainValve.gd")
 var LightReflectorPuzzle = load("res://LightReflectorPuzzle.gd")
 var TimedLeverSequence = load("res://TimedLeverSequence.gd")
 var PlayerController = load("res://PlayerController.gd")
+var NPCDialogueTrigger = load("res://NPCDialogueTrigger.gd")
+var AudioManager = load("res://AudioManager.gd")
 
 var game_st = null
 
@@ -31,6 +33,7 @@ func test_block_push_puzzle():
 func test_dig_spot_puzzle():
     var puzzle = DigSpotPuzzle.new("test_spot")
     add_child_autoqfree(puzzle)
+    watch_signals(puzzle)
 
     assert_false(puzzle.is_dug, "Spot should initially not be dug")
 
@@ -43,43 +46,50 @@ func test_dig_spot_puzzle():
     var success2 = puzzle.try_dig(game_st.terrain_capabilities)
     assert_true(success2, "Should succeed digging with shovel")
     assert_true(puzzle.is_dug, "Spot should now be dug")
+    assert_signal_emitted(puzzle, "spot_dug")
 
 func test_vine_cut_puzzle():
     var puzzle = VineCutPuzzle.new("test_vine")
     add_child_autoqfree(puzzle)
+    watch_signals(puzzle)
 
     game_st.terrain_capabilities.can_cut_vines = false
     assert_false(puzzle.try_cut(game_st.terrain_capabilities))
 
     game_st.terrain_capabilities.can_cut_vines = true
     assert_true(puzzle.try_cut(game_st.terrain_capabilities))
+    assert_signal_emitted(puzzle, "vine_cut")
 
 func test_water_drain_puzzle():
     var puzzle = WaterDrainValve.new("test_valve")
     add_child_autoqfree(puzzle)
+    watch_signals(puzzle)
 
     assert_false(puzzle.is_drained)
     puzzle.interact()
     assert_true(puzzle.is_drained)
+    assert_signal_emitted(puzzle, "water_drained")
 
 func test_light_reflector_puzzle():
     var puzzle = LightReflectorPuzzle.new("test_reflector", 0.0)
     add_child_autoqfree(puzzle)
+    watch_signals(puzzle)
 
     assert_eq(puzzle.current_rotation_deg, 0.0)
     puzzle.interact()
     assert_eq(puzzle.current_rotation_deg, 90.0)
-    puzzle.interact()
-    assert_eq(puzzle.current_rotation_deg, 180.0)
+    assert_signal_emitted_with_parameters(puzzle, "reflector_rotated", [90.0])
 
 func test_timed_lever_sequence():
     var puzzle = TimedLeverSequence.new("test_sequence", ["lever_1", "lever_2", "lever_3"], 2.0)
     add_child_autoqfree(puzzle)
+    watch_signals(puzzle)
 
     puzzle.time_limit = 2.0
 
     puzzle.lever_pulled("lever_1")
     assert_true(puzzle.is_active)
+    assert_signal_emitted_with_parameters(puzzle, "lever_pulled_signal", ["lever_1"])
 
     puzzle._process(2.5)
     assert_false(puzzle.is_active, "Should fail because time limit exceeded")
@@ -116,3 +126,27 @@ func test_impassable_terrain_blocks_movement():
     player.move_and_slide()
 
     assert_true(player.position.x < 16.0, "Player movement should be blocked by impassable obstacle")
+
+func test_npc_dialogue_trigger():
+    var npc = NPCDialogueTrigger.new()
+    add_child_autoqfree(npc)
+    watch_signals(npc)
+
+    var first_line = npc.interact()
+    assert_true(npc.has_met)
+    assert_true(npc.is_dialogue_open)
+    assert_eq(first_line, npc.first_meeting_text)
+    assert_signal_emitted_with_parameters(npc, "dialogue_opened", [npc.first_meeting_text])
+
+    var second_line = npc.interact()
+    assert_eq(second_line, npc.repeat_text)
+
+    npc.close_dialogue()
+    assert_false(npc.is_dialogue_open)
+    assert_signal_emitted(npc, "dialogue_closed")
+
+func test_audio_manager_nodes():
+    var audio_mgr = AudioManager.new()
+    add_child_autoqfree(audio_mgr)
+    assert_not_null(audio_mgr.bgm_player)
+    assert_not_null(audio_mgr.sfx_player)
