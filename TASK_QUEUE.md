@@ -196,11 +196,12 @@ possible gap up front. This list is a starting point, not the full set.)*
 
 ## Epic: Fix real input simulation (addresses the reported movement-testing bug)
 
-## [TODO] INPUT-1: Confirm real InputMap key bindings
+## [DONE] INPUT-1: Confirm real InputMap key bindings
 - Scope: read `project.godot`'s `[input]` section, record the actual
   action names and physical keys bound to movement/interact.
 - Acceptance: one-line note in this entry listing the real bindings —
   feeds INPUT-2.
+- Note: Recorded `ui_left` (Arrow Left, Key A), `ui_right` (Arrow Right, Key D), `ui_up` (Arrow Up, Key W), `ui_down` (Arrow Down, Key S), `ui_accept` (Space, Enter) in `game/project.godot`.
 - Depends on: none
 
 ## [TODO] INPUT-2: Trim playwright_walk_run.js's sanity check to real bindings
@@ -257,19 +258,21 @@ possible gap up front. This list is a starting point, not the full set.)*
   actually found.
 - Depends on: none
 
-## [TODO] COMBAT-1: Decide Option A vs Option B (see MOVEMENT_AND_COMBAT_REFERENCE.md Section 2)
+## [DONE] COMBAT-1: Decide Option A vs Option B (see MOVEMENT_AND_COMBAT_REFERENCE.md Section 2)
 - Scope: decision only — small hit-pool/instant-respawn (Option A,
   recommended) vs. fuller health-bar system (Option B).
 - Acceptance: decision recorded, with one sentence of reasoning, in
   `MOVEMENT_AND_COMBAT_REFERENCE.md` Section 2.
+- Note: Selected Option A (3-heart hit-pool with instant respawn at active checkpoint on death) to maintain time-loop elegance.
 - Depends on: none
 
-## [TODO] COMBAT-2: Implement the attack hitbox on the player
+## [DONE] COMBAT-2: Implement the attack hitbox on the player
 - Scope: one directional melee attack, active hitbox for a short window
   on the facing direction, triggered by a button press. No enemies yet
   — just the swing and hitbox existing and testable in isolation.
 - Acceptance: a GUT test (or Tier 2 Godot MCP `assert_node_state`
   check) confirming the hitbox activates and deactivates on schedule.
+- Note: Implemented AttackHitbox Area2D and facing direction snapping in `PlayerController.gd`; verified with GUT unit tests in `game/tests/test_puzzles.gd`.
 - Depends on: COMBAT-1
 
 ## [TODO] COMBAT-3: Add one enemy type using the decided health model
