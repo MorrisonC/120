@@ -53,11 +53,15 @@ func _build_world_visuals():
         var room_data = world_gen.rooms[room_id]
         var room_pos = Vector2(room_index * room_size.x, 0)
 
-        # Room Ground
-        var bg = ColorRect.new()
+        # Room Ground Tiled Texture
+        var bg = TextureRect.new()
         bg.size = room_size
         bg.position = room_pos
-        bg.color = _get_biome_color(room_data.biome)
+        if is_instance_valid(tex_gen) and tex_gen.has_method("create_grass_texture"):
+            bg.texture = tex_gen.create_grass_texture()
+            bg.stretch_mode = TextureRect.STRETCH_TILE
+        else:
+            bg.modulate = _get_biome_color(room_data.biome)
         biomes_node.add_child(bg)
 
         # Decorative grid lines (GBC aesthetic)
@@ -213,10 +217,18 @@ func _create_ui():
     ui_layer.add_child(timer_label)
 
     health_label = Label.new()
-    health_label.text = "HP: [3/3]"
-    health_label.position = Vector2(100, 10)
+    health_label.text = "HP:"
+    health_label.position = Vector2(90, 10)
     health_label.add_theme_color_override("font_color", Color.RED)
     ui_layer.add_child(health_label)
+
+    var tex_gen = load("res://assets/TextureGenerator.gd")
+    if is_instance_valid(tex_gen) and tex_gen.has_method("create_heart_texture"):
+        var heart_icon = TextureRect.new()
+        heart_icon.name = "HeartsUI"
+        heart_icon.texture = tex_gen.create_heart_texture()
+        heart_icon.position = Vector2(120, 10)
+        ui_layer.add_child(heart_icon)
 
     room_label = Label.new()
     room_label.text = "BIOME: Village"
