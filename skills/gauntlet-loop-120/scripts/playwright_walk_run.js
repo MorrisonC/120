@@ -53,13 +53,18 @@ function hashFile(filePath) {
 async function focusCanvas(page) {
   // Godot's web export needs the canvas itself focused to receive
   // keyboard events -- a page-level goto() does NOT give it focus.
-  // This was the second thing the old script never did.
-  const canvas = page.locator('canvas').first();
-  await canvas.click({ position: { x: 5, y: 5 } }).catch(async () => {
-    // Some export templates size the canvas to fill the viewport with
-    // no visible click target at (5,5) -- fall back to a center click.
-    await canvas.click();
-  });
+  try {
+    const canvas = page.locator('canvas').first();
+    if (await canvas.count() > 0) {
+      await canvas.click({ timeout: 5000 }).catch(async () => {
+        await canvas.click({ position: { x: 5, y: 5 }, timeout: 5000 }).catch(() => {});
+      });
+    } else {
+      await page.mouse.click(100, 100);
+    }
+  } catch (e) {
+    await page.mouse.click(100, 100).catch(() => {});
+  }
 }
 
 async function pressAndCapture(page, outDir, label, key, holdMs) {

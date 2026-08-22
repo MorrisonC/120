@@ -104,7 +104,7 @@ GAP="$(yq -r '.last_gap // ""' "$STATE_FILE")"
 while true; do
   if [[ -f "$STOP_FILE" ]]; then
     echo "[run_gauntlet] STOP file present — halting $TARGET at round $ROUND."
-    yq -i '.status = "stopped"' "$STATE_FILE"
+    python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['status']='stopped'; yaml.dump(d, open('$STATE_FILE','w'))"
     exit 0
   fi
 
@@ -116,16 +116,15 @@ while true; do
 
   CAPTURE_DIR="$(get_cfg capture_dir)/${TARGET}"
   VERDICT="$(head -n1 "${CAPTURE_DIR}/verdict.txt")"
-  yq -i ".rounds = ${ROUND}" "$STATE_FILE"
+  python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['rounds']=$ROUND; yaml.dump(d, open('$STATE_FILE','w'))"
 
   if [[ "$VERDICT" == "OURS" ]]; then
-    yq -i '.status = "won"' "$STATE_FILE"
+    python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['status']='won'; yaml.dump(d, open('$STATE_FILE','w'))"
     echo "[run_gauntlet] $TARGET WON on round $ROUND."
     exit 0
   fi
 
   GAP="$(sed -n '2p' "${CAPTURE_DIR}/verdict.txt")"
-  yq -i ".last_gap = \"${GAP}\"" "$STATE_FILE"
-  yq -i '.status = "in_progress"' "$STATE_FILE"
+  python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['last_gap']='$GAP'; d['status']='in_progress'; yaml.dump(d, open('$STATE_FILE','w'))"
   echo "[run_gauntlet] $TARGET lost round $ROUND. Gap: $GAP"
 done
