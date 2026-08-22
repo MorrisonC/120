@@ -36,6 +36,44 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const zlib = require('zlib');
+
+function checkPngIsBlack(filePath) {
+  if (!fs.existsSync(filePath)) return { isBlack: true, reason: 'File missing' };
+  const buf = fs.readFileSync(filePath);
+  if (buf.length < 8) return { isBlack: true, reason: 'Too small' };
+  let idx = 8, width = 0, height = 0, colorType = 0;
+  const chunks = [];
+  while (idx < buf.length) {
+    const len = buf.readUInt32BE(idx);
+    const type = buf.toString('ascii', idx + 4, idx + 8);
+    if (type === 'IHDR') {
+      width = buf.readUInt32BE(idx + 8);
+      height = buf.readUInt32BE(idx + 12);
+      colorType = buf.readUInt8(idx + 17);
+    } else if (type === 'IDAT') chunks.push(buf.subarray(idx + 8, idx + 8 + len));
+    idx += 12 + len;
+  }
+  if (!chunks.length) return { isBlack: true, reason: 'No IDAT' };
+  const decomp = zlib.inflateSync(Buffer.concat(chunks));
+  const bpp = colorType === 2 ? 3 : 4;
+  const stride = width * bpp + 1;
+  let sum = 0, nonZero = 0;
+  const total = width * height;
+  for (let y = 0; y < height; y++) {
+    const row = y * stride + 1;
+    for (let x = 0; x < width; x++) {
+      const off = row + x * bpp;
+      const val = decomp[off] + decomp[off + 1] + decomp[off + 2];
+      sum += val;
+      if (val > 10) nonZero++;
+    }
+  }
+  const avg = sum / (total * 3);
+  const ratio = nonZero / total;
+  const isBlack = nonZero < 500 || avg < 0.1;
+  return { avg, ratio, nonZero, isBlack };
+}
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -169,10 +207,15 @@ async function runWalkScript(page, outDir, scriptPath) {
     results = await runWalkScript(page, out, walkScriptPath);
   }
 
+  const startPng = path.join(out, 'checkpoint_00_start.png');
+  const startCheck = checkPngIsBlack(startPng);
+
   const anyMovement = results.some((r) => r.changed);
   const manifest = {
     mode,
     timestamp: new Date().toISOString(),
+    black_screen_detected: startCheck.isBlack,
+    black_screen_metrics: startCheck,
     any_frame_changed: anyMovement,
     steps: results,
   };

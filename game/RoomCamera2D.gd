@@ -11,6 +11,16 @@ var current_room: Vector2 = Vector2(-999, -999) # Init to invalid room to force 
 func _ready() -> void:
     set_process(true)
     top_level = true # Disconnect from parent transform
+    zoom = Vector2(4.0, 4.0) # Scale 320x180 pixel-art room to fill 1280x720 viewport
+    if get_parent() and get_parent() is Node2D:
+        var parent_pos = get_parent().global_position
+        var room = Vector2(
+            floor(parent_pos.x / room_size.x),
+            floor(parent_pos.y / room_size.y)
+        )
+        current_room = room
+        target_position = room * room_size + (room_size / 2)
+        global_position = target_position
 
 func _process(delta: float) -> void:
     if get_parent() and get_parent() is Node2D:

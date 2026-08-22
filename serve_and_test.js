@@ -112,8 +112,72 @@ async function runTest() {
         }
 
         console.log("Taking screenshot...");
-        await page.screenshot({ path: 'web_screenshot.png' });
-        console.log("Screenshot saved to web_screenshot.png");
+        const dataUrl = await page.evaluate(() => {
+            return new Promise((resolve) => {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        const canvas = document.getElementById('canvas');
+                        if (canvas && typeof canvas.toDataURL === 'function') {
+                            resolve(canvas.toDataURL('image/png'));
+                        } else {
+                            resolve(null);
+                        }
+                    });
+                });
+            });
+        });
+
+        if (dataUrl) {
+            fs.writeFileSync('web_screenshot.png', Buffer.from(dataUrl.split(',')[1], 'base64'));
+            console.log("Screenshot captured via Canvas toDataURL and saved to web_screenshot.png");
+        } else {
+            await page.screenshot({ path: 'web_screenshot.png' });
+            console.log("Screenshot saved via page.screenshot to web_screenshot.png");
+        }
+
+        const zlib = require('zlib');
+        const imgCheck = (function checkPng(filePath) {
+            const buf = fs.readFileSync(filePath);
+            let idx = 8, width = 0, height = 0, colorType = 0;
+            const chunks = [];
+            while (idx < buf.length) {
+                const len = buf.readUInt32BE(idx);
+                const type = buf.toString('ascii', idx + 4, idx + 8);
+                if (type === 'IHDR') {
+                    width = buf.readUInt32BE(idx + 8);
+                    height = buf.readUInt32BE(idx + 12);
+                    colorType = buf.readUInt8(idx + 17);
+                } else if (type === 'IDAT') chunks.push(buf.subarray(idx + 8, idx + 8 + len));
+                idx += 12 + len;
+            }
+            const decomp = zlib.inflateSync(Buffer.concat(chunks));
+            const bpp = colorType === 2 ? 3 : 4;
+            const stride = width * bpp + 1;
+            let sum = 0, nonZero = 0;
+            const total = width * height;
+            for (let y = 0; y < height; y++) {
+                const row = y * stride + 1;
+                for (let x = 0; x < width; x++) {
+                    const off = row + x * bpp;
+                    const val = decomp[off] + decomp[off + 1] + decomp[off + 2];
+                    sum += val;
+                    if (val > 10) nonZero++;
+                }
+            }
+            const avg = sum / (total * 3);
+            const ratio = nonZero / total;
+            // Letterboxed WebGL canvas has nonZero pixels in the active 320x180 viewport area.
+            // A pure black or unrendered screen has nonZero < 500 pixels.
+            const isBlack = nonZero < 500 || avg < 0.1;
+            return { avg, ratio, nonZero, isBlack };
+        })('web_screenshot.png');
+
+        if (imgCheck.isBlack) {
+            console.error(`[CRITIQUE ERROR] Screenshot is black or unrendered! avg=${imgCheck.avg.toFixed(2)}, nonZeroRatio=${(imgCheck.ratio * 100).toFixed(2)}%`);
+            hasErrors = true;
+        } else {
+            console.log(`[CRITIQUE VERIFIED] Screenshot contains valid rendering. avg=${imgCheck.avg.toFixed(2)}, nonZeroRatio=${(imgCheck.ratio * 100).toFixed(2)}%`);
+        }
     } catch (e) {
         console.error("Timeout waiting for canvas or rendering.", e);
         hasErrors = true;
@@ -123,7 +187,7 @@ async function runTest() {
     server.close();
 
     if (hasErrors) {
-        console.error("Test failed due to browser console/network errors.");
+        console.error("Test failed due to browser console, network, or black screenshot errors.");
         process.exit(1);
     } else {
         console.log("SUCCESS: Automated Web E2E Test passed without errors.");

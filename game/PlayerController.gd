@@ -89,7 +89,8 @@ func _handle_input(_delta: float) -> void:
         if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
             y -= 1.0
 
-    input_vector = Vector2(x, y)
+    if x != 0.0 or y != 0.0:
+        input_vector = Vector2(x, y)
 
     if input_vector.length_squared() > 0.001:
         # Snap facing direction to 4 cardinal directions

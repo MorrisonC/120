@@ -9,6 +9,8 @@ var health_label: Label
 var checkpoint_nodes: Dictionary = {}
 
 func _ready():
+    RenderingServer.set_default_clear_color(Color(0.12, 0.25, 0.15))
+
     # 1. Instantiate and generate world
     world_gen = load("res://ProceduralWorldGenerator.gd").new()
     add_child(world_gen)
@@ -211,7 +213,7 @@ func _create_ui():
     ui_layer.add_child(timer_label)
 
     health_label = Label.new()
-    health_label.text = "HP: ♥ ♥ ♥"
+    health_label.text = "HP: [3/3]"
     health_label.position = Vector2(100, 10)
     health_label.add_theme_color_override("font_color", Color.RED)
     ui_layer.add_child(health_label)
@@ -230,10 +232,7 @@ func _on_second_ticked(remaining_time: float):
 
 func _on_player_health_changed(hp: int, max_hp: int):
     if is_instance_valid(health_label):
-        var hearts = ""
-        for i in range(hp):
-            hearts += "♥ "
-        health_label.text = "HP: " + hearts.strip_edges()
+        health_label.text = "HP: [" + str(hp) + "/" + str(max_hp) + "]"
 
 func _on_loop_expired():
     # Respawn player at current active spawn point

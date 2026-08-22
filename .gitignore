@@ -5,5 +5,11 @@ logs/
 game/web_build/
 playwright-report/
 test-results/
+web_screenshot.png
+test_*.png
+canvas_only.png
+*.png.import
+*.import
+skills/gauntlet-loop-120/state/captures/
 game/telemetry/
 game/assets/
