@@ -51,12 +51,15 @@ func _ready():
 func apply_shake(strength: float = 10.0):
     shake_strength = strength
 
+func trigger_screen_shake(duration: float = 0.2, strength: float = 5.0):
+    shake_strength = strength
+
 func play_transition(duration: float = 0.3):
     var tween = create_tween()
     tween.tween_property(color_rect, "color", Color(0, 0, 0, 1), duration / 2.0).set_trans(Tween.TRANS_CUBIC)
     tween.tween_property(color_rect, "color", Color(0, 0, 0, 0), duration / 2.0).set_trans(Tween.TRANS_CUBIC)
 
-func spawn_particles(pos: Vector2, color: Color = Color.WHITE):
+func spawn_particles(pos: Vector2, color: Color = Color.WHITE, _count: int = 10):
     for p in particle_pool:
         if not p.emitting:
             p.global_position = pos

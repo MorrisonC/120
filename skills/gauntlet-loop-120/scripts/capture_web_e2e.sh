@@ -26,15 +26,17 @@ CONFIG="${SKILL_ROOT}/assets/config.yaml"
 get_cfg () { yq -r ".$1" "$CONFIG"; }
 
 GODOT_BIN="$(get_cfg godot_binary)"
+PROJECT_PATH="$(get_cfg project_path)"
 EXPORT_PRESET="$(get_cfg web_export_preset)"
 WEB_BUILD_DIR="$(get_cfg web_build_dir)"
 SERVE_PORT="$(get_cfg serve_port)"
 CAPTURE_DIR="$(get_cfg capture_dir)/${TARGET}"
 mkdir -p "$CAPTURE_DIR"
+mkdir -p "$WEB_BUILD_DIR"
 
 echo "[capture_web_e2e] Exporting web build..."
 if command -v "$GODOT_BIN" >/dev/null 2>&1; then
-  "$GODOT_BIN" --headless --export-release "$EXPORT_PRESET" "${WEB_BUILD_DIR}/index.html"
+  "$GODOT_BIN" --path "$PROJECT_PATH" --headless --export-release "$EXPORT_PRESET" "../${WEB_BUILD_DIR}/index.html"
 else
   echo "[capture_web_e2e] $GODOT_BIN not found in path, checking if build exists..."
 fi
@@ -66,7 +68,11 @@ echo "[capture_web_e2e] Done. Artifacts + manifest.json in ${CAPTURE_DIR}"
 cat "${CAPTURE_DIR}/manifest.json" | python3 -c "
 import json, sys
 m = json.load(sys.stdin)
+print(f\"black_screen_detected: {m.get('black_screen_detected', False)}\")
 print(f\"any_frame_changed: {m['any_frame_changed']}\")
 for s in m['steps']:
     print(f\"  {s['label']:<30} key={s['key']:<12} changed={s['changed']}\")
+if m.get('black_screen_detected', False):
+    print('[capture_web_e2e] ERROR: Black/unrendered screen detected in capture!')
+    sys.exit(1)
 "

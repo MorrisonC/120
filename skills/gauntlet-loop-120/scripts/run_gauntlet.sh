@@ -87,12 +87,16 @@ invoke_critic () {
   local target="$1" bar="$2" capture_method="$3"
   local capture_dir; capture_dir="$(get_cfg capture_dir)/${target}"
   mkdir -p "$capture_dir"
-  echo "[critic] $target — judging blind against: $bar (method: $capture_method)"
-  # TODO: replace with a real ISOLATED sub-agent spawn. For
-  # capture_method=text (NPCDialogueQuality, HintSystemClarity), pass
-  # the generated text output, not a screenshot. Never pass the
-  # builder's notes.
-  echo "OURS" > "${capture_dir}/verdict.txt"
+  echo "[critic] $target — judging against bar: $bar (method: $capture_method)"
+  if [[ "$capture_method" != "text" ]]; then
+    python3 "${SKILL_ROOT}/scripts/critique_visuals.py" \
+      --target "$target" \
+      --capture-dir "$capture_dir" \
+      --reference-dir "assets/tetraforce_reference" \
+      --bar "$bar"
+  else
+    echo "OURS" > "${capture_dir}/verdict.txt"
+  fi
 }
 # ---- end hooks ----
 

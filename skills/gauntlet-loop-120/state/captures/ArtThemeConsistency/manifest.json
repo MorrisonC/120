@@ -1,13 +1,20 @@
 {
   "mode": "sanity",
-  "timestamp": "2026-08-22T02:48:46.440Z",
-  "any_frame_changed": false,
+  "timestamp": "2026-08-22T04:59:23.510Z",
+  "black_screen_detected": false,
+  "black_screen_metrics": {
+    "avg": 0.2054466869212963,
+    "ratio": 0.0015885416666666667,
+    "nonZero": 1464,
+    "isBlack": false
+  },
+  "any_frame_changed": true,
   "steps": [
     {
       "label": "sanity_up_ArrowUp",
       "key": "ArrowUp",
       "holdMs": 600,
-      "changed": false,
+      "changed": true,
       "before": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_up_ArrowUp_before.png",
       "after": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_up_ArrowUp_after.png"
     },
@@ -15,7 +22,7 @@
       "label": "sanity_up_KeyW",
       "key": "KeyW",
       "holdMs": 600,
-      "changed": false,
+      "changed": true,
       "before": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_up_KeyW_before.png",
       "after": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_up_KeyW_after.png"
     },
@@ -23,7 +30,7 @@
       "label": "sanity_down_ArrowDown",
       "key": "ArrowDown",
       "holdMs": 600,
-      "changed": false,
+      "changed": true,
       "before": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_down_ArrowDown_before.png",
       "after": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_down_ArrowDown_after.png"
     },
@@ -31,7 +38,7 @@
       "label": "sanity_down_KeyS",
       "key": "KeyS",
       "holdMs": 600,
-      "changed": false,
+      "changed": true,
       "before": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_down_KeyS_before.png",
       "after": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_down_KeyS_after.png"
     },
@@ -39,7 +46,7 @@
       "label": "sanity_left_ArrowLeft",
       "key": "ArrowLeft",
       "holdMs": 600,
-      "changed": false,
+      "changed": true,
       "before": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_left_ArrowLeft_before.png",
       "after": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_left_ArrowLeft_after.png"
     },
@@ -47,7 +54,7 @@
       "label": "sanity_left_KeyA",
       "key": "KeyA",
       "holdMs": 600,
-      "changed": false,
+      "changed": true,
       "before": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_left_KeyA_before.png",
       "after": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_left_KeyA_after.png"
     },
@@ -55,7 +62,7 @@
       "label": "sanity_right_ArrowRight",
       "key": "ArrowRight",
       "holdMs": 600,
-      "changed": false,
+      "changed": true,
       "before": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_right_ArrowRight_before.png",
       "after": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_right_ArrowRight_after.png"
     },
@@ -63,7 +70,7 @@
       "label": "sanity_right_KeyD",
       "key": "KeyD",
       "holdMs": 600,
-      "changed": false,
+      "changed": true,
       "before": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_right_KeyD_before.png",
       "after": "skills/gauntlet-loop-120/state/captures/ArtThemeConsistency/sanity_right_KeyD_after.png"
     }
