@@ -24,13 +24,15 @@ func _ready() -> void:
     _setup_attack_hitbox()
 
 func _setup_visual_sprite() -> void:
-    # Use TextureGenerator if available
-    var tex_gen = load("res://assets/TextureGenerator.gd")
-    if is_instance_valid(tex_gen) and tex_gen.has_method("create_player_texture"):
-        sprite_node = Sprite2D.new()
-        sprite_node.name = "PlayerSprite"
-        sprite_node.texture = tex_gen.create_player_texture()
-        add_child(sprite_node)
+    sprite_node = Sprite2D.new()
+    sprite_node.name = "PlayerSprite"
+    if ResourceLoader.exists("res://assets/sprites/characters/player_idle_front.png"):
+        sprite_node.texture = load("res://assets/sprites/characters/player_idle_front.png")
+    else:
+        var tex_gen = load("res://assets/TextureGenerator.gd")
+        if is_instance_valid(tex_gen) and tex_gen.has_method("create_player_texture"):
+            sprite_node.texture = tex_gen.create_player_texture()
+    add_child(sprite_node)
 
 func _setup_attack_hitbox() -> void:
     attack_hitbox = Area2D.new()

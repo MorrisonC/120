@@ -127,17 +127,15 @@ func _spawn_enemy_target(parent: Node, pos: Vector2):
     shape.shape = rect
     enemy.add_child(shape)
 
-    var tex_gen = load("res://assets/TextureGenerator.gd")
-    if is_instance_valid(tex_gen) and tex_gen.has_method("create_monster_texture"):
-        var sprite = Sprite2D.new()
-        sprite.texture = tex_gen.create_monster_texture()
-        enemy.add_child(sprite)
+    var sprite = Sprite2D.new()
+    sprite.name = "Sprite2D"
+    if ResourceLoader.exists("res://assets/sprites/characters/enemy_patrol_1.png"):
+        sprite.texture = load("res://assets/sprites/characters/enemy_patrol_1.png")
     else:
-        var visual = ColorRect.new()
-        visual.size = Vector2(16, 16)
-        visual.position = Vector2(-8, -8)
-        visual.color = Color(0.8, 0.2, 0.8)
-        enemy.add_child(visual)
+        var tex_gen = load("res://assets/TextureGenerator.gd")
+        if is_instance_valid(tex_gen) and tex_gen.has_method("create_monster_texture"):
+            sprite.texture = tex_gen.create_monster_texture()
+    enemy.add_child(sprite)
 
     enemy.connect("area_entered", Callable(self, "_on_enemy_hit").bind(enemy))
     enemy.connect("body_entered", Callable(self, "_on_enemy_contact_player"))
