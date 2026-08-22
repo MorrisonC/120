@@ -30,7 +30,7 @@ func _ready() -> void:
     joystick_knob_position = default_joystick_center
 
     # Auto-detect touch capability
-    if DisplayServer.has_feature("touchscreen") or OS.has_feature("mobile") or OS.has_feature("web"):
+    if DisplayServer.has_feature(DisplayServer.FEATURE_TOUCHSCREEN) or OS.has_feature("mobile") or OS.has_feature("web") or OS.has_feature("touchscreen"):
         is_touch_device_detected = true
 
 func _gui_input(event: InputEvent) -> void:
