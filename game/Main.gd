@@ -333,7 +333,24 @@ func _create_ui():
     room_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.95))
     ui_layer.add_child(room_label)
 
+    # Touch Controls Overlay
+    var touch_controls = load("res://TouchControls.gd").new()
+    touch_controls.name = "TouchControls"
+    touch_controls.size = Vector2(320, 180)
+    touch_controls.connect("joystick_moved", Callable(self, "_on_touch_joystick_moved"))
+    touch_controls.connect("attack_pressed", Callable(self, "_on_touch_attack_pressed"))
+    ui_layer.add_child(touch_controls)
+
     add_child(ui_layer)
+
+func _on_touch_joystick_moved(vector: Vector2) -> void:
+    if is_instance_valid(player):
+        player.touch_input_vector = vector
+
+func _on_touch_attack_pressed() -> void:
+    if is_instance_valid(player) and player.has_method("perform_attack"):
+        if not player.is_attacking:
+            player.perform_attack()
 
 func _on_second_ticked(remaining_time: float):
     if is_instance_valid(timer_label):
