@@ -66,3 +66,15 @@ func test_respawn_persists_run_state():
     assert_eq(GameState.move_speed_modifier, 1.75, "Run state items should persist after respawn")
     assert_eq(GameState.active_spawn_point, Vector2(100, 100), "Spawn point should persist after respawn")
     assert_eq(GameState.loop_state["pushed_blocks"].size(), 0, "Loop state should be wiped on respawn")
+
+func test_hint_system_trigger():
+    watch_signals(GameState)
+
+    GameState.record_checkpoint_death("c_village")
+    assert_signal_not_emitted(GameState, "hint_triggered")
+
+    GameState.record_checkpoint_death("c_village")
+    assert_signal_emitted(GameState, "hint_triggered")
+
+    GameState.record_checkpoint_death("c_village")
+    assert_signal_emit_count(GameState, "hint_triggered", 1)
