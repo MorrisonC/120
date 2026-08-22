@@ -16,21 +16,33 @@ var invulnerability_timer: float = 0.0
 
 var attack_hitbox: Area2D
 var attack_shape: CollisionShape2D
+var sprite_node: Sprite2D
 
 func _ready() -> void:
     current_health = max_health
+    _setup_visual_sprite()
     _setup_attack_hitbox()
+
+func _setup_visual_sprite() -> void:
+    # Use TextureGenerator if available
+    var tex_gen = load("res://assets/TextureGenerator.gd")
+    if is_instance_valid(tex_gen) and tex_gen.has_method("create_player_texture"):
+        sprite_node = Sprite2D.new()
+        sprite_node.name = "PlayerSprite"
+        sprite_node.texture = tex_gen.create_player_texture()
+        add_child(sprite_node)
 
 func _setup_attack_hitbox() -> void:
     attack_hitbox = Area2D.new()
     attack_hitbox.name = "AttackHitbox"
     attack_hitbox.monitoring = false
-    attack_hitbox.monitorable = true
+    attack_hitbox.monitorable = false
 
     attack_shape = CollisionShape2D.new()
     var shape = RectangleShape2D.new()
     shape.size = Vector2(16, 16)
     attack_shape.shape = shape
+    attack_shape.disabled = true
     attack_shape.position = Vector2(0, 16) # Default facing down
 
     attack_hitbox.add_child(attack_shape)
@@ -47,9 +59,17 @@ func _handle_timers(delta: float) -> void:
         if attack_cooldown <= 0.0:
             is_attacking = false
             attack_hitbox.monitoring = false
+            attack_hitbox.monitorable = false
+            if is_instance_valid(attack_shape):
+                attack_shape.disabled = true
 
     if invulnerability_timer > 0.0:
         invulnerability_timer -= delta
+        if is_instance_valid(sprite_node):
+            sprite_node.modulate.a = 0.5 if fmod(invulnerability_timer * 10.0, 2.0) > 1.0 else 1.0
+    else:
+        if is_instance_valid(sprite_node):
+            sprite_node.modulate.a = 1.0
 
 func _handle_input(_delta: float) -> void:
     # Read movement input from InputMap or key polling
@@ -104,6 +124,9 @@ func perform_attack() -> void:
     is_attacking = true
     attack_cooldown = 0.25
     attack_hitbox.monitoring = true
+    attack_hitbox.monitorable = true
+    if is_instance_valid(attack_shape):
+        attack_shape.disabled = false
 
     var juice = get_node_or_null("/root/VisualJuiceManager")
     if is_instance_valid(juice):

@@ -45,6 +45,7 @@ func _build_world_visuals():
 
     var room_size = Vector2(320, 180)
     var room_index = 0
+    var tex_gen = load("res://assets/TextureGenerator.gd")
 
     for room_id in world_gen.rooms:
         var room_data = world_gen.rooms[room_id]
@@ -85,11 +86,10 @@ func _build_world_visuals():
             cp_shape.shape = shape
             cp_area.add_child(cp_shape)
 
-            var cp_visual = ColorRect.new()
-            cp_visual.size = Vector2(24, 24)
-            cp_visual.position = Vector2(-12, -12)
-            cp_visual.color = Color(0.2, 0.9, 0.4, 0.8) # Safe Green Beacon
-            cp_area.add_child(cp_visual)
+            if is_instance_valid(tex_gen) and tex_gen.has_method("create_checkpoint_texture"):
+                var cp_sprite = Sprite2D.new()
+                cp_sprite.texture = tex_gen.create_checkpoint_texture()
+                cp_area.add_child(cp_sprite)
 
             var cp_label = Label.new()
             cp_label.text = "SAFE"
@@ -125,11 +125,17 @@ func _spawn_enemy_target(parent: Node, pos: Vector2):
     shape.shape = rect
     enemy.add_child(shape)
 
-    var visual = ColorRect.new()
-    visual.size = Vector2(16, 16)
-    visual.position = Vector2(-8, -8)
-    visual.color = Color(0.8, 0.2, 0.8) # Purple Monster
-    enemy.add_child(visual)
+    var tex_gen = load("res://assets/TextureGenerator.gd")
+    if is_instance_valid(tex_gen) and tex_gen.has_method("create_monster_texture"):
+        var sprite = Sprite2D.new()
+        sprite.texture = tex_gen.create_monster_texture()
+        enemy.add_child(sprite)
+    else:
+        var visual = ColorRect.new()
+        visual.size = Vector2(16, 16)
+        visual.position = Vector2(-8, -8)
+        visual.color = Color(0.8, 0.2, 0.8)
+        enemy.add_child(visual)
 
     enemy.connect("area_entered", Callable(self, "_on_enemy_hit").bind(enemy))
     enemy.connect("body_entered", Callable(self, "_on_enemy_contact_player"))
@@ -177,13 +183,6 @@ func _spawn_player():
     player = CharacterBody2D.new()
     player.name = "Player"
     player.set_script(load("res://PlayerController.gd"))
-
-    # Player Visual Sprite
-    var sprite = ColorRect.new()
-    sprite.size = Vector2(16, 16)
-    sprite.position = Vector2(-8, -8)
-    sprite.color = Color(0.9, 0.2, 0.2) # Bright Red Player
-    player.add_child(sprite)
 
     # Collision Shape
     var col = CollisionShape2D.new()
