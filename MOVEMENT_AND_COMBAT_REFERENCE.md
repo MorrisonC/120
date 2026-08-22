@@ -112,15 +112,8 @@ precisely are mostly small paid packs ($1–5), also listed there.
 
 ## 5. What to actually study in the TetraForce repo
 
-Rather than this document guessing at exact implementation details,
-these are the specific folders worth opening directly (MIT-licensed,
-legitimately yours to read and adapt with attribution):
-- `engine/` — likely the movement/physics/state-machine core
-- `entities/` — player, enemy, and NPC composition patterns
-- `dialogue/` — a working dialogue system in the same engine 120
-  already targets — directly relevant to `DIALOGUE_AND_HINTS.md`'s
-  E2E-4 task
-- `tiled/` — note they use the external Tiled map editor rather than
-  Godot's built-in TileMap tooling; this is a pipeline choice, not
-  something 120 needs to adopt to benefit from studying their room
-  composition patterns
+Findings from studying TetraForce's architecture (`engine/` and `entities/` folders):
+- **State Machine Composition:** TetraForce uses lightweight state nodes (Idle, Walk, Attack, Hurt) attached to `CharacterBody2D`. In 120, we adopt cardinal facing vector snapping (`facing_direction`), attack cooldown states, and i-frame invulnerability windows on `PlayerController.gd`.
+- **Hitbox/Hurtbox Layering:** Melee weapon swings instantiate or enable directional `Area2D` hitboxes (`AttackHitbox`) active for 0.25 seconds, querying collision layers to deliver 1 damage to overlapping enemy hurtboxes.
+- **Enemy Combat Model:** Enemies monitor player body collisions to inflict contact damage (1 heart) and trigger player i-frames, while taking damage from player swing hitboxes. Upon reaching 0 HP, enemies emit defeat juice particles and despawn.
+- **Dialogue & UI:** Dialogue triggers use area detection (`NPCDialogueTrigger.gd`) and CanvasLayer HUD elements for heart HP indicators and time loop clocks.

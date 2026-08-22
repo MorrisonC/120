@@ -132,7 +132,12 @@ func _spawn_enemy_target(parent: Node, pos: Vector2):
     enemy.add_child(visual)
 
     enemy.connect("area_entered", Callable(self, "_on_enemy_hit").bind(enemy))
+    enemy.connect("body_entered", Callable(self, "_on_enemy_contact_player"))
     parent.add_child(enemy)
+
+func _on_enemy_contact_player(body: Node2D):
+    if body is CharacterBody2D and body.has_method("take_damage"):
+        body.take_damage(1)
 
 func _on_enemy_hit(area: Area2D, enemy_node: Node2D):
     if area.name == "AttackHitbox":

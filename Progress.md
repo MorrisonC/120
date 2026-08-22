@@ -60,3 +60,13 @@
 - [x] Perform audio trigger audit and add `AudioManager.gd` with BGM and SFX players (E2E-6).
 - [x] Verify all 26 GUT unit tests pass headlessly and all Lane B gauntlet targets are unblocked.
 - [x] Complete pre-commit steps.
+
+## TetraForce Movement/Combat Retrofit & Jules AI Continuity Skill - COMPLETED
+- [x] Implement InputMap bindings for WASD/Arrows (`ui_left`, `ui_right`, `ui_up`, `ui_down`, `ui_accept`).
+- [x] Implement top-down 8-directional movement, cardinal facing vector snapping, attack hitboxes, and 3-heart health system in `PlayerController.gd`.
+- [x] Add safe checkpoint beacon zones, enemy contact damage, HP heart UI, and checkpoint respawning in `Main.gd`.
+- [x] Integrate `continue-120-build` skill, `resume.sh`, `capture_web_e2e.sh`, `playwright_walk_run.js`, `MOVEMENT_AND_COMBAT_REFERENCE.md`, `CONTINUE_BUILD_PROMPT.md`, and `SESSION_LOG.md`.
+- [x] Install `godot_mcp_bridge` editor plugin and test scenario runner.
+- [x] Complete all 31 tasks in `TASK_QUEUE.md`.
+- [x] Verify unit test suite headlessly (28 GUT tests passing across 8 suites).
+- [x] Complete pre-commit steps.
