@@ -9,6 +9,7 @@ signal health_changed(current_hp: int, max_hp: int)
 
 var current_health: int = 3
 var input_vector: Vector2 = Vector2.ZERO
+var touch_input_vector: Vector2 = Vector2.ZERO
 var facing_direction: Vector2 = Vector2.DOWN
 var is_attacking: bool = false
 var attack_cooldown: float = 0.0
@@ -91,8 +92,14 @@ func _handle_input(_delta: float) -> void:
         if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
             y -= 1.0
 
+    if touch_input_vector.length_squared() > 0.001:
+        x = touch_input_vector.x
+        y = touch_input_vector.y
+
     if x != 0.0 or y != 0.0:
         input_vector = Vector2(x, y)
+    else:
+        input_vector = Vector2.ZERO
 
     if input_vector.length_squared() > 0.001:
         # Snap facing direction to 4 cardinal directions
