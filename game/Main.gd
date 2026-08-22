@@ -4,6 +4,9 @@ var world_gen: Node
 var player: CharacterBody2D
 var timer_label: Label
 var room_label: Label
+var health_label: Label
+
+var checkpoint_nodes: Dictionary = {}
 
 func _ready():
     # 1. Instantiate and generate world
@@ -20,11 +23,17 @@ func _ready():
     # 4. Attach UI
     _create_ui()
 
-    # 5. Start Time Loop
+    # 5. Connect GameState / Time Loop
     var time_mgr = get_node_or_null("/root/TimeManager")
     if is_instance_valid(time_mgr):
         time_mgr.connect("second_ticked", Callable(self, "_on_second_ticked"))
+        time_mgr.connect("loop_expired", Callable(self, "_on_loop_expired"))
         time_mgr.start_loop()
+
+    # Set initial active spawn point at village spawn
+    var game_state = get_node_or_null("/root/GameState")
+    if is_instance_valid(game_state):
+        game_state.set_active_spawn_point(Vector2(160, 90), "village_0")
 
 func _build_world_visuals():
     if not is_instance_valid(world_gen) or world_gen.rooms.is_empty():
@@ -48,21 +57,98 @@ func _build_world_visuals():
         bg.color = _get_biome_color(room_data.biome)
         biomes_node.add_child(bg)
 
+        # Decorative grid lines (GBC aesthetic)
+        var border = ReferenceRect.new()
+        border.size = room_size
+        border.position = room_pos
+        border.editor_only = false
+        border.border_color = Color(1.0, 1.0, 1.0, 0.15)
+        border.border_width = 2.0
+        biomes_node.add_child(border)
+
         # Room Label/Obstacle info
         var label = Label.new()
         label.text = room_id.capitalize() + "\n" + _get_obstacle_name(room_data.obstacle)
-        label.position = room_pos + Vector2(20, 20)
+        label.position = room_pos + Vector2(10, 10)
         label.add_theme_color_override("font_color", Color.WHITE)
         biomes_node.add_child(label)
+
+        # Checkpoint Safe Location Marker
+        if room_data.is_checkpoint:
+            var cp_area = Area2D.new()
+            cp_area.name = "Checkpoint_" + room_id
+            cp_area.position = room_pos + Vector2(160, 90)
+
+            var cp_shape = CollisionShape2D.new()
+            var shape = RectangleShape2D.new()
+            shape.size = Vector2(32, 32)
+            cp_shape.shape = shape
+            cp_area.add_child(cp_shape)
+
+            var cp_visual = ColorRect.new()
+            cp_visual.size = Vector2(24, 24)
+            cp_visual.position = Vector2(-12, -12)
+            cp_visual.color = Color(0.2, 0.9, 0.4, 0.8) # Safe Green Beacon
+            cp_area.add_child(cp_visual)
+
+            var cp_label = Label.new()
+            cp_label.text = "SAFE"
+            cp_label.position = Vector2(-16, -28)
+            cp_label.add_theme_color_override("font_color", Color.GREEN_YELLOW)
+            cp_area.add_child(cp_label)
+
+            cp_area.connect("body_entered", Callable(self, "_on_checkpoint_entered").bind(room_id, cp_area.global_position))
+            biomes_node.add_child(cp_area)
+            checkpoint_nodes[room_id] = cp_area
 
         if room_data.item_contained != "":
             var item_label = Label.new()
             item_label.text = "[ " + room_data.item_contained + " ]"
-            item_label.position = room_pos + Vector2(120, 90)
+            item_label.position = room_pos + Vector2(120, 130)
             item_label.add_theme_color_override("font_color", Color.YELLOW)
             biomes_node.add_child(item_label)
 
+        # Add an interactive enemy target in non-checkpoint rooms
+        if room_index > 0 and not room_data.is_checkpoint:
+            _spawn_enemy_target(biomes_node, room_pos + Vector2(220, 90))
+
         room_index += 1
+
+func _spawn_enemy_target(parent: Node, pos: Vector2):
+    var enemy = Area2D.new()
+    enemy.name = "EnemyTarget"
+    enemy.position = pos
+
+    var shape = CollisionShape2D.new()
+    var rect = RectangleShape2D.new()
+    rect.size = Vector2(16, 16)
+    shape.shape = rect
+    enemy.add_child(shape)
+
+    var visual = ColorRect.new()
+    visual.size = Vector2(16, 16)
+    visual.position = Vector2(-8, -8)
+    visual.color = Color(0.8, 0.2, 0.8) # Purple Monster
+    enemy.add_child(visual)
+
+    enemy.connect("area_entered", Callable(self, "_on_enemy_hit").bind(enemy))
+    parent.add_child(enemy)
+
+func _on_enemy_hit(area: Area2D, enemy_node: Node2D):
+    if area.name == "AttackHitbox":
+        var juice = get_node_or_null("/root/VisualJuiceManager")
+        if is_instance_valid(juice):
+            juice.spawn_particles(enemy_node.global_position, Color.MAGENTA, 12)
+            juice.trigger_screen_shake(0.2, 3.0)
+        enemy_node.queue_free()
+
+func _on_checkpoint_entered(body: Node2D, room_id: String, cp_pos: Vector2):
+    if body is CharacterBody2D:
+        var game_state = get_node_or_null("/root/GameState")
+        if is_instance_valid(game_state):
+            game_state.set_active_spawn_point(cp_pos, room_id)
+            if is_instance_valid(room_label):
+                room_label.text = "SAFE: " + room_id.capitalize()
 
 func _get_biome_color(biome: int) -> Color:
     match biome:
@@ -107,6 +193,7 @@ func _spawn_player():
     player.add_child(camera)
 
     player.position = Vector2(160, 90)
+    player.connect("health_changed", Callable(self, "_on_player_health_changed"))
     add_child(player)
 
 func _create_ui():
@@ -119,6 +206,12 @@ func _create_ui():
     timer_label.add_theme_color_override("font_color", Color.YELLOW)
     ui_layer.add_child(timer_label)
 
+    health_label = Label.new()
+    health_label.text = "HP: ♥ ♥ ♥"
+    health_label.position = Vector2(100, 10)
+    health_label.add_theme_color_override("font_color", Color.RED)
+    ui_layer.add_child(health_label)
+
     room_label = Label.new()
     room_label.text = "BIOME: Village"
     room_label.position = Vector2(200, 10)
@@ -130,3 +223,22 @@ func _create_ui():
 func _on_second_ticked(remaining_time: float):
     if is_instance_valid(timer_label):
         timer_label.text = "TIME: " + str(int(remaining_time)) + "s"
+
+func _on_player_health_changed(hp: int, max_hp: int):
+    if is_instance_valid(health_label):
+        var hearts = ""
+        for i in range(hp):
+            hearts += "♥ "
+        health_label.text = "HP: " + hearts.strip_edges()
+
+func _on_loop_expired():
+    # Respawn player at current active spawn point
+    var game_state = get_node_or_null("/root/GameState")
+    var spawn_pos = Vector2(160, 90)
+    if is_instance_valid(game_state) and game_state.active_spawn_point != Vector2.ZERO:
+        spawn_pos = game_state.active_spawn_point
+
+    if is_instance_valid(player):
+        player.global_position = spawn_pos
+        player.current_health = player.max_health
+        _on_player_health_changed(player.current_health, player.max_health)

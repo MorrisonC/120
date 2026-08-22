@@ -150,3 +150,27 @@ func test_audio_manager_nodes():
     add_child_autoqfree(audio_mgr)
     assert_not_null(audio_mgr.bgm_player)
     assert_not_null(audio_mgr.sfx_player)
+
+func test_player_controller_facing_and_attack():
+    var player = PlayerController.new()
+    add_child_autoqfree(player)
+    watch_signals(player)
+
+    assert_eq(player.facing_direction, Vector2.DOWN)
+    player.input_vector = Vector2(1, 0) # Moving right
+    player._physics_process(0.016)
+    assert_eq(player.facing_direction, Vector2.RIGHT)
+
+    player.perform_attack()
+    assert_true(player.is_attacking)
+    assert_signal_emitted_with_parameters(player, "attacked", [Vector2.RIGHT])
+
+func test_player_controller_health_and_damage():
+    var player = PlayerController.new()
+    add_child_autoqfree(player)
+    watch_signals(player)
+
+    assert_eq(player.current_health, 3)
+    player.take_damage(1)
+    assert_eq(player.current_health, 2)
+    assert_signal_emitted_with_parameters(player, "health_changed", [2, 3])
