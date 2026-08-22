@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/npc_wanderer_idle_1.png" id="1_wanderer_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/npc_wanderer_idle_2.png" id="2_wanderer_2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wanderer"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_wanderer_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_wanderer_2")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="NPCWanderer" type="CharacterBody2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_wanderer")
+animation = &"idle"

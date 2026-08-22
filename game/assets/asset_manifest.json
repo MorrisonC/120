@@ -1,0 +1,336 @@
+{
+  "version": "1.0.0",
+  "total_assets": 46,
+  "categories": {
+    "tetraforce_reference": [
+      {
+        "name": "potlight.png",
+        "relative_path": "assets/tetraforce_reference/potlight.png",
+        "width": 64,
+        "height": 16,
+        "category": "tetraforce_reference"
+      },
+      {
+        "name": "upperhud.png",
+        "relative_path": "assets/tetraforce_reference/upperhud.png",
+        "width": 40,
+        "height": 20,
+        "category": "tetraforce_reference"
+      },
+      {
+        "name": "tall_grass.png",
+        "relative_path": "assets/tetraforce_reference/tall_grass.png",
+        "width": 176,
+        "height": 80,
+        "category": "tetraforce_reference"
+      },
+      {
+        "name": "statue.png",
+        "relative_path": "assets/tetraforce_reference/statue.png",
+        "width": 48,
+        "height": 16,
+        "category": "tetraforce_reference"
+      },
+      {
+        "name": "hearts.png",
+        "relative_path": "assets/tetraforce_reference/hearts.png",
+        "width": 45,
+        "height": 9,
+        "category": "tetraforce_reference"
+      },
+      {
+        "name": "icon.png",
+        "relative_path": "assets/tetraforce_reference/icon.png",
+        "width": 2122,
+        "height": 2121,
+        "category": "tetraforce_reference"
+      }
+    ],
+    "spritesheets": [
+      {
+        "name": "ui_hud_atlas.png",
+        "relative_path": "assets/spritesheets/ui_hud_atlas.png",
+        "width": 128,
+        "height": 64,
+        "category": "spritesheets"
+      },
+      {
+        "name": "entities_props_16x16.png",
+        "relative_path": "assets/spritesheets/entities_props_16x16.png",
+        "width": 64,
+        "height": 32,
+        "category": "spritesheets"
+      },
+      {
+        "name": "player_spritesheet_16x16.png",
+        "relative_path": "assets/spritesheets/player_spritesheet_16x16.png",
+        "width": 64,
+        "height": 32,
+        "category": "spritesheets"
+      },
+      {
+        "name": "master_atlas_32x32.png",
+        "relative_path": "assets/spritesheets/master_atlas_32x32.png",
+        "width": 96,
+        "height": 96,
+        "category": "spritesheets"
+      },
+      {
+        "name": "props_tiles_16x16.png",
+        "relative_path": "assets/spritesheets/props_tiles_16x16.png",
+        "width": 64,
+        "height": 32,
+        "category": "spritesheets"
+      }
+    ],
+    "sprites": [
+      {
+        "name": "door_open_16.png",
+        "relative_path": "assets/sprites/props/door_open_16.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "item_coin.png",
+        "relative_path": "assets/sprites/props/item_coin.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "desert_hazard_quicksand.png",
+        "relative_path": "assets/sprites/props/desert_hazard_quicksand.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "anchor_stone.png",
+        "relative_path": "assets/sprites/props/anchor_stone.png",
+        "width": 32,
+        "height": 32,
+        "category": "sprites"
+      },
+      {
+        "name": "desert_hazard_cactus.png",
+        "relative_path": "assets/sprites/props/desert_hazard_cactus.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "swamp_obstacle.png",
+        "relative_path": "assets/sprites/props/swamp_obstacle.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "door_open.png",
+        "relative_path": "assets/sprites/props/door_open.png",
+        "width": 32,
+        "height": 32,
+        "category": "sprites"
+      },
+      {
+        "name": "item_key.png",
+        "relative_path": "assets/sprites/props/item_key.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "anchor_stone_16.png",
+        "relative_path": "assets/sprites/props/anchor_stone_16.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "door_locked_16.png",
+        "relative_path": "assets/sprites/props/door_locked_16.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "respawn_bed.png",
+        "relative_path": "assets/sprites/props/respawn_bed.png",
+        "width": 32,
+        "height": 32,
+        "category": "sprites"
+      },
+      {
+        "name": "door_locked.png",
+        "relative_path": "assets/sprites/props/door_locked.png",
+        "width": 32,
+        "height": 32,
+        "category": "sprites"
+      },
+      {
+        "name": "respawn_bed_16.png",
+        "relative_path": "assets/sprites/props/respawn_bed_16.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "player_idle_front.png",
+        "relative_path": "assets/sprites/characters/player_idle_front.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "player_action_interact.png",
+        "relative_path": "assets/sprites/characters/player_action_interact.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "player_idle_side.png",
+        "relative_path": "assets/sprites/characters/player_idle_side.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "player_walk_step_right.png",
+        "relative_path": "assets/sprites/characters/player_walk_step_right.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "player_idle_back.png",
+        "relative_path": "assets/sprites/characters/player_idle_back.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "player_walk_side_1.png",
+        "relative_path": "assets/sprites/characters/player_walk_side_1.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "player_walk_step_left.png",
+        "relative_path": "assets/sprites/characters/player_walk_step_left.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "enemy_patrol_1.png",
+        "relative_path": "assets/sprites/characters/enemy_patrol_1.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "npc_wanderer_idle_1.png",
+        "relative_path": "assets/sprites/characters/npc_wanderer_idle_1.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "enemy_patrol_2.png",
+        "relative_path": "assets/sprites/characters/enemy_patrol_2.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "player_action_swing.png",
+        "relative_path": "assets/sprites/characters/player_action_swing.png",
+        "width": 32,
+        "height": 32,
+        "category": "sprites"
+      },
+      {
+        "name": "npc_wanderer_idle_2.png",
+        "relative_path": "assets/sprites/characters/npc_wanderer_idle_2.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "player_walk_side_2.png",
+        "relative_path": "assets/sprites/characters/player_walk_side_2.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      },
+      {
+        "name": "npc_shopkeeper.png",
+        "relative_path": "assets/sprites/characters/npc_shopkeeper.png",
+        "width": 32,
+        "height": 32,
+        "category": "sprites"
+      },
+      {
+        "name": "npc_shopkeeper_16.png",
+        "relative_path": "assets/sprites/characters/npc_shopkeeper_16.png",
+        "width": 16,
+        "height": 16,
+        "category": "sprites"
+      }
+    ],
+    "ui": [
+      {
+        "name": "ui_touch_dpad.png",
+        "relative_path": "assets/ui/hud/ui_touch_dpad.png",
+        "width": 32,
+        "height": 32,
+        "category": "ui"
+      },
+      {
+        "name": "ui_action_button.png",
+        "relative_path": "assets/ui/hud/ui_action_button.png",
+        "width": 32,
+        "height": 32,
+        "category": "ui"
+      },
+      {
+        "name": "game_over_skull.png",
+        "relative_path": "assets/ui/hud/game_over_skull.png",
+        "width": 32,
+        "height": 32,
+        "category": "ui"
+      },
+      {
+        "name": "hud_heart_full.png",
+        "relative_path": "assets/ui/hud/hud_heart_full.png",
+        "width": 16,
+        "height": 16,
+        "category": "ui"
+      },
+      {
+        "name": "hud_120_timer_dial.png",
+        "relative_path": "assets/ui/hud/hud_120_timer_dial.png",
+        "width": 32,
+        "height": 32,
+        "category": "ui"
+      },
+      {
+        "name": "hud_heart_half.png",
+        "relative_path": "assets/ui/hud/hud_heart_half.png",
+        "width": 16,
+        "height": 16,
+        "category": "ui"
+      },
+      {
+        "name": "hud_heart_empty.png",
+        "relative_path": "assets/ui/hud/hud_heart_empty.png",
+        "width": 16,
+        "height": 16,
+        "category": "ui"
+      }
+    ]
+  }
+}
