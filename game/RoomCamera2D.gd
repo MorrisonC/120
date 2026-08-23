@@ -5,6 +5,8 @@ class_name RoomCamera2D
 @export var smooth_transition: bool = true
 @export var transition_speed: float = 10.0
 
+signal room_changed(new_room: Vector2)
+
 var target_position: Vector2 = Vector2.ZERO
 var current_room: Vector2 = Vector2(-999, -999) # Init to invalid room to force update on frame 1
 
@@ -36,6 +38,7 @@ func _process(delta: float) -> void:
             current_room = new_room
             # Center of the current room
             target_position = current_room * room_size + (room_size / 2)
+            emit_signal("room_changed", current_room)
 
             if not smooth_transition:
                 global_position = target_position

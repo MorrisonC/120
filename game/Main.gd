@@ -5,8 +5,11 @@ var player: CharacterBody2D
 var timer_label: Label
 var room_label: Label
 var health_label: Label
+var map_overlay: Control
+var map_button: Button
 
 var checkpoint_nodes: Dictionary = {}
+var current_room_index: int = 0
 
 func _ready():
     RenderingServer.set_default_clear_color(Color(0.08, 0.12, 0.15))
@@ -294,6 +297,10 @@ func _spawn_player():
     player.connect("health_changed", Callable(self, "_on_player_health_changed"))
     add_child(player)
 
+    var camera = player.get_node_or_null("Camera2D")
+    if is_instance_valid(camera) and camera.has_signal("room_changed"):
+        camera.connect("room_changed", Callable(self, "_on_room_changed"))
+
 func _create_ui():
     var ui_layer = CanvasLayer.new()
     ui_layer.name = "HUD"
@@ -333,6 +340,15 @@ func _create_ui():
     room_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.95))
     ui_layer.add_child(room_label)
 
+    # MAP Button on HUD
+    map_button = Button.new()
+    map_button.text = "MAP [M]"
+    map_button.position = Vector2(265, 1)
+    map_button.size = Vector2(50, 16)
+    map_button.add_theme_font_size_override("font_size", 9)
+    map_button.connect("pressed", Callable(self, "toggle_map"))
+    ui_layer.add_child(map_button)
+
     # Touch Controls Overlay
     var touch_controls = load("res://TouchControls.gd").new()
     touch_controls.name = "TouchControls"
@@ -341,7 +357,101 @@ func _create_ui():
     touch_controls.connect("attack_pressed", Callable(self, "_on_touch_attack_pressed"))
     ui_layer.add_child(touch_controls)
 
+    # Map Popup Overlay
+    _create_map_overlay(ui_layer)
+
     add_child(ui_layer)
+
+func _create_map_overlay(parent: CanvasLayer):
+    map_overlay = Control.new()
+    map_overlay.name = "MapOverlay"
+    map_overlay.visible = false
+    map_overlay.position = Vector2(40, 25)
+    map_overlay.size = Vector2(240, 130)
+
+    var bg = ColorRect.new()
+    bg.size = map_overlay.size
+    bg.color = Color(0.04, 0.06, 0.1, 0.92)
+    map_overlay.add_child(bg)
+
+    var title = Label.new()
+    title.text = "WORLD MAP"
+    title.position = Vector2(85, 4)
+    title.add_theme_font_size_override("font_size", 12)
+    title.add_theme_color_override("font_color", Color(1.0, 0.85, 0.3))
+    map_overlay.add_child(title)
+
+    parent.add_child(map_overlay)
+    _update_map_display()
+
+func toggle_map():
+    if is_instance_valid(map_overlay):
+        map_overlay.visible = not map_overlay.visible
+        if map_overlay.visible:
+            _update_map_display()
+
+func _input(event: InputEvent):
+    if event is InputEventKey and event.pressed and not event.echo:
+        if event.keycode == KEY_M:
+            toggle_map()
+
+func _on_room_changed(room_coords: Vector2):
+    if not is_instance_valid(world_gen) or world_gen.rooms.is_empty():
+        return
+    current_room_index = int(clamp(room_coords.x, 0, world_gen.rooms.size() - 1))
+    var room_keys = world_gen.rooms.keys()
+    if current_room_index < room_keys.size():
+        var room_id = room_keys[current_room_index]
+        var room_data = world_gen.rooms[room_id]
+        if is_instance_valid(room_label):
+            room_label.text = "BIOME: " + _get_biome_name(room_data.biome)
+    _update_map_display()
+
+func _update_map_display():
+    if not is_instance_valid(map_overlay) or not is_instance_valid(world_gen):
+        return
+
+    # Clear previous room indicators
+    for child in map_overlay.get_children():
+        if child.name.begins_with("MapRoom_"):
+            child.queue_free()
+
+    var room_keys = world_gen.rooms.keys()
+    var total_rooms = room_keys.size()
+    if total_rooms == 0:
+        return
+
+    var card_width = 32
+    var card_height = 20
+    var start_x = 10
+    var start_y = 35
+
+    for i in range(total_rooms):
+        var room_id = room_keys[i]
+        var room_data = world_gen.rooms[room_id]
+
+        var r_rect = ColorRect.new()
+        r_rect.name = "MapRoom_" + str(i)
+        r_rect.size = Vector2(card_width, card_height)
+        r_rect.position = Vector2(start_x + i * (card_width + 6), start_y + (i % 3) * (card_height + 8))
+        r_rect.color = _get_biome_color(room_data.biome)
+
+        if i == current_room_index:
+            r_rect.color = r_rect.color.lightened(0.4)
+            var current_dot = ColorRect.new()
+            current_dot.size = Vector2(6, 6)
+            current_dot.position = Vector2(card_width / 2 - 3, card_height / 2 - 3)
+            current_dot.color = Color.YELLOW
+            r_rect.add_child(current_dot)
+
+        var r_label = Label.new()
+        r_label.text = room_data.id
+        r_label.position = Vector2(2, 2)
+        r_label.add_theme_font_size_override("font_size", 7)
+        r_label.add_theme_color_override("font_color", Color.WHITE)
+        r_rect.add_child(r_label)
+
+        map_overlay.add_child(r_rect)
 
 func _on_touch_joystick_moved(vector: Vector2) -> void:
     if is_instance_valid(player):
