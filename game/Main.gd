@@ -1,6 +1,7 @@
 extends Node2D
 
 var world_gen: Node
+var ruins_dungeon: Node3D
 var player: CharacterBody2D
 var timer_label: Label
 var room_label: Label
@@ -14,31 +15,45 @@ var current_room_index: int = 0
 func _ready():
     RenderingServer.set_default_clear_color(Color(0.08, 0.12, 0.15))
 
-    # 1. Instantiate and generate world
+    # 1. Instantiate and initialize Modular Ruins as the First Area
+    _setup_first_area_ruins()
+
+    # 2. Instantiate and generate world DAG for multi-biome map
     world_gen = load("res://ProceduralWorldGenerator.gd").new()
     add_child(world_gen)
     world_gen.generate_valid_world()
 
-    # 2. Build visual representation for generated rooms
+    # 3. Build visual representation for generated rooms
     _build_world_visuals()
 
-    # 3. Spawn Player
+    # 4. Spawn Player
     _spawn_player()
 
-    # 4. Attach UI
+    # 5. Attach UI
     _create_ui()
 
-    # 5. Connect GameState / Time Loop
+    # 6. Connect GameState / Time Loop
     var time_mgr = get_node_or_null("/root/TimeManager")
     if is_instance_valid(time_mgr):
         time_mgr.connect("second_ticked", Callable(self, "_on_second_ticked"))
         time_mgr.connect("loop_expired", Callable(self, "_on_loop_expired"))
         time_mgr.start_loop()
 
-    # Set initial active spawn point at village spawn
+    # Set initial active spawn point at Ruins spawn
     var game_state = get_node_or_null("/root/GameState")
     if is_instance_valid(game_state):
-        game_state.set_active_spawn_point(Vector2(160, 90), "village_0")
+        var spawn_vec = Vector2(160, 90)
+        if is_instance_valid(ruins_dungeon) and ruins_dungeon.dungeon_data.has("spawn_pos"):
+            var sp = ruins_dungeon.dungeon_data.spawn_pos
+            spawn_vec = Vector2(sp.x * 16 + 8, sp.z * 16 + 8)
+        game_state.set_active_spawn_point(spawn_vec, "ruins_0")
+
+func _setup_first_area_ruins():
+    var ruins_scene = load("res://scenes/procgen/RuinsDungeon.tscn")
+    if is_instance_valid(ruins_scene):
+        ruins_dungeon = ruins_scene.instantiate()
+        ruins_dungeon.name = "FirstAreaRuinsDungeon"
+        add_child(ruins_dungeon)
 
 func _build_world_visuals():
     if not is_instance_valid(world_gen) or world_gen.rooms.is_empty():
@@ -277,28 +292,28 @@ func _on_checkpoint_entered(body: Node2D, room_id: String, cp_pos: Vector2):
             game_state.set_active_spawn_point(cp_pos, room_id)
             if is_instance_valid(room_label):
                 var room_data = world_gen.rooms.get(room_id)
-                var biome_name = _get_biome_name(room_data.biome) if room_data else "Village"
+                var biome_name = _get_biome_name(room_data.biome) if room_data else "Ruins"
                 room_label.text = "BIOME: " + biome_name
 
 func _get_biome_name(biome: int) -> String:
     match biome:
-        0: return "Village"
+        0: return "Ruins"
         1: return "Desert"
         2: return "Swamp"
         3: return "Caves"
         4: return "Sea"
         5: return "Factory"
-        _: return "Unknown"
+        _: return "Ruins"
 
 func _get_biome_color(biome: int) -> Color:
     match biome:
-        0: return Color(0.2, 0.5, 0.2)
+        0: return Color(0.35, 0.38, 0.45)
         1: return Color(0.7, 0.6, 0.3)
         2: return Color(0.3, 0.4, 0.2)
         3: return Color(0.3, 0.3, 0.4)
         4: return Color(0.1, 0.3, 0.6)
         5: return Color(0.4, 0.4, 0.4)
-        _: return Color(0.2, 0.2, 0.2)
+        _: return Color(0.35, 0.38, 0.45)
 
 func _get_obstacle_name(obs: int) -> String:
     match obs:
@@ -325,7 +340,12 @@ func _spawn_player():
     room_camera.set_script(load("res://RoomCamera2D.gd"))
     player.add_child(room_camera)
 
-    player.position = Vector2(160, 90)
+    var spawn_pos = Vector2(160, 90)
+    if is_instance_valid(ruins_dungeon) and ruins_dungeon.dungeon_data.has("spawn_pos"):
+        var sp = ruins_dungeon.dungeon_data.spawn_pos
+        spawn_pos = Vector2(sp.x * 16 + 8, sp.z * 16 + 8)
+
+    player.position = spawn_pos
     player.connect("health_changed", Callable(self, "_on_player_health_changed"))
     add_child(player)
 
@@ -365,7 +385,7 @@ func _create_ui():
         ui_layer.add_child(heart_icon)
 
     room_label = Label.new()
-    room_label.text = "BIOME: Village"
+    room_label.text = "BIOME: Ruins"
     room_label.position = Vector2(195, 1)
     room_label.add_theme_font_size_override("font_size", 11)
     room_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.95))
@@ -502,6 +522,9 @@ func _on_player_health_changed(hp: int, max_hp: int):
         health_label.text = "HP: " + str(hp) + "/" + str(max_hp)
 
 func _on_loop_expired():
+    if is_instance_valid(ruins_dungeon) and ruins_dungeon.has_method("reset_ruins_state"):
+        ruins_dungeon.reset_ruins_state()
+
     var game_state = get_node_or_null("/root/GameState")
     var spawn_pos = Vector2(160, 90)
     if is_instance_valid(game_state) and game_state.active_spawn_point != Vector2.ZERO:
