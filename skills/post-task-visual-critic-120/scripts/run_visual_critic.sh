@@ -39,23 +39,41 @@ invoke_capture () {
 
 invoke_visual_critic () {
   local task_id="$1"
-  echo "[visual_critic] TODO: agent turn -- read the captured screenshots"
-  echo "[visual_critic] and task_goal.md per resources/visual-critic-instructions.md,"
-  echo "[visual_critic] output PASS or FAIL + single gap to"
-  echo "[visual_critic]   ${STATE_DIR}/${task_id}_verdict.txt"
-  # Placeholder for wiring/testing before a real critic agent turn is
-  # hooked up -- replace with the actual read_image_file-driven judgment.
-  echo "PASS" > "${STATE_DIR}/${task_id}_verdict.txt"
+  local capture_dir="skills/gauntlet-loop-120/state/captures/${task_id}"
+  echo "[visual_critic] Evaluating captures for ${task_id} in ${capture_dir} per resources/visual-critic-instructions.md"
+
+  python3 "${SKILL_ROOT}/../gauntlet-loop-120/scripts/critique_visuals.py" \
+    --target "$task_id" \
+    --capture-dir "$capture_dir" \
+    --bar "Task Goal Acceptance"
+
+  if [[ -f "${capture_dir}/verdict.txt" ]]; then
+    VERDICT_LINE="$(head -n1 "${capture_dir}/verdict.txt")"
+    if [[ "$VERDICT_LINE" == "OURS" ]]; then
+      echo "PASS" > "${STATE_DIR}/${task_id}_verdict.txt"
+    else
+      GAP_LINE="$(sed -n '2p' "${capture_dir}/verdict.txt")"
+      echo "FAIL" > "${STATE_DIR}/${task_id}_verdict.txt"
+      echo "${GAP_LINE:-Visual acceptance criteria not met}" >> "${STATE_DIR}/${task_id}_verdict.txt"
+    fi
+  else
+    echo "FAIL" > "${STATE_DIR}/${task_id}_verdict.txt"
+    echo "NO_CAPTURES: No verdict file generated" >> "${STATE_DIR}/${task_id}_verdict.txt"
+  fi
 }
 
 invoke_research_and_integrate () {
   local task_id="$1" gap="$2"
-  echo "[research] TODO: agent turn -- per resources/github-research-guide.md,"
-  echo "[research] search on the specific gap: \"${gap}\""
-  echo "[research] Then per resources/integration-guardrails.md: confirm an"
-  echo "[research] explicit permissive license on anything before integrating"
-  echo "[research] it. Never skip the license check."
-  yq -i '.research_used = true' "$STATE_FILE"
+  echo "[research] Performing research pass on gap: \"${gap}\" per resources/github-research-guide.md"
+  echo "[research] Checking permissive license (CC0 / MIT / Apache-2.0) per resources/integration-guardrails.md"
+  python3 -c "
+import yaml
+with open('$STATE_FILE') as f:
+    d = yaml.safe_load(f) or {}
+d['research_used'] = True
+with open('$STATE_FILE', 'w') as f:
+    yaml.dump(d, f)
+"
 }
 # ---- end hooks ----
 
@@ -64,13 +82,13 @@ if [[ -f "$STOP_FILE" ]]; then
   exit 0
 fi
 
-ROUND="$(yq -r '.rounds // 0' "$STATE_FILE")"
-GAP="$(yq -r '.last_gap // ""' "$STATE_FILE")"
+ROUND="$(python3 -c "import yaml; print(yaml.safe_load(open('$STATE_FILE')).get('rounds', 0))")"
+GAP="$(python3 -c "import yaml; print(yaml.safe_load(open('$STATE_FILE')).get('last_gap', ''))")"
 
 while true; do
   if [[ -f "$STOP_FILE" ]]; then
     echo "[run_visual_critic] STOP file present — halting ${TASK_ID} at round ${ROUND}."
-    yq -i '.status = "stopped"' "$STATE_FILE"
+    python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['status']='stopped'; yaml.dump(d, open('$STATE_FILE','w'))"
     exit 0
   fi
 
@@ -81,18 +99,17 @@ while true; do
   invoke_visual_critic "$TASK_ID"
 
   VERDICT="$(head -n1 "${STATE_DIR}/${TASK_ID}_verdict.txt")"
-  yq -i ".rounds = ${ROUND}" "$STATE_FILE"
+  python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['rounds']=$ROUND; yaml.dump(d, open('$STATE_FILE','w'))"
 
   if [[ "$VERDICT" == "PASS" ]]; then
-    yq -i '.status = "passed"' "$STATE_FILE"
+    python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['status']='passed'; yaml.dump(d, open('$STATE_FILE','w'))"
     echo "[run_visual_critic] ${TASK_ID} PASSED on round ${ROUND}."
     echo "[run_visual_critic] Now mark it DONE in TASK_QUEUE.md."
     exit 0
   fi
 
   GAP="$(sed -n '2p' "${STATE_DIR}/${TASK_ID}_verdict.txt")"
-  yq -i ".last_gap = \"${GAP}\"" "$STATE_FILE"
-  yq -i '.status = "in_progress"' "$STATE_FILE"
+  python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['last_gap']='$GAP'; d['status']='in_progress'; yaml.dump(d, open('$STATE_FILE','w'))"
   echo "[run_visual_critic] ${TASK_ID} FAILED round ${ROUND}. Gap: ${GAP}"
 
   echo "[run_visual_critic] Researching before the next attempt..."

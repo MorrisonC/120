@@ -3,5 +3,6 @@ task_queue_file: "TASK_QUEUE.md"    # at repo root
 # capture_for_task.sh reads gauntlet-loop-120's own config.yaml for
 # that, so screenshots and task_goal.md land in the same place. See
 # capture_for_task.sh's comments.
+capture_dir: "skills/gauntlet-loop-120/state/captures"
 state_dir: "skills/post-task-visual-critic-120/state"
 stop_file: "STOP"
