@@ -55,7 +55,7 @@ invoke_research_and_integrate () {
   echo "[research] Then per resources/integration-guardrails.md: confirm an"
   echo "[research] explicit permissive license on anything before integrating"
   echo "[research] it. Never skip the license check."
-  yq -i '.research_used = true' "$STATE_FILE"
+  python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['research_used']=True; yaml.dump(d, open('$STATE_FILE','w'))"
 }
 # ---- end hooks ----
 
@@ -64,13 +64,13 @@ if [[ -f "$STOP_FILE" ]]; then
   exit 0
 fi
 
-ROUND="$(yq -r '.rounds // 0' "$STATE_FILE")"
-GAP="$(yq -r '.last_gap // ""' "$STATE_FILE")"
+ROUND="$(python3 -c "import yaml; print(yaml.safe_load(open('$STATE_FILE')).get('rounds', 0))")"
+GAP="$(python3 -c "import yaml; print(yaml.safe_load(open('$STATE_FILE')).get('last_gap', ''))")"
 
 while true; do
   if [[ -f "$STOP_FILE" ]]; then
     echo "[run_visual_critic] STOP file present — halting ${TASK_ID} at round ${ROUND}."
-    yq -i '.status = "stopped"' "$STATE_FILE"
+    python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['status']='stopped'; yaml.dump(d, open('$STATE_FILE','w'))"
     exit 0
   fi
 
@@ -81,18 +81,17 @@ while true; do
   invoke_visual_critic "$TASK_ID"
 
   VERDICT="$(head -n1 "${STATE_DIR}/${TASK_ID}_verdict.txt")"
-  yq -i ".rounds = ${ROUND}" "$STATE_FILE"
+  python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['rounds']=$ROUND; yaml.dump(d, open('$STATE_FILE','w'))"
 
   if [[ "$VERDICT" == "PASS" ]]; then
-    yq -i '.status = "passed"' "$STATE_FILE"
+    python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['status']='passed'; yaml.dump(d, open('$STATE_FILE','w'))"
     echo "[run_visual_critic] ${TASK_ID} PASSED on round ${ROUND}."
     echo "[run_visual_critic] Now mark it DONE in TASK_QUEUE.md."
     exit 0
   fi
 
   GAP="$(sed -n '2p' "${STATE_DIR}/${TASK_ID}_verdict.txt")"
-  yq -i ".last_gap = \"${GAP}\"" "$STATE_FILE"
-  yq -i '.status = "in_progress"' "$STATE_FILE"
+  python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['last_gap']='$GAP'; d['status']='in_progress'; yaml.dump(d, open('$STATE_FILE','w'))"
   echo "[run_visual_critic] ${TASK_ID} FAILED round ${ROUND}. Gap: ${GAP}"
 
   echo "[run_visual_critic] Researching before the next attempt..."

@@ -298,3 +298,9 @@ possible gap up front. This list is a starting point, not the full set.)*
   entry.
 - Note: Documented CC0 open asset licensing and attribution in `game/assets/CREDITS.md`.
 - Depends on: none
+
+## [TODO] VIS-1: Add decorative grass tile animation to starting biome room
+- Scope: Add grass tile animation sprite in starting room scene
+- Acceptance: Starting room displays animated grass tile visual
+- Depends on: none
+- Visual check: yes
