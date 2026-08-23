@@ -76,6 +76,7 @@ func _handle_timers(delta: float) -> void:
                 sword_visual.visible = false
             if is_instance_valid(attack_shape):
                 attack_shape.disabled = true
+            _update_sprite_texture()
 
     if invulnerability_timer > 0.0:
         invulnerability_timer -= delta
@@ -127,6 +128,26 @@ func _handle_input(_delta: float) -> void:
 func _update_attack_hitbox_position() -> void:
     if is_instance_valid(attack_shape):
         attack_shape.position = facing_direction * 16.0
+    _update_sprite_texture()
+
+func _update_sprite_texture() -> void:
+    if not is_instance_valid(sprite_node):
+        return
+
+    if is_attacking and ResourceLoader.exists("res://assets/sprites/characters/player_action_swing.png"):
+        sprite_node.texture = load("res://assets/sprites/characters/player_action_swing.png")
+        sprite_node.flip_h = (facing_direction == Vector2.LEFT)
+        return
+
+    if facing_direction == Vector2.UP and ResourceLoader.exists("res://assets/sprites/characters/player_idle_back.png"):
+        sprite_node.texture = load("res://assets/sprites/characters/player_idle_back.png")
+        sprite_node.flip_h = false
+    elif facing_direction == Vector2.DOWN and ResourceLoader.exists("res://assets/sprites/characters/player_idle_front.png"):
+        sprite_node.texture = load("res://assets/sprites/characters/player_idle_front.png")
+        sprite_node.flip_h = false
+    elif (facing_direction == Vector2.LEFT or facing_direction == Vector2.RIGHT) and ResourceLoader.exists("res://assets/sprites/characters/player_idle_side.png"):
+        sprite_node.texture = load("res://assets/sprites/characters/player_idle_side.png")
+        sprite_node.flip_h = (facing_direction == Vector2.LEFT)
 
 func _apply_movement() -> void:
     var move_speed_modifier = 1.0
