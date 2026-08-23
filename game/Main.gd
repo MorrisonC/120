@@ -289,17 +289,16 @@ func _spawn_player():
     player.add_child(col)
 
     # Attach Camera
-    var camera = Camera2D.new()
-    camera.set_script(load("res://RoomCamera2D.gd"))
-    player.add_child(camera)
+    var room_camera = Camera2D.new()
+    room_camera.set_script(load("res://RoomCamera2D.gd"))
+    player.add_child(room_camera)
 
     player.position = Vector2(160, 90)
     player.connect("health_changed", Callable(self, "_on_player_health_changed"))
     add_child(player)
 
-    var camera = player.get_node_or_null("Camera2D")
-    if is_instance_valid(camera) and camera.has_signal("room_changed"):
-        camera.connect("room_changed", Callable(self, "_on_room_changed"))
+    if room_camera.has_signal("room_changed"):
+        room_camera.connect("room_changed", Callable(self, "_on_room_changed"))
 
 func _create_ui():
     var ui_layer = CanvasLayer.new()
