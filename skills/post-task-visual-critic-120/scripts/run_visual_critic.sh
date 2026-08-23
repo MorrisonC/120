@@ -39,13 +39,27 @@ invoke_capture () {
 
 invoke_visual_critic () {
   local task_id="$1"
-  echo "[visual_critic] TODO: agent turn -- read the captured screenshots"
-  echo "[visual_critic] and task_goal.md per resources/visual-critic-instructions.md,"
-  echo "[visual_critic] output PASS or FAIL + single gap to"
-  echo "[visual_critic]   ${STATE_DIR}/${task_id}_verdict.txt"
-  # Placeholder for wiring/testing before a real critic agent turn is
-  # hooked up -- replace with the actual read_image_file-driven judgment.
-  echo "PASS" > "${STATE_DIR}/${task_id}_verdict.txt"
+  local capture_dir
+  capture_dir="$(get_cfg capture_dir)/${task_id}"
+  echo "[visual_critic] Evaluating captures for ${task_id} in ${capture_dir}"
+  python3 "${SKILL_ROOT}/../gauntlet-loop-120/scripts/critique_visuals.py" \
+    --target "$task_id" \
+    --capture-dir "$capture_dir" \
+    --bar "Task Goal Acceptance"
+
+  if [[ -f "${capture_dir}/verdict.txt" ]]; then
+    VERDICT_LINE="$(head -n1 "${capture_dir}/verdict.txt")"
+    if [[ "$VERDICT_LINE" == "OURS" ]]; then
+      echo "PASS" > "${STATE_DIR}/${task_id}_verdict.txt"
+    else
+      GAP_LINE="$(sed -n '2p' "${capture_dir}/verdict.txt")"
+      echo "FAIL" > "${STATE_DIR}/${task_id}_verdict.txt"
+      echo "${GAP_LINE:-Visual acceptance criteria not met}" >> "${STATE_DIR}/${task_id}_verdict.txt"
+    fi
+  else
+    echo "FAIL" > "${STATE_DIR}/${task_id}_verdict.txt"
+    echo "NO_VERDICT_FILE" >> "${STATE_DIR}/${task_id}_verdict.txt"
+  fi
 }
 
 invoke_research_and_integrate () {
