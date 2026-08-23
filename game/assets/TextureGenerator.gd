@@ -144,6 +144,44 @@ static func create_biome_wall_texture(biome: int) -> ImageTexture:
 
 	return ImageTexture.create_from_image(img)
 
+static func create_slashable_grass_texture() -> ImageTexture:
+	var img = Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	var base = Color(0.18, 0.58, 0.18)
+	var blade = Color(0.28, 0.82, 0.28)
+	var tip = Color(0.45, 0.95, 0.35)
+
+	for y in range(16):
+		for x in range(16):
+			var col = base
+			if y < 4:
+				col = tip
+			elif (x % 3 == 0 and y < 12) or (x % 4 == 1 and y < 14):
+				col = blade
+			img.set_pixel(x, y, col)
+	return ImageTexture.create_from_image(img)
+
+static func create_sword_texture() -> ImageTexture:
+	var img = Image.create(24, 24, false, Image.FORMAT_RGBA8)
+	var hilt = Color(0.55, 0.35, 0.15)
+	var guard = Color(0.85, 0.75, 0.25)
+	var blade = Color(0.90, 0.92, 0.98)
+	var edge = Color(0.65, 0.85, 1.0, 0.85)
+
+	for y in range(24):
+		for x in range(24):
+			# Diagonal sword arc blade
+			if abs(x - y) <= 2 and x >= 4 and x <= 20:
+				img.set_pixel(x, y, blade)
+			elif abs(x - y) == 3 and x >= 3 and x <= 21:
+				img.set_pixel(x, y, edge)
+			elif x >= 2 and x <= 5 and y >= 2 and y <= 5:
+				img.set_pixel(x, y, hilt)
+			elif abs(x - y) <= 3 and x >= 5 and x <= 7:
+				img.set_pixel(x, y, guard)
+			else:
+				img.set_pixel(x, y, Color(0, 0, 0, 0))
+	return ImageTexture.create_from_image(img)
+
 static func create_biome_decor_texture(biome: int) -> ImageTexture:
 	var img = Image.create(16, 16, false, Image.FORMAT_RGBA8)
 	var bg: Color

@@ -304,3 +304,15 @@ possible gap up front. This list is a starting point, not the full set.)*
 - Acceptance: Starting room displays animated grass tile visual
 - Depends on: none
 - Visual check: yes
+
+## [TODO] SLASH-1: Slashable grass tile destruction
+- Scope: Add slashable grass Area2D tile with leaf destruction animation
+- Acceptance: Grass tile destroys when hit by player AttackHitbox with leaf particles
+- Depends on: none
+- Visual check: yes
+
+## [TODO] COMBAT-4: Sword swing arc visual and enemy health bar
+- Scope: Add animated sword arc sprite on attack and enemy HP bar display
+- Acceptance: Sword swing sprite renders on attack and enemy HP bar updates on damage
+- Depends on: none
+- Visual check: yes
