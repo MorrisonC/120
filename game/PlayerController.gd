@@ -18,6 +18,7 @@ var invulnerability_timer: float = 0.0
 var attack_hitbox: Area2D
 var attack_shape: CollisionShape2D
 var sprite_node: Sprite2D
+var sword_visual: Sprite2D
 
 func _ready() -> void:
     current_health = max_health
@@ -48,6 +49,14 @@ func _setup_attack_hitbox() -> void:
     attack_shape.disabled = true
     attack_shape.position = Vector2(0, 16) # Default facing down
 
+    sword_visual = Sprite2D.new()
+    sword_visual.name = "SwordVisual"
+    sword_visual.visible = false
+    var tex_gen = load("res://assets/TextureGenerator.gd")
+    if is_instance_valid(tex_gen) and tex_gen.has_method("create_sword_texture"):
+        sword_visual.texture = tex_gen.create_sword_texture()
+    add_child(sword_visual)
+
     attack_hitbox.add_child(attack_shape)
     add_child(attack_hitbox)
 
@@ -63,6 +72,8 @@ func _handle_timers(delta: float) -> void:
             is_attacking = false
             attack_hitbox.monitoring = false
             attack_hitbox.monitorable = false
+            if is_instance_valid(sword_visual):
+                sword_visual.visible = false
             if is_instance_valid(attack_shape):
                 attack_shape.disabled = true
 
@@ -137,6 +148,11 @@ func perform_attack() -> void:
     attack_hitbox.monitorable = true
     if is_instance_valid(attack_shape):
         attack_shape.disabled = false
+
+    if is_instance_valid(sword_visual):
+        sword_visual.position = facing_direction * 18.0
+        sword_visual.rotation = facing_direction.angle() + PI/4
+        sword_visual.visible = true
 
     var juice = get_node_or_null("/root/VisualJuiceManager")
     if is_instance_valid(juice):

@@ -76,6 +76,9 @@ func _build_world_visuals():
         if room_index > 0 and not room_data.is_checkpoint:
             _spawn_enemy_target(biomes_node, room_pos + Vector2(240, 55))
 
+        # Add slashable grass patch in village/room
+        _spawn_slashable_grass_patch(biomes_node, room_pos + Vector2(100, 70))
+
         room_index += 1
 
 func _build_room_tilemap(parent: Node, room_data, room_pos: Vector2, room_index: int, total_rooms: int, tex_gen):
@@ -201,6 +204,17 @@ func _spawn_obstacle_prop(parent: Node, obs_type: int, pos: Vector2):
 
     parent.add_child(obs_node)
 
+func _spawn_slashable_grass_patch(parent: Node, base_pos: Vector2):
+    var grass_script = load("res://SlashableGrass.gd")
+    if not is_instance_valid(grass_script):
+        return
+
+    for x in range(3):
+        for y in range(2):
+            var grass = grass_script.new()
+            grass.position = base_pos + Vector2(x * 16, y * 16)
+            parent.add_child(grass)
+
 func _spawn_enemy_target(parent: Node, pos: Vector2):
     var enemy = Area2D.new()
     enemy.name = "EnemyTarget"
@@ -222,6 +236,15 @@ func _spawn_enemy_target(parent: Node, pos: Vector2):
             sprite.texture = tex_gen.create_monster_texture()
     enemy.add_child(sprite)
 
+    var hp_bar = ColorRect.new()
+    hp_bar.name = "HPBar"
+    hp_bar.size = Vector2(16, 3)
+    hp_bar.position = Vector2(-8, -12)
+    hp_bar.color = Color.RED
+    enemy.add_child(hp_bar)
+
+    enemy.set_meta("health", 2)
+
     enemy.connect("area_entered", Callable(self, "_on_enemy_hit").bind(enemy))
     enemy.connect("body_entered", Callable(self, "_on_enemy_contact_player"))
     parent.add_child(enemy)
@@ -232,11 +255,20 @@ func _on_enemy_contact_player(body: Node2D):
 
 func _on_enemy_hit(area: Area2D, enemy_node: Node2D):
     if area.name == "AttackHitbox":
+        var hp = enemy_node.get_meta("health") - 1
+        enemy_node.set_meta("health", hp)
+
+        var hp_bar = enemy_node.get_node_or_null("HPBar")
+        if is_instance_valid(hp_bar):
+            hp_bar.size.x = max(0, hp * 8)
+
         var juice = get_node_or_null("/root/VisualJuiceManager")
         if is_instance_valid(juice):
             juice.spawn_particles(enemy_node.global_position, Color.MAGENTA, 12)
             juice.trigger_screen_shake(0.2, 3.0)
-        enemy_node.queue_free()
+
+        if hp <= 0:
+            enemy_node.queue_free()
 
 func _on_checkpoint_entered(body: Node2D, room_id: String, cp_pos: Vector2):
     if body is CharacterBody2D:
