@@ -157,7 +157,7 @@ func test_player_controller_facing_and_attack():
     watch_signals(player)
 
     assert_eq(player.facing_direction, Vector2.DOWN)
-    player.input_vector = Vector2(1, 0) # Moving right
+    player.touch_input_vector = Vector2(1, 0) # Moving right
     player._physics_process(0.016)
     assert_eq(player.facing_direction, Vector2.RIGHT)
 
