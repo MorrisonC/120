@@ -1,0 +1,6 @@
+# Example only -- created automatically by run_visual_critic.sh on
+# first run for a given task_id. Shows the shape.
+status: in_progress
+rounds: 1
+last_gap: "the grass tile doesn't read as grass against the dirt path"
+research_used: false

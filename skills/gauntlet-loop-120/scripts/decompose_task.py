@@ -27,6 +27,20 @@ RED_FLAG_PATTERNS = [
     (r"\balso\b", "scope contains 'also' -- classic sign of scope creep"),
 ]
 
+# Heuristic for post-task-visual-critic-120's "Visual check" field --
+# auto-set to yes if the scope plausibly touches something with
+# on-screen, visually-judgeable output. See that skill's
+# resources/task-queue-visual-field.md for the full convention.
+VISUAL_SCOPE_KEYWORDS = [
+    "scene", "biome", "room", "sprite", "tile", "ui", "animation",
+    "environment", "art",
+]
+
+
+def infer_visual_check(scope):
+    scope_lower = scope.lower()
+    return any(kw in scope_lower for kw in VISUAL_SCOPE_KEYWORDS)
+
 
 def find_task_queue_path():
     # TASK_QUEUE.md lives at the repo root per config.yaml, which is one
@@ -58,6 +72,10 @@ def main():
     p.add_argument("--scope", required=True)
     p.add_argument("--acceptance", required=True)
     p.add_argument("--depends-on", default="none")
+    p.add_argument("--visual-check", choices=["yes", "no"], default=None,
+                    help="override the auto-inferred Visual check field "
+                         "(see post-task-visual-critic-120's docs); "
+                         "auto-inferred from --scope keywords if omitted")
     p.add_argument("--force", action="store_true",
                     help="write even if the linter flags size concerns")
     args = p.parse_args()
@@ -70,11 +88,16 @@ def main():
         print("See resources/task-sizing-guide.md. Split it, or rerun with --force.", file=sys.stderr)
         sys.exit(1)
 
+    visual_check = args.visual_check
+    if visual_check is None:
+        visual_check = "yes" if infer_visual_check(args.scope) else "no"
+
     entry = f"""
 ## [TODO] {args.id}: {args.title}
 - Scope: {args.scope}
 - Acceptance: {args.acceptance}
 - Depends on: {args.depends_on}
+- Visual check: {visual_check}
 """
     path = find_task_queue_path()
     with open(path, "a") as f:

@@ -1,0 +1,8 @@
+{
+  "seed": 120,
+  "moves": [
+    {"key": "ArrowUp", "hold_ms": 800, "label": "EXAMPLE: leave spawn heading north"},
+    {"key": "ArrowRight", "hold_ms": 400, "label": "EXAMPLE: sidestep an obstacle"},
+    {"key": "Space", "hold_ms": 100, "label": "EXAMPLE: interact at the checkpoint"}
+  ]
+}

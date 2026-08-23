@@ -1,0 +1,13 @@
+{
+  "_comment": "Generic template for the common mcpServers JSON config shape used by several MCP clients (Claude Code, Cursor, etc). Jules' own MCP config format may differ -- check Jules' current documentation before assuming this shape applies directly.",
+  "mcpServers": {
+    "godot": {
+      "command": "npx",
+      "args": ["@coding-solo/godot-mcp"],
+      "env": {
+        "GODOT_PATH": "/path/to/your/godot4/executable"
+      },
+      "_comment_alternative_mkdevkit": "If using the default mkdevkit/godot-mcp instead, its connection is WebSocket-based (client <-stdio/MCP-> Node.js server <-WebSocket:6505-> Godot editor plugin) -- check that repo's own README for its exact client config shape, since it differs from the simple npx-launch pattern shown above for Coding-Solo's server."
+    }
+  }
+}
