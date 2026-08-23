@@ -53,13 +53,16 @@ func _setup_first_area_ruins():
     if is_instance_valid(ruins_scene):
         var viewport_container = SubViewportContainer.new()
         viewport_container.name = "DungeonViewportContainer"
+        viewport_container.custom_minimum_size = Vector2(320, 180)
         viewport_container.size = Vector2(320, 180)
         viewport_container.stretch = true
+        viewport_container.z_index = -10
         add_child(viewport_container)
 
         var viewport = SubViewport.new()
         viewport.name = "DungeonViewport"
         viewport.size = Vector2i(320, 180)
+        viewport.transparent_bg = false
         viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
         viewport.own_world_3d = true
         viewport_container.add_child(viewport)
@@ -72,6 +75,7 @@ func _build_world_visuals():
     if not is_instance_valid(world_gen) or world_gen.rooms.is_empty():
         return
 
+    # In 3D Ruins mode, skip drawing 2D background ground tilemaps over the 3D dungeon
     var biomes_node = Node2D.new()
     biomes_node.name = "WorldBiomes"
     add_child(biomes_node)
@@ -85,8 +89,9 @@ func _build_world_visuals():
         var room_data = world_gen.rooms[room_id]
         var room_pos = Vector2(room_index * room_size.x, 0)
 
-        # Build 2D tilemap landscape for this room
-        _build_room_tilemap(biomes_node, room_data, room_pos, room_index, total_rooms, tex_gen)
+        # Build 2D tilemap landscape for non-ruins rooms
+        if room_index > 0:
+            _build_room_tilemap(biomes_node, room_data, room_pos, room_index, total_rooms, tex_gen)
 
         # Checkpoint Safe Location Marker
         if room_data.is_checkpoint:
