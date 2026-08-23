@@ -54,7 +54,39 @@ func generate_dungeon(seed_val: int) -> void:
 	prop_scatterer.scatter_props(dungeon_data, grid_map, seed_val)
 	nav_manager.build_navigation_graph(dungeon_data)
 
+	if dungeon_data.has("spawn_pos"):
+		var sp: Vector3i = dungeon_data.spawn_pos
+		var spawn_world := Vector3(sp.x + 0.5, 0.0, sp.z + 0.5)
+		_spawn_3d_player(spawn_world)
+
 	is_initialized = true
+
+func _spawn_3d_player(spawn_world: Vector3) -> void:
+	var p3d = get_node_or_null("Player3D")
+	if not is_instance_valid(p3d):
+		p3d = Node3D.new()
+		p3d.name = "Player3D"
+
+		var mesh_inst := MeshInstance3D.new()
+		var cm := CylinderMesh.new()
+		cm.top_radius = 0.3
+		cm.bottom_radius = 0.3
+		cm.height = 1.6
+		var mat := StandardMaterial3D.new()
+		mat.albedo_color = Color("#4CAF50") # Link tunic green
+		cm.material = mat
+		mesh_inst.mesh = cm
+		mesh_inst.position = Vector3(0, 0.8, 0)
+		p3d.add_child(mesh_inst)
+
+		add_child(p3d)
+
+	p3d.global_position = spawn_world
+	if is_instance_valid(dungeon_camera):
+		dungeon_camera.global_position = spawn_world + Vector3(0, 10, 8)
+		dungeon_camera.look_at(spawn_world)
+		dungeon_camera.make_current()
+		dungeon_camera.set_target(p3d)
 
 func reset_ruins_state(next_seed: int = -1) -> void:
 	if next_seed < 0:
