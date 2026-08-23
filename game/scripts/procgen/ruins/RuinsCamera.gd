@@ -3,15 +3,19 @@ class_name RuinsCamera
 
 @export var target_path: NodePath
 var target: Node3D
-var follow_offset: Vector3 = Vector3(0, 12, 10)
+var follow_offset: Vector3 = Vector3(0, 10, 8)
 var lerp_speed: float = 5.0
 
 var occluding_nodes: Array = []
 
 func _ready() -> void:
+	make_current()
 	rotation_degrees = Vector3(-50, 0, 0)
 	if not target_path.is_empty():
 		target = get_node_or_null(target_path)
+
+func set_target(new_target: Node3D) -> void:
+	target = new_target
 
 func _physics_process(delta: float) -> void:
 	if is_instance_valid(target):
