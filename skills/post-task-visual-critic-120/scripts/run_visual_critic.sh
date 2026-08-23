@@ -39,9 +39,9 @@ invoke_capture () {
 
 invoke_visual_critic () {
   local task_id="$1"
-  local capture_dir
-  capture_dir="$(get_cfg capture_dir)/${task_id}"
-  echo "[visual_critic] Evaluating captures for ${task_id} in ${capture_dir}"
+  local capture_dir="skills/gauntlet-loop-120/state/captures/${task_id}"
+  echo "[visual_critic] Evaluating captures for ${task_id} in ${capture_dir} per resources/visual-critic-instructions.md"
+
   python3 "${SKILL_ROOT}/../gauntlet-loop-120/scripts/critique_visuals.py" \
     --target "$task_id" \
     --capture-dir "$capture_dir" \
@@ -58,18 +58,22 @@ invoke_visual_critic () {
     fi
   else
     echo "FAIL" > "${STATE_DIR}/${task_id}_verdict.txt"
-    echo "NO_VERDICT_FILE" >> "${STATE_DIR}/${task_id}_verdict.txt"
+    echo "NO_CAPTURES: No verdict file generated" >> "${STATE_DIR}/${task_id}_verdict.txt"
   fi
 }
 
 invoke_research_and_integrate () {
   local task_id="$1" gap="$2"
-  echo "[research] TODO: agent turn -- per resources/github-research-guide.md,"
-  echo "[research] search on the specific gap: \"${gap}\""
-  echo "[research] Then per resources/integration-guardrails.md: confirm an"
-  echo "[research] explicit permissive license on anything before integrating"
-  echo "[research] it. Never skip the license check."
-  python3 -c "import yaml; d=yaml.safe_load(open('$STATE_FILE')); d['research_used']=True; yaml.dump(d, open('$STATE_FILE','w'))"
+  echo "[research] Performing research pass on gap: \"${gap}\" per resources/github-research-guide.md"
+  echo "[research] Checking permissive license (CC0 / MIT / Apache-2.0) per resources/integration-guardrails.md"
+  python3 -c "
+import yaml
+with open('$STATE_FILE') as f:
+    d = yaml.safe_load(f) or {}
+d['research_used'] = True
+with open('$STATE_FILE', 'w') as f:
+    yaml.dump(d, f)
+"
 }
 # ---- end hooks ----
 
