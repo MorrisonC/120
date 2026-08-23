@@ -8,6 +8,8 @@ func test_main_scene_instantiates_first_area_ruins():
 	add_child_autoqfree(main_scene)
 
 	var ruins_child = main_scene.get_node_or_null("FirstAreaRuinsDungeon")
+	if ruins_child == null:
+		ruins_child = main_scene.get_node_or_null("DungeonViewportContainer/DungeonViewport/FirstAreaRuinsDungeon")
 	assert_not_null(ruins_child, "Main scene must instantiate FirstAreaRuinsDungeon as first play area")
 
 	var player_node = main_scene.get_node_or_null("Player")

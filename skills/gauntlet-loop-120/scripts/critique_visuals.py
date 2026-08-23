@@ -50,10 +50,17 @@ def analyze_png(filepath):
     sum_brightness = 0
     non_zero_count = 0
     unique_colors = set()
+    center_colors = set()
     total_pixels = width * height
+
+    center_ymin = int(height * 0.20)
+    center_ymax = int(height * 0.80)
+    center_xmin = int(width * 0.15)
+    center_xmax = int(width * 0.85)
 
     for y in range(height):
         row_offset = y * stride + 1
+        is_center_y = (center_ymin <= y <= center_ymax)
         for x in range(width):
             px_off = row_offset + x * bytes_per_pixel
             r = raw[px_off]
@@ -65,6 +72,9 @@ def analyze_png(filepath):
                 non_zero_count += 1
                 if len(unique_colors) < 100:
                     unique_colors.add((r, g, b))
+                if is_center_y and (center_xmin <= x <= center_xmax):
+                    if len(center_colors) < 100:
+                        center_colors.add((r, g, b))
 
     avg_brightness = sum_brightness / (total_pixels * 3)
     return {
@@ -74,7 +84,8 @@ def analyze_png(filepath):
         "height": height,
         "non_zero_count": non_zero_count,
         "avg_brightness": avg_brightness,
-        "unique_color_count": len(unique_colors)
+        "unique_color_count": len(unique_colors),
+        "center_color_count": len(center_colors)
     }
 
 def main():
@@ -104,6 +115,14 @@ def main():
 
         if not res.get("valid", False):
             gap = f"INVALID_PNG: {filename} is corrupt or not a valid image."
+            with open(verdict_file, "w") as f:
+                f.write(f"THEIRS\n{gap}\n")
+            print(f"[critic] REJECTED {target}: {gap}")
+            sys.exit(0)
+
+        # 3. Center Viewport Dungeon Geometry / Asset Check
+        if res.get("center_color_count", 0) < 4:
+            gap = f"MISSING_3D_DUNGEON: Center viewport region in ({filename}) lacks rendered dungeon geometry or 3D terrain assets (center_colors={res.get('center_color_count', 0)})."
             with open(verdict_file, "w") as f:
                 f.write(f"THEIRS\n{gap}\n")
             print(f"[critic] REJECTED {target}: {gap}")

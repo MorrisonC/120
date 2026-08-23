@@ -51,9 +51,22 @@ func _ready():
 func _setup_first_area_ruins():
     var ruins_scene = load("res://scenes/procgen/RuinsDungeon.tscn")
     if is_instance_valid(ruins_scene):
+        var viewport_container = SubViewportContainer.new()
+        viewport_container.name = "DungeonViewportContainer"
+        viewport_container.size = Vector2(320, 180)
+        viewport_container.stretch = true
+        add_child(viewport_container)
+
+        var viewport = SubViewport.new()
+        viewport.name = "DungeonViewport"
+        viewport.size = Vector2i(320, 180)
+        viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+        viewport.own_world_3d = true
+        viewport_container.add_child(viewport)
+
         ruins_dungeon = ruins_scene.instantiate()
         ruins_dungeon.name = "FirstAreaRuinsDungeon"
-        add_child(ruins_dungeon)
+        viewport.add_child(ruins_dungeon)
 
 func _build_world_visuals():
     if not is_instance_valid(world_gen) or world_gen.rooms.is_empty():
