@@ -3,7 +3,7 @@ name: continue-120-build
 description: The single on-command entry point for resuming work on 120 ("Every 120 you die") in a fresh Jules session. Reads all markdown/YAML state (Progress.md, TASK_QUEUE.md, gauntlet-loop-120's Lane A/B state), figures out exactly what's next, does it, updates the tracking files, and writes a session log entry -- so the NEXT invocation, in a completely separate session, picks up seamlessly with zero re-explanation needed. Invoke this by name, or paste CONTINUE_BUILD_PROMPT.md's prompt into a new session.
 license: CC-BY-4.0
 compatible_agents: [jules]
-requires_skills: [gauntlet-loop-120, godot-mcp-bridge]
+requires_skills: [gauntlet-loop-120, godot-mcp-bridge, post-task-visual-critic-120]
 depends_on_project_files: [Progress.md, TASK_QUEUE.md, COMPLEXITY_GRAPH.md, TEST_HARNESS_ARCHITECTURE.md, SESSION_LOG.md]
 ---
 
@@ -41,7 +41,11 @@ a state the next session can read cold.
    gameplay logic changes get checked with GUT (Tier 1) and, if
    `godot-mcp-bridge` is set up, the live editor session (Tier 2) before
    spending an export cycle on the web E2E check (Tier 3). Anything
-   plausibly web-export-specific gets Tier 3 regardless.
+   plausibly web-export-specific gets Tier 3 regardless. If the task
+   picked in step 2 is flagged `Visual check: yes`, also run
+   `post-task-visual-critic-120/scripts/run_visual_critic.sh` before
+   marking it done — a passing GUT suite says nothing about whether a
+   biome/room/sprite actually looks right.
 
 5. **Update state.** Mark the `TASK_QUEUE.md` entry `DONE` (or
    `BLOCKED` with a reason, or leave it split into smaller entries), or
@@ -73,8 +77,10 @@ files this skill reads, not in the prompt itself.
   this skill orchestrates. This skill doesn't duplicate that logic, it
   calls into it.
 - `godot-mcp-bridge` — Tier 2 testing, used during step 4 when relevant.
-- This skill is the thin coordinating layer on top of both, plus the
-  session-to-session continuity log neither of the others owns.
+- `post-task-visual-critic-120` — the automatic per-task visual gate,
+  also used during step 4 for any task flagged `Visual check: yes`.
+- This skill is the thin coordinating layer on top of all three, plus
+  the session-to-session continuity log none of the others own.
 
 ## Guardrails
 - Never skip step 1 (orient) — acting on assumed state instead of
