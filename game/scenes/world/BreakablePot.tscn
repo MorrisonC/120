@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://c1potbreakable3d"]
+
+[ext_resource type="Script" path="res://scripts/world/BreakableProp3D.gd" id="1_prop"]
+[ext_resource type="PackedScene" uid="uid://cbi6v6l8ua3rc" path="res://assets/models/items/Pot.glb" id="2_pot_model"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hit"]
+radius = 0.5
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_body"]
+height = 0.65
+radius = 0.35
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shard"]
+albedo_color = Color(0.78, 0.42, 0.22, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_shard"]
+material = SubResource("StandardMaterial3D_shard")
+size = Vector3(0.08, 0.08, 0.08)
+
+[node name="BreakablePot" type="Area3D"]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_prop")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+shape = SubResource("SphereShape3D_hit")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+
+[node name="PotModel" parent="VisualRoot" instance=ExtResource("2_pot_model")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+shape = SubResource("CylinderShape3D_body")
+
+[node name="BreakParticles" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.9
+mesh = SubResource("BoxMesh_shard")
+emission_shape = 1
+emission_sphere_radius = 0.2
+direction = Vector3(0, 1, 0)
+spread = 70.0
+gravity = Vector3(0, -9.8, 0)
+initial_velocity_min = 3.0
+initial_velocity_max = 5.5

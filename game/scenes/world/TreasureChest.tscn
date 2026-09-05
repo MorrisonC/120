@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://c1chestinteractive3d"]
+
+[ext_resource type="Script" path="res://scripts/world/TreasureChest3D.gd" id="1_chest"]
+[ext_resource type="PackedScene" uid="uid://c20252b2f8u0j" path="res://assets/models/items/Chest_Interactive.glb" id="2_chest_model"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_interact"]
+radius = 1.8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(0.9, 0.6, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gold_sparkle"]
+emission_enabled = true
+emission = Color(1, 0.85, 0.2, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_sparkle"]
+material = SubResource("StandardMaterial3D_gold_sparkle")
+size = Vector3(0.05, 0.05, 0.05)
+
+[node name="TreasureChest" type="Area3D"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1_chest")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("SphereShape3D_interact")
+
+[node name="ChestModel" parent="." instance=ExtResource("2_chest_model")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="GoldLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+visible = false
+light_color = Color(1, 0.85, 0.3, 1)
+light_energy = 0.0
+omni_range = 4.0
+
+[node name="GoldParticles" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+emitting = false
+amount = 20
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.7
+mesh = SubResource("BoxMesh_sparkle")
+emission_shape = 1
+emission_sphere_radius = 0.3
+direction = Vector3(0, 1, 0)
+spread = 35.0
+gravity = Vector3(0, -2.0, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 3.5

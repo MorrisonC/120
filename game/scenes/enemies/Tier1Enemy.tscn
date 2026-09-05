@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://e1tier1enemy3d01"]
+
+[ext_resource type="Script" path="res://scripts/combat/Tier1PatrolEnemy.gd" id="1_enemy"]
+[ext_resource type="PackedScene" uid="uid://57qaijaxnasy" path="res://assets/models/enemies/Rat.glb" id="2_rat_model"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_col"]
+radius = 0.35
+height = 0.8
+
+[node name="Tier1Enemy" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_enemy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("CapsuleShape3D_col")
+
+[node name="MeshRoot" type="Node3D" parent="."]
+
+[node name="RatModel" parent="MeshRoot" instance=ExtResource("2_rat_model")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="TelegraphLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+visible = false
+light_color = Color(1, 0.1, 0.1, 1)
+light_energy = 0.0
+omni_range = 3.0

@@ -1,14 +1,52 @@
-game/.godot/
+# Godot Engine
+.godot/
+*.godot/
+*.import
+*.uid
+*.translation
+
+# Node / JS / Tooling
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+
+# Build & Test Outputs
 build/
-logs/
+dist/
 game/web_build/
 playwright-report/
 test-results/
+coverage/
+game/telemetry/
+*.log
+test_output.log
+verdict.txt
+
+# Binary Executables & Archives
+*.exe
+*.zip
+*.7z
+*.tar.gz
+Godot_v*
+
+# IDE & OS Files
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Temporary Mockups, Captures & Screenshots
+3D Puzzle Game Mockup _ Use AI*
+Use AI Image*
 web_screenshot.png
 test_*.png
 canvas_only.png
-*.png.import
-*.import
 skills/gauntlet-loop-120/state/captures/
-game/telemetry/
+scratch/
+game/scratch/

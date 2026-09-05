@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://f1tier2enemy3d01"]
+
+[ext_resource type="Script" path="res://scripts/combat/Tier2ShieldEnemy.gd" id="1_shield_enemy"]
+[ext_resource type="PackedScene" uid="uid://cocd8am8digor" path="res://assets/models/characters/KnightCharacter.glb" id="2_knight_model"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_col"]
+radius = 0.45
+height = 1.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shield"]
+albedo_color = Color(0.7, 0.55, 0.2, 1)
+metallic = 0.6
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_shield"]
+material = SubResource("StandardMaterial3D_shield")
+size = Vector3(0.9, 1.1, 0.12)
+
+[node name="Tier2Enemy" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_shield_enemy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_col")
+
+[node name="MeshRoot" type="Node3D" parent="."]
+
+[node name="KnightModel" parent="MeshRoot" instance=ExtResource("2_knight_model")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+
+[node name="ShieldMesh" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -0.55)
+mesh = SubResource("BoxMesh_shield")
+
+[node name="TelegraphLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+visible = false
+light_color = Color(1, 0.2, 0.2, 1)
+light_energy = 0.0
+omni_range = 4.0

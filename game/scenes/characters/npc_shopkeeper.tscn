@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3]
-
-[ext_resource type="Texture2D" path="res://assets/sprites/characters/npc_shopkeeper.png" id="1_shopkeeper"]
-
-[node name="NPCShopkeeper" type="Node2D"]
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_shopkeeper")

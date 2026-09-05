@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://b1brazierstanding3d"]
+
+[ext_resource type="Script" path="res://scripts/world/StandingBrazier.gd" id="1_brazier"]
+[ext_resource type="PackedScene" uid="uid://d0xb8h0r8t0pa" path="res://assets/models/world/Brazier.glb" id="2_brazier_model"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_col"]
+height = 1.0
+radius = 0.45
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ember"]
+emission_enabled = true
+emission = Color(1, 0.45, 0.1, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_ember"]
+material = SubResource("StandardMaterial3D_ember")
+size = Vector3(0.04, 0.04, 0.04)
+
+[node name="StandingBrazier" type="Node3D"]
+script = ExtResource("1_brazier")
+
+[node name="BrazierModel" parent="." instance=ExtResource("2_brazier_model")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CylinderShape3D_col")
+
+[node name="FlameLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+light_color = Color(1, 0.6, 0.25, 1)
+light_energy = 2.4
+omni_range = 7.0
+omni_attenuation = 0.8
+shadow_enabled = true
+
+[node name="EmberParticles" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+amount = 14
+lifetime = 1.2
+mesh = SubResource("BoxMesh_ember")
+emission_shape = 1
+emission_sphere_radius = 0.25
+direction = Vector3(0, 1, 0)
+spread = 25.0
+gravity = Vector3(0, 1.2, 0)
+initial_velocity_min = 0.8
+initial_velocity_max = 1.6
+scale_amount_min = 0.6
+scale_amount_max = 1.4
