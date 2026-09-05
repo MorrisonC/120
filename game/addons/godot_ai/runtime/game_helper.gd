@@ -54,7 +54,7 @@ const MAIN_LOOP_STALL_MSEC := 1000
 ## an honestly stale-flagged image immediately instead of a 6s wait.
 const RENDER_STALL_MSEC := 1500
 
-const GameLogger := preload("res://addons/godot_ai/runtime/game_logger.gd")
+# GameLogger is dynamically loaded in Godot 4.4+ where Logger is available
 const ErrorCodes := preload("res://addons/godot_ai/utils/error_codes.gd")
 ## Shared with the editor-side copy in editor_handler.gd (#716). Preload by
 ## path, not class_name: this autoload runs in the game process and must not
@@ -63,7 +63,7 @@ const ScreenshotEncode := preload("res://addons/godot_ai/utils/screenshot_encode
 
 var _registered := false
 ## Captures game-process print, warning, and error output for the editor.
-var _logger: Logger
+var _logger: RefCounted = null
 var _logger_attached := false
 ## Entries drained from the logger but not yet sent over the debugger
 ## channel. Holds the tail of one drain() so we can bleed it out across
@@ -121,9 +121,12 @@ func _ready() -> void:
 	## Capture print() / printerr() / push_error() / push_warning() and
 	## ferry them to the editor in mcp:log_batch messages flushed from
 	## _process.
-	_logger = GameLogger.new()
-	OS.add_logger(_logger)
-	_logger_attached = true
+	if ClassDB.class_exists("Logger") and OS.has_method("add_logger"):
+		var game_logger_script = load("res://addons/godot_ai/runtime/game_logger.gd")
+		if game_logger_script != null:
+			_logger = game_logger_script.new()
+			OS.call("add_logger", _logger)
+			_logger_attached = true
 	## Routed to the editor's Output panel via Godot's remote-stdout
 	## forwarder — handy when diagnosing why capture timed out.
 	print("[godot_ai game_helper] registered mcp capture (debugger active=%s, logger=%s)"
@@ -170,7 +173,8 @@ func _exit_tree() -> void:
 		EngineDebugger.unregister_message_capture(CAPTURE_PREFIX)
 		_registered = false
 	if _logger_attached and _logger != null:
-		OS.remove_logger(_logger)
+		if OS.has_method("remove_logger"):
+			OS.call("remove_logger", _logger)
 		_logger_attached = false
 		_logger = null
 
