@@ -30,7 +30,7 @@ var game_state: Node:
 func _ready() -> void:
 	spawn_pos = global_position
 	current_health = health
-	collision_layer = 8 # Objects / Breakables (hittable by player attacks)
+	collision_layer = 4 # Objects / Breakables (hittable by player attacks on layer 4)
 	collision_mask = 2 # Detect player roll dash
 
 	body_entered.connect(_on_body_entered)
@@ -73,7 +73,7 @@ func break_prop() -> void:
 		break_particles.emitting = true
 
 	# Play SFX
-	_play_sfx("block_push")
+	_play_sfx("pot_break")
 
 	# Screen shake
 	var vp = get_viewport()

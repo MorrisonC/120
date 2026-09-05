@@ -41,9 +41,10 @@ func _on_body_entered(body: Node3D) -> void:
 		game_state.add_item(item_id)
 		_play_sfx("item_pickup")
 		
-		var hud = get_tree().root.find_child("HUD", true, false)
-		if hud and hud.has_method("show_banner"):
-			hud.show_banner("Acquired Item: " + display_name)
+		if get_tree() and get_tree().root:
+			var hud = get_tree().root.find_child("HUD", true, false)
+			if hud and hud.has_method("show_banner"):
+				hud.show_banner("Acquired Item: " + display_name)
 			
 		queue_free()
 

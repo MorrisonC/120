@@ -84,18 +84,20 @@ func _on_defeated() -> void:
 		game_state.clear_boss(boss_id)
 	boss_defeated.emit()
 	
-	var hud = get_tree().root.find_child("HUD", true, false)
-	if hud and hud.has_method("show_banner"):
-		hud.show_banner("Boss Defeated! Ashen Guardian Banished.")
+	if get_tree() and get_tree().root:
+		var hud = get_tree().root.find_child("HUD", true, false)
+		if hud and hud.has_method("show_banner"):
+			hud.show_banner("Boss Defeated! Ashen Guardian Banished.")
 
 	if not boss_door_path.is_empty():
 		var door = get_node_or_null(boss_door_path)
 		if door and door.has_method("set_gate_open"):
 			door.set_gate_open(true)
 
-	var main_cam = get_tree().root.find_child("OrbitCamera", true, false)
-	if main_cam and main_cam.has_method("set_room_override"):
-		main_cam.set_room_override(null)
+	if get_tree() and get_tree().root:
+		var main_cam = get_tree().root.find_child("OrbitCamera", true, false)
+		if main_cam and main_cam.has_method("set_room_override"):
+			main_cam.set_room_override(null)
 
 func _on_already_cleared() -> void:
 	visible = false

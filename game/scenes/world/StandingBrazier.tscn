@@ -31,9 +31,9 @@ shape = SubResource("CylinderShape3D_col")
 [node name="FlameLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 light_color = Color(1, 0.6, 0.25, 1)
-light_energy = 2.4
-omni_range = 7.0
-omni_attenuation = 0.8
+light_energy = 1.0
+omni_range = 5.0
+omni_attenuation = 1.0
 shadow_enabled = true
 
 [node name="EmberParticles" type="CPUParticles3D" parent="."]

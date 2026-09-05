@@ -1,5 +1,5 @@
 @tool
-extends Logger
+extends RefCounted
 
 ## Editor-process Logger subclass.
 ##

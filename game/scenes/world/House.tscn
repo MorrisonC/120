@@ -37,9 +37,9 @@ transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 0, 0, -0.6)
 [node name="LanternLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 1.8)
 light_color = Color(1, 0.82, 0.45, 1)
-light_energy = 2.5
-omni_range = 6.0
-omni_attenuation = 0.7
+light_energy = 0.8
+omni_range = 3.5
+omni_attenuation = 1.0
 
 [node name="DoorwayCollision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 1.5)

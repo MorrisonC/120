@@ -26,6 +26,7 @@ var hit_timer: float = 0.0
 var roll_direction: Vector3 = Vector3.FORWARD
 var is_invulnerable: bool = false
 var invulnerability_timer: float = 0.0
+var footstep_timer: float = 0.0
 
 @onready var mesh_root: Node3D = $MeshRoot
 @onready var attack_area: Area3D = $AttackPivot/AttackArea
@@ -65,6 +66,8 @@ func get_roll_stamina_cost() -> float:
 
 func _ready() -> void:
 	anim_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
+	if anim_player and anim_player.has_animation("HumanArmature|Idle"):
+		anim_player.play("HumanArmature|Idle")
 	current_stamina = max_stamina
 	if game_state != null:
 		game_state.player_respawned.connect(_on_player_respawned)
@@ -169,6 +172,16 @@ func _process_locomotion(delta: float) -> void:
 		$AttackPivot.rotation.y = mesh_root.rotation.y
 
 	move_and_slide()
+
+	# Surface footstep audio
+	if move_dir.length_squared() > 0.001 and is_on_floor():
+		var step_interval = 0.24 if wants_sprint else 0.38
+		footstep_timer += delta
+		if footstep_timer >= step_interval:
+			footstep_timer = 0.0
+			_play_footstep()
+	else:
+		footstep_timer = 0.0
 
 	# Interaction check
 	if Input.is_action_just_pressed("interact"):
@@ -382,3 +395,26 @@ func _play_sfx(sound_name: String) -> void:
 	var am = get_node_or_null("/root/AudioManager")
 	if am and am.has_method("play_sfx"):
 		am.play_sfx(sound_name)
+
+func _play_footstep() -> void:
+	var sound = "footstep_grass"
+	if is_inside_tree():
+		var space_state = get_world_3d().direct_space_state
+		var query = PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 0.2, global_position + Vector3.DOWN * 1.5)
+		query.collision_mask = 1
+		var result = space_state.intersect_ray(query)
+		if result and result.has("collider") and result["collider"] != null:
+			var col = result["collider"]
+			if col.is_in_group("stone") or global_position.x > 40.0:
+				sound = "footstep_stone"
+			elif col.is_in_group("wood"):
+				sound = "footstep_wood"
+			elif col.is_in_group("carpet"):
+				sound = "footstep_carpet"
+			elif col.is_in_group("grass"):
+				sound = "footstep_grass"
+			elif global_position.x > 40.0:
+				sound = "footstep_stone"
+		elif global_position.x > 40.0:
+			sound = "footstep_stone"
+	_play_sfx(sound)

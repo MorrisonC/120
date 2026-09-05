@@ -54,3 +54,7 @@ community packages provide, that's optional, not required:
 CC0 requires no attribution, but a `CREDITS.md` crediting Kenney and any
 other named CC0 pack authors by name is good practice, same
 recommendation as the other projects in this family.
+
+- **Kenney Impact Sounds** (CC0) — 130 impact/collision/footstep audio files in `assets/audio/impact/` (https://kenney.nl/assets/impact-sounds).
+- **Kenney UI Audio** (CC0) — 50 UI click/switch/rollover audio files in `assets/audio/ui/` (https://github.com/Calinou/kenney-ui-audio, https://kenney.nl/assets/ui-audio).
+- **Kenney RPG Audio** (CC0) — 50 RPG item/cloth/creak/door audio files in `assets/audio/rpg/` (https://kenney.nl/assets/rpg-audio).

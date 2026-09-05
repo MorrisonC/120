@@ -165,7 +165,7 @@ var _log_buffer
 var _game_log_buffer
 var _editor_log_buffer
 var _surfaced_error_tracker
-var _editor_logger: Logger
+var _editor_logger: RefCounted
 var _dock
 var _debugger_plugin
 var _vision_routing
@@ -713,8 +713,10 @@ func _exit_tree() -> void:
 ## file would re-emit them but at the cost of disrupting the user's
 ## editing state, so we accept the gap.
 func _attach_editor_logger() -> void:
+	if EditorLogger == null or not OS.has_method("add_logger"):
+		return
 	_editor_logger = EditorLogger.new(_editor_log_buffer)
-	OS.add_logger(_editor_logger)
+	OS.call("add_logger", _editor_logger)
 
 
 ## Remove old Logger-quarantine artifacts left by extract-over-live
@@ -758,8 +760,8 @@ static func _remove_dir_recursive_absolute(path: String) -> void:
 
 
 func _detach_editor_logger() -> void:
-	if _editor_logger != null:
-		OS.remove_logger(_editor_logger)
+	if _editor_logger != null and OS.has_method("remove_logger"):
+		OS.call("remove_logger", _editor_logger)
 	_editor_logger = null
 
 
