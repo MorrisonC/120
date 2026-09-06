@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/items/ItemPickup3D.gd" id="3_pickup"]
 [ext_resource type="Script" path="res://scripts/world/FrostHazard.gd" id="4_frost"]
 [ext_resource type="PackedScene" uid="uid://xe2hmrdnvhcw" path="res://assets/models/items/Potion1_Filled.glb" id="5_potion"]
+[ext_resource type="Script" path="res://scripts/world/ZoneTransitionArea3D.gd" id="6_transition"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_frost"]
 sky_top_color = Color(0.45, 0.60, 0.85, 1)
@@ -54,6 +55,9 @@ size = Vector3(55, 15, 55)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_cloak"]
 radius = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_transition_gate"]
+size = Vector3(8, 3, 2)
 
 [node name="Frostpeak" type="Node3D"]
 
@@ -121,3 +125,12 @@ shape = SubResource("SphereShape3D_cloak")
 
 [node name="VisualModel" parent="PickupWarmCloak" instance=ExtResource("5_potion")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+
+[node name="GatewayToQuarry" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 10, -80)
+script = ExtResource("6_transition")
+target_zone = "OldQuarry"
+target_position = Vector3(30, 1, -130)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayToQuarry"]
+shape = SubResource("BoxShape3D_transition_gate")

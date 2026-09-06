@@ -85,6 +85,23 @@ radius = 2.0
 height = 1.5
 radius = 0.8
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_transition_gate"]
+size = Vector3(8, 3, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bridge_z"]
+material = SubResource("StandardMaterial3D_path")
+size = Vector3(6, 0.2, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bridge_z"]
+size = Vector3(6, 0.2, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bridge_x"]
+material = SubResource("StandardMaterial3D_path")
+size = Vector3(30, 0.2, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bridge_x"]
+size = Vector3(30, 0.2, 6)
+
 [node name="OverworldVillage" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -294,3 +311,74 @@ shape = SubResource("CylinderShape3D_well")
 [node name="WellModel" parent="WellDescent" instance=ExtResource("9_well_model")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
+[node name="BridgeNorth" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -45)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BridgeNorth"]
+mesh = SubResource("BoxMesh_bridge_z")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BridgeNorth"]
+shape = SubResource("BoxShape3D_bridge_z")
+
+[node name="BridgeSouth" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 45)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BridgeSouth"]
+mesh = SubResource("BoxMesh_bridge_z")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BridgeSouth"]
+shape = SubResource("BoxShape3D_bridge_z")
+
+[node name="BridgeEast" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, -0.1, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BridgeEast"]
+mesh = SubResource("BoxMesh_bridge_x")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BridgeEast"]
+shape = SubResource("BoxShape3D_bridge_x")
+
+[node name="BridgeWest" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, -0.1, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BridgeWest"]
+mesh = SubResource("BoxMesh_bridge_x")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BridgeWest"]
+shape = SubResource("BoxShape3D_bridge_x")
+
+[node name="GatewayToQuarry" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -38)
+script = ExtResource("23_transition")
+target_zone = "OldQuarry"
+target_position = Vector3(0, 1, -65)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayToQuarry"]
+shape = SubResource("BoxShape3D_transition_gate")
+
+[node name="GatewayToWoods" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 38)
+script = ExtResource("23_transition")
+target_zone = "WhisperingWoods"
+target_position = Vector3(0, 1, 65)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayToWoods"]
+shape = SubResource("BoxShape3D_transition_gate")
+
+[node name="GatewayToRuins" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 1, 0)
+script = ExtResource("23_transition")
+target_zone = "AshenRuins"
+target_position = Vector3(65, 1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayToRuins"]
+shape = SubResource("BoxShape3D_transition_gate")
+
+[node name="GatewayToMarsh" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 1, 0)
+script = ExtResource("23_transition")
+target_zone = "SunkenMarsh"
+target_position = Vector3(-65, 1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayToMarsh"]
+shape = SubResource("BoxShape3D_transition_gate")

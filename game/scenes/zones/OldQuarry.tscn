@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://e1tier1enemy3d01" path="res://scenes/enemies/Tier1Enemy.tscn" id="7_tier1"]
 [ext_resource type="PackedScene" uid="uid://q1quarryboss3d01" path="res://scenes/enemies/QuarryBoss.tscn" id="8_boss"]
 [ext_resource type="PackedScene" path="res://assets/models/world/Rock_Cluster.glb" id="9_rock"]
+[ext_resource type="Script" path="res://scripts/world/ZoneTransitionArea3D.gd" id="10_transition"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_quarry"]
 sky_top_color = Color(0.40, 0.38, 0.35, 1)
@@ -66,6 +67,9 @@ radius = 3.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_grapple"]
 radius = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_transition_gate"]
+size = Vector3(8, 3, 2)
 
 [node name="OldQuarry" type="Node3D"]
 
@@ -161,3 +165,21 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 8, 0, -88)
 
 [node name="Boulder2" parent="Boulders" instance=ExtResource("9_rock")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 35, 0, -110)
+
+[node name="GatewayToVillage" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -52)
+script = ExtResource("10_transition")
+target_zone = "OverworldVillage"
+target_position = Vector3(0, 0.5, -32)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayToVillage"]
+shape = SubResource("BoxShape3D_transition_gate")
+
+[node name="GatewayToFrostpeak" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 1, -135)
+script = ExtResource("10_transition")
+target_zone = "Frostpeak"
+target_position = Vector3(50, 10, -80)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayToFrostpeak"]
+shape = SubResource("BoxShape3D_transition_gate")

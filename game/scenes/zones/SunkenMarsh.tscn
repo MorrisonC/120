@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/Tier2Enemy.tscn" id="9_tier2"]
 [ext_resource type="PackedScene" uid="uid://m1marshboss3d01" path="res://scenes/enemies/MarshBoss.tscn" id="10_boss"]
 [ext_resource type="PackedScene" path="res://assets/models/world/Rock_Cluster.glb" id="11_rock"]
+[ext_resource type="Script" path="res://scripts/world/ZoneTransitionArea3D.gd" id="12_transition"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_marsh"]
 sky_top_color = Color(0.18, 0.28, 0.22, 1)
@@ -69,6 +70,9 @@ radius = 3.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_fins"]
 radius = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_transition_gate"]
+size = Vector3(2, 3, 8)
 
 [node name="SunkenMarsh" type="Node3D"]
 
@@ -160,3 +164,12 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -92, 0, 8)
 
 [node name="Rock2" parent="Decorations" instance=ExtResource("11_rock")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -108, 0, -12)
+
+[node name="GatewayToVillage" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54, 1, 0)
+script = ExtResource("12_transition")
+target_zone = "OverworldVillage"
+target_position = Vector3(-32, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayToVillage"]
+shape = SubResource("BoxShape3D_transition_gate")

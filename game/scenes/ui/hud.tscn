@@ -84,6 +84,13 @@ text = "  G: 0"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="HomeButton" type="Button" parent="MarginContainer/TopRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.4, 1)
+theme_override_colors/font_hover_color = Color(1, 0.95, 0.7, 1)
+theme_override_font_sizes/font_size = 14
+text = " HOME [H] "
+
 [node name="CompassPlate" type="PanelContainer" parent="MarginContainer/TopRow"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_compass")
