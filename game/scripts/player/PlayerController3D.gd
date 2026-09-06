@@ -98,6 +98,13 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 
 func _process_locomotion(delta: float) -> void:
+	# Out-of-bounds fall protection safety net
+	var current_zone = game_state.loop_state.get("current_zone", "") if game_state != null else ""
+	if current_zone != "TheHollow" and global_position.y < -15.0:
+		if game_state != null and game_state.has_method("respawn_player"):
+			game_state.respawn_player()
+			return
+
 	# Gravity
 	if not is_on_floor():
 		velocity.y -= gravity * delta

@@ -16,8 +16,14 @@ emission_energy_multiplier = 2.0
 material = SubResource("StandardMaterial3D_particles")
 size = Vector3(0.08, 0.08, 0.08)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_house_col"]
-size = Vector3(4.2, 3.2, 4.2)
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_back"]
+size = Vector3(4.2, 3.2, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_side"]
+size = Vector3(0.4, 3.2, 3.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_front"]
+size = Vector3(1.4, 3.2, 0.4)
 
 [node name="House" type="Area3D"]
 script = ExtResource("1_house")
@@ -25,9 +31,25 @@ script = ExtResource("1_house")
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -0.6)
-shape = SubResource("BoxShape3D_house_col")
+[node name="WallBack" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -2.5)
+shape = SubResource("BoxShape3D_wall_back")
+
+[node name="WallLeft" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 1.6, -0.6)
+shape = SubResource("BoxShape3D_wall_side")
+
+[node name="WallRight" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 1.6, -0.6)
+shape = SubResource("BoxShape3D_wall_side")
+
+[node name="WallFrontLeft" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 1.6, 1.3)
+shape = SubResource("BoxShape3D_wall_front")
+
+[node name="WallFrontRight" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 1.6, 1.3)
+shape = SubResource("BoxShape3D_wall_front")
 
 [node name="HouseModel" parent="." instance=ExtResource("2_house_model")]
 transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 0, 0, -0.6)

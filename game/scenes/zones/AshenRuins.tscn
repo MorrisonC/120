@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://caeskjtra6e71" path="res://assets/models/world/AncientPillar_Glyphs.glb" id="19_ancient_pillar"]
 [ext_resource type="PackedScene" uid="uid://bewvhiccfe2b8" path="res://assets/models/world/AncientGear.glb" id="20_ancient_gear"]
 [ext_resource type="PackedScene" path="res://assets/models/props/WallTorch.glb" id="21_wall_torch"]
+[ext_resource type="Script" path="res://scripts/world/ZoneTransitionArea3D.gd" id="22_transition"]
 
 [sub_resource type="Environment" id="Environment_ruins"]
 background_mode = 1
@@ -100,6 +101,9 @@ radius = 1.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_heart_col"]
 radius = 1.2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_transition_gate"]
+size = Vector3(2, 3, 8)
 
 [node name="AshenRuins" type="Node3D"]
 
@@ -330,3 +334,12 @@ transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, -4.0, 2.5, 0.0)
 
 [node name="AncientGear_Puzzle" parent="." instance=ExtResource("20_ancient_gear")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 4.0, 2.5, 0.0)
+
+[node name="GatewayToVillage" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 1, 0)
+script = ExtResource("22_transition")
+target_zone = "OverworldVillage"
+target_position = Vector3(32, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GatewayToVillage"]
+shape = SubResource("BoxShape3D_transition_gate")

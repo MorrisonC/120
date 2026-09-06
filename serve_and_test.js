@@ -5,7 +5,7 @@ const path = require('path');
 const mime = require('mime');
 
 const PORT = 8081;
-const BUILD_DIR = path.join(__dirname, 'build', 'web');
+const BUILD_DIR = fs.existsSync(path.join(__dirname, 'web_build')) ? path.join(__dirname, 'web_build') : path.join(__dirname, 'build', 'web');
 
 const server = http.createServer((req, res) => {
     // Set mandatory headers for Godot Web Exports

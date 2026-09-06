@@ -108,6 +108,10 @@ func update_capabilities_from_items() -> void:
 func respawn_player() -> void:
 	reset_loop_state()
 	update_capabilities_from_items()
+	var house_id = run_state.get("bookmarked_house_id", "house_village_1")
+	var wg = get_node_or_null("/root/WorldGraph")
+	if wg != null and "houses" in wg and wg.houses.has(house_id):
+		loop_state.current_zone = wg.houses[house_id].get("zone", "OverworldVillage")
 	var spawn_pos: Vector3 = run_state.bookmarked_position
 	player_respawned.emit(spawn_pos)
 	

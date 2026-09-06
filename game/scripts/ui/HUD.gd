@@ -10,6 +10,7 @@ class_name HUD
 @onready var banner_label: Label = find_child("BannerLabel", true, false)
 @onready var banner_panel: Panel = find_child("BannerPanel", true, false)
 @onready var items_container: HBoxContainer = find_child("ItemsContainer", true, false)
+@onready var home_button: Button = find_child("HomeButton", true, false)
 @onready var fast_travel_panel: Panel = find_child("FastTravelModal", true, false)
 @onready var fast_travel_list: VBoxContainer = find_child("WaypointList", true, false)
 @onready var dialogue_panel: Panel = find_child("DialogueModal", true, false)
@@ -19,6 +20,7 @@ var touch_controls: TouchControls = null
 
 var _banner_timer: float = 0.0
 var _vignette_pulse: float = 0.0
+var _home_key_down: bool = false
 
 func _ready() -> void:
 	var tm = get_node_or_null("/root/TimeManager")
@@ -42,6 +44,9 @@ func _ready() -> void:
 	dialogue_panel.visible = false
 	banner_panel.visible = false
 	warning_vignette.color.a = 0.0
+
+	if home_button != null:
+		home_button.pressed.connect(_on_home_button_pressed)
 
 	# Instantiate TouchControls on web, mobile or touch environments
 	_setup_touch_controls()
@@ -88,6 +93,13 @@ func _process(delta: float) -> void:
 			close_fast_travel_menu()
 		elif fast_travel_panel:
 			open_fast_travel_menu()
+
+	# Home respawn hotkey (H)
+	if Input.is_physical_key_pressed(KEY_H) and not _home_key_down:
+		_home_key_down = true
+		_on_home_button_pressed()
+	elif not Input.is_physical_key_pressed(KEY_H):
+		_home_key_down = false
 
 func _on_second_ticked(remaining: float) -> void:
 	if timer_label:
@@ -190,6 +202,14 @@ func open_fast_travel_menu() -> void:
 
 func close_fast_travel_menu() -> void:
 	fast_travel_panel.visible = false
+
+func _on_home_button_pressed() -> void:
+	var gs = get_node_or_null("/root/GameState")
+	if gs != null and gs.has_method("respawn_player"):
+		gs.respawn_player()
+		_play_sfx("teleport")
+		var house_id = gs.run_state.get("bookmarked_house_id", "house_village_1")
+		show_banner("Respawned to House: " + str(house_id))
 
 func _on_waypoint_selected(wpid: String, pos: Vector3) -> void:
 	close_fast_travel_menu()

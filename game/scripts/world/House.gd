@@ -4,7 +4,7 @@ class_name House
 
 @export var house_id: String = "house_village_1"
 @export var display_name: String = "Starting Cabin"
-@export var spawn_offset: Vector3 = Vector3(0.0, 0.5, 1.5)
+@export var spawn_offset: Vector3 = Vector3(0.0, 0.5, 2.2)
 
 @onready var lantern_light: OmniLight3D = $LanternLight
 @onready var bookmark_particles: CPUParticles3D = $BookmarkParticles
