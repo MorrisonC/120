@@ -15,6 +15,8 @@ class_name HUD
 @onready var dialogue_panel: Panel = find_child("DialogueModal", true, false)
 @onready var dialogue_text: Label = find_child("DialogueText", true, false)
 
+var touch_controls: TouchControls = null
+
 var _banner_timer: float = 0.0
 var _vignette_pulse: float = 0.0
 
@@ -40,6 +42,24 @@ func _ready() -> void:
 	dialogue_panel.visible = false
 	banner_panel.visible = false
 	warning_vignette.color.a = 0.0
+
+	# Instantiate TouchControls on web, mobile or touch environments
+	_setup_touch_controls()
+
+func _setup_touch_controls() -> void:
+	var is_touch_device = OS.has_feature("web") or OS.has_feature("mobile") or DisplayServer.has_feature(DisplayServer.FEATURE_TOUCHSCREEN)
+	if is_touch_device:
+		var touch_script = load("res://scripts/ui/TouchControls.gd")
+		if touch_script:
+			touch_controls = touch_script.new()
+			touch_controls.name = "TouchControls"
+			touch_controls.joystick_moved.connect(_on_joystick_moved)
+			add_child(touch_controls)
+
+func _on_joystick_moved(vec: Vector2) -> void:
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() > 0:
+		players[0].touch_input_vector = vec
 
 func _process(delta: float) -> void:
 	if _banner_timer > 0.0:
