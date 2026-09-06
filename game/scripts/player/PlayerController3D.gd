@@ -66,10 +66,71 @@ func get_effective_speed() -> float:
 func get_roll_stamina_cost() -> float:
 	return 10.0 if (game_state != null and game_state.has_stamina_ring()) else 20.0
 
+func _setup_animation_loops() -> void:
+	if not anim_player:
+		return
+	for anim_name in anim_player.get_animation_list():
+		var anim = anim_player.get_animation(anim_name)
+		if anim:
+			var lower = String(anim_name).to_lower()
+			if "idle" in lower or "walk" in lower or "run" in lower or "flying" in lower:
+				anim.loop_mode = Animation.LOOP_LINEAR
+
+func _play_anim(anim_type: String, custom_blend: float = 0.12) -> void:
+	if not anim_player:
+		return
+
+	var has_sword := true # Knight player model holds sword by default
+	var target_anim := ""
+
+	match anim_type.to_lower():
+		"idle":
+			if has_sword and anim_player.has_animation("HumanArmature|Idle_swordRight"):
+				target_anim = "HumanArmature|Idle_swordRight"
+			elif anim_player.has_animation("HumanArmature|Idle"):
+				target_anim = "HumanArmature|Idle"
+			elif anim_player.has_animation("idle"):
+				target_anim = "idle"
+		"walk":
+			if anim_player.has_animation("HumanArmature|Walking"):
+				target_anim = "HumanArmature|Walking"
+			elif anim_player.has_animation("walk"):
+				target_anim = "walk"
+		"sprint", "run":
+			if has_sword and anim_player.has_animation("HumanArmature|Run_swordRight"):
+				target_anim = "HumanArmature|Run_swordRight"
+			elif anim_player.has_animation("HumanArmature|Run"):
+				target_anim = "HumanArmature|Run"
+			elif anim_player.has_animation("run"):
+				target_anim = "run"
+		"attack":
+			if anim_player.has_animation("HumanArmature|Run_swordAttack"):
+				target_anim = "HumanArmature|Run_swordAttack"
+			elif anim_player.has_animation("HumanArmature|swordAttackJump"):
+				target_anim = "HumanArmature|swordAttackJump"
+			elif anim_player.has_animation("attack"):
+				target_anim = "attack"
+		"roll", "dash":
+			if has_sword and anim_player.has_animation("HumanArmature|Roll_sword"):
+				target_anim = "HumanArmature|Roll_sword"
+			elif anim_player.has_animation("HumanArmature|Roll"):
+				target_anim = "HumanArmature|Roll"
+			elif anim_player.has_animation("roll"):
+				target_anim = "roll"
+		"death", "dead":
+			if anim_player.has_animation("HumanArmature|Death"):
+				target_anim = "HumanArmature|Death"
+			elif anim_player.has_animation("death"):
+				target_anim = "death"
+
+	if target_anim != "" and anim_player.current_animation != target_anim:
+		anim_player.play(target_anim, custom_blend)
+
 func _ready() -> void:
 	anim_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
-	if anim_player and anim_player.has_animation("HumanArmature|Idle"):
-		anim_player.play("HumanArmature|Idle")
+	_setup_animation_loops()
+	if anim_player:
+		_play_anim("idle")
 	current_stamina = max_stamina
 	if game_state != null:
 		game_state.player_respawned.connect(_on_player_respawned)
@@ -206,12 +267,7 @@ func _start_attack() -> void:
 	velocity.x = 0.0
 	velocity.z = 0.0
 	_play_sfx("sword_swing")
-	
-	if anim_player:
-		if anim_player.has_animation("HumanArmature|Run_swordAttack"):
-			anim_player.play("HumanArmature|Run_swordAttack")
-		elif anim_player.has_animation("attack"):
-			anim_player.play("attack")
+	_play_anim("attack", 0.05)
 		
 	# Show slash visual arc
 	if slash_visual:
@@ -359,38 +415,19 @@ func _change_state(new_state: State) -> void:
 	var state_name = State.keys()[current_state]
 	state_changed.emit(state_name)
 
-	if anim_player:
-		match current_state:
-			State.IDLE:
-				if anim_player.has_animation("HumanArmature|Idle"):
-					anim_player.play("HumanArmature|Idle")
-				elif anim_player.has_animation("idle"):
-					anim_player.play("idle")
-			State.WALK:
-				if anim_player.has_animation("HumanArmature|Walking"):
-					anim_player.play("HumanArmature|Walking")
-				elif anim_player.has_animation("walk"):
-					anim_player.play("walk")
-			State.SPRINT:
-				if anim_player.has_animation("HumanArmature|Run"):
-					anim_player.play("HumanArmature|Run")
-				elif anim_player.has_animation("run"):
-					anim_player.play("run")
-			State.ROLL:
-				if anim_player.has_animation("HumanArmature|Roll"):
-					anim_player.play("HumanArmature|Roll")
-				elif anim_player.has_animation("roll"):
-					anim_player.play("roll")
-			State.ATTACK:
-				if anim_player.has_animation("HumanArmature|Run_swordAttack"):
-					anim_player.play("HumanArmature|Run_swordAttack")
-				elif anim_player.has_animation("attack"):
-					anim_player.play("attack")
-			State.DEAD:
-				if anim_player.has_animation("HumanArmature|Death"):
-					anim_player.play("HumanArmature|Death")
-				elif anim_player.has_animation("death"):
-					anim_player.play("death")
+	match current_state:
+		State.IDLE:
+			_play_anim("idle")
+		State.WALK:
+			_play_anim("walk")
+		State.SPRINT:
+			_play_anim("sprint")
+		State.ROLL:
+			_play_anim("roll")
+		State.ATTACK:
+			_play_anim("attack")
+		State.DEAD:
+			_play_anim("death")
 
 func _set_mesh_visibility(visible_flag: bool) -> void:
 	if mesh_root:
