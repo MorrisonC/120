@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://m_terrain_grass"]
+
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/grass.png" id="1_grass"]
+
+[resource]
+resource_name = "M_Terrain_Grass"
+albedo_color = Color(0.28, 0.45, 0.20, 1)
+albedo_texture = ExtResource("1_grass")
+roughness = 0.8
+uv1_scale = Vector3(0.2, 0.2, 0.2)
+uv1_triplanar = true

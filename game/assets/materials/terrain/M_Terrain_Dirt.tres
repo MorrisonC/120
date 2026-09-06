@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://m_terrain_dirt"]
+
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/dirt.png" id="1_dirt"]
+
+[resource]
+resource_name = "M_Terrain_Dirt"
+albedo_color = Color(0.43, 0.34, 0.23, 1)
+albedo_texture = ExtResource("1_dirt")
+roughness = 0.9
+uv1_scale = Vector3(0.2, 0.2, 0.2)
+uv1_triplanar = true
