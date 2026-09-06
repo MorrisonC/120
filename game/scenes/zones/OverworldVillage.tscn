@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" path="res://assets/models/items/Boots.glb" id="20_boots_model"]
 [ext_resource type="PackedScene" path="res://assets/models/foliage/Tree_Pine.glb" id="21_tree_pine"]
 [ext_resource type="PackedScene" path="res://assets/models/world/Rock_Cluster.glb" id="22_rock_cluster"]
+[ext_resource type="Script" path="res://scripts/world/ZoneTransitionArea3D.gd" id="23_transition"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.42, 0.62, 0.82, 1)
@@ -279,3 +280,17 @@ transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -8.0, 0, 8.0)
 
 [node name="RockCluster2" parent="." instance=ExtResource("22_rock_cluster")]
 transform = Transform3D(1.0, 0, 0.4, 0, 1.0, 0, -0.4, 0, 1.0, 11.0, 0, 10.0)
+
+[node name="WellDescent" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+script = ExtResource("23_transition")
+target_zone = "TheHollow"
+target_position = Vector3(0, -20, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WellDescent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("CylinderShape3D_well")
+
+[node name="WellModel" parent="WellDescent" instance=ExtResource("9_well_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+

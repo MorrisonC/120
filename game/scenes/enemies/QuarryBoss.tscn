@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://q1quarryboss3d01"]
+
+[ext_resource type="Script" path="res://scripts/combat/QuarryBoss.gd" id="1_boss"]
+[ext_resource type="PackedScene" path="res://assets/models/world/Rock_Cluster.glb" id="2_rock"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_boss"]
+size = Vector3(3.0, 2.5, 3.0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_core"]
+albedo_color = Color(1, 0.7, 0.1, 1)
+emission_enabled = true
+emission = Color(1, 0.6, 0.1, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_eye"]
+material = SubResource("StandardMaterial3D_core")
+radius = 0.25
+height = 0.5
+
+[node name="QuarryBoss" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_boss")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("BoxShape3D_boss")
+
+[node name="MeshRoot" type="Node3D" parent="."]
+
+[node name="RockModel" parent="MeshRoot" instance=ExtResource("2_rock")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
+
+[node name="GolemEye" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -0.9)
+mesh = SubResource("SphereMesh_eye")
+
+[node name="TelegraphLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -1.0)
+visible = false
+light_color = Color(1, 0.8, 0.2, 1)
+light_energy = 0.0
+omni_range = 8.0

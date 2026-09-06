@@ -24,11 +24,25 @@ var run_state: Dictionary = {
 	"heart_containers": 0,
 	"coins": 0,
 	"opened_chests": [],
-	"discovered_zones": ["OverworldVillage"]
+	"discovered_zones": ["OverworldVillage"],
+	"quests": {}
 }
 
 signal coin_collected(total_coins: int)
 signal chest_opened(chest_id: String)
+signal quest_advanced(quest_id: String, stage: int)
+
+func get_quest_stage(quest_id: String) -> int:
+	var q = run_state.get("quests", {})
+	if q is Dictionary:
+		return q.get(quest_id, 0)
+	return 0
+
+func advance_quest(quest_id: String, stage: int) -> void:
+	if not run_state.has("quests") or not (run_state["quests"] is Dictionary):
+		run_state["quests"] = {}
+	run_state["quests"][quest_id] = stage
+	quest_advanced.emit(quest_id, stage)
 
 var loop_state: Dictionary = {}
 

@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://b1finalboss3d01"]
+
+[ext_resource type="Script" path="res://scripts/combat/FinalBoss.gd" id="1_boss"]
+[ext_resource type="PackedScene" uid="uid://boocvlbpfb554" path="res://assets/models/enemies/Spider.glb" id="2_spider"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_boss"]
+size = Vector3(4.5, 3.0, 4.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_void_core"]
+albedo_color = Color(0.8, 0.1, 0.9, 1)
+emission_enabled = true
+emission = Color(0.7, 0.1, 0.9, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_core"]
+material = SubResource("StandardMaterial3D_void_core")
+radius = 0.45
+height = 0.9
+
+[node name="FinalBoss" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_boss")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_boss")
+
+[node name="MeshRoot" type="Node3D" parent="."]
+
+[node name="SpiderModel" parent="MeshRoot" instance=ExtResource("2_spider")]
+transform = Transform3D(-3.5, 0, 0, 0, 3.5, 0, 0, 0, -3.5, 0, 0, 0)
+
+[node name="VoidCore" type="MeshInstance3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -1.0)
+mesh = SubResource("SphereMesh_core")
+
+[node name="TelegraphLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -1.2)
+visible = false
+light_color = Color(0.8, 0.2, 1.0, 1)
+light_energy = 0.0
+omni_range = 12.0

@@ -129,7 +129,26 @@ func take_hit(damage: int, source_pos: Vector3) -> void:
 			tw.tween_property(mesh_root, "scale", Vector3(1.2, 0.8, 1.2), 0.05)
 			tw.tween_property(mesh_root, "scale", Vector3.ONE, 0.1)
 
-	_play_sfx("block_push")
+	_play_sfx("hit")
+
+	# Impact flash particles
+	if is_inside_tree() and get_parent():
+		var p = CPUParticles3D.new()
+		p.emitting = true
+		p.one_shot = true
+		p.explosiveness = 0.95
+		p.amount = 10
+		p.lifetime = 0.25
+		p.emission_shape = CPUParticles3D.EMISSION_SHAPE_SPHERE
+		p.emission_sphere_radius = 0.3
+		p.initial_velocity_min = 2.0
+		p.initial_velocity_max = 5.0
+		p.global_position = global_position + Vector3.UP * 0.8
+		get_parent().add_child(p)
+		var ptw = create_tween()
+		if ptw:
+			ptw.tween_interval(0.3)
+			ptw.tween_callback(p.queue_free)
 	
 	if current_health <= 0:
 		enemy_defeated.emit()

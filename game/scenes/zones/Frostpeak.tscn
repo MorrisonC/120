@@ -1,0 +1,123 @@
+[gd_scene format=3 uid="uid://f1frostpeak3d01"]
+
+[ext_resource type="PackedScene" uid="uid://c1house3dscene01" path="res://scenes/world/House.tscn" id="1_house"]
+[ext_resource type="PackedScene" uid="uid://d1waypoint3d01" path="res://scenes/world/WaypointShrine.tscn" id="2_waypoint"]
+[ext_resource type="Script" path="res://scripts/items/ItemPickup3D.gd" id="3_pickup"]
+[ext_resource type="Script" path="res://scripts/world/FrostHazard.gd" id="4_frost"]
+[ext_resource type="PackedScene" uid="uid://xe2hmrdnvhcw" path="res://assets/models/items/Potion1_Filled.glb" id="5_potion"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_frost"]
+sky_top_color = Color(0.45, 0.60, 0.85, 1)
+sky_horizon_color = Color(0.75, 0.85, 0.95, 1)
+ground_bottom_color = Color(0.40, 0.50, 0.65, 1)
+ground_horizon_color = Color(0.70, 0.80, 0.90, 1)
+
+[sub_resource type="Sky" id="Sky_frost"]
+sky_material = SubResource("ProceduralSkyMaterial_frost")
+
+[sub_resource type="Environment" id="Environment_frost"]
+background_mode = 2
+sky = SubResource("Sky_frost")
+ambient_light_source = 2
+ambient_light_color = Color(0.60, 0.70, 0.85, 1)
+ambient_light_energy = 0.8
+tonemap_mode = 2
+ssao_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.75, 0.82, 0.92, 1)
+fog_density = 0.006
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_frost"]
+agent_radius = 0.4
+agent_height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_snow_ground"]
+albedo_color = Color(0.75, 0.82, 0.90, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_peak_ground"]
+material = SubResource("StandardMaterial3D_snow_ground")
+size = Vector3(50, 2, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_peak_col"]
+size = Vector3(50, 2, 50)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ramp"]
+material = SubResource("StandardMaterial3D_snow_ground")
+size = Vector3(12, 1, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ramp_col"]
+size = Vector3(12, 1, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_blizzard_col"]
+size = Vector3(55, 15, 55)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cloak"]
+radius = 1.0
+
+[node name="Frostpeak" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_frost")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 80, 35, -80)
+light_color = Color(0.92, 0.96, 1.0, 1)
+light_energy = 1.0
+shadow_enabled = true
+directional_shadow_max_distance = 60.0
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_frost")
+
+[node name="PeakPlateau" type="StaticBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 9, -80)
+collision_layer = 1
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/PeakPlateau"]
+mesh = SubResource("BoxMesh_peak_ground")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/PeakPlateau"]
+shape = SubResource("BoxShape3D_peak_col")
+
+[node name="MountainRamp" type="StaticBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(0.707107, 0.11933, -0.69695, 0, 0.98569, 0.16857, 0.707107, -0.11933, 0.69695, 60, 4.5, -60)
+collision_layer = 1
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/MountainRamp"]
+mesh = SubResource("BoxMesh_ramp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MountainRamp"]
+shape = SubResource("BoxShape3D_ramp_col")
+
+[node name="HouseFrost" parent="." instance=ExtResource("1_house")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 10, -80)
+house_id = "house_frost_1"
+house_name = "Shelter Peak"
+
+[node name="WaypointFrost" parent="." instance=ExtResource("2_waypoint")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, 10, -70)
+waypoint_id = &"waypoint_frost"
+display_name = "Peak Waypoint Shrine"
+
+[node name="BlizzardZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 15, -80)
+script = ExtResource("4_frost")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BlizzardZone"]
+shape = SubResource("BoxShape3D_blizzard_col")
+
+[node name="PickupWarmCloak" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55, 4, -55)
+script = ExtResource("3_pickup")
+item_type = 0
+item_id = "WarmCloak"
+respawns_on_loop = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PickupWarmCloak"]
+shape = SubResource("SphereShape3D_cloak")
+
+[node name="VisualModel" parent="PickupWarmCloak" instance=ExtResource("5_potion")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)

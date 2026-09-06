@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://m1sunkenmarsh3d01"]
+
+[ext_resource type="PackedScene" uid="uid://c1house3dscene01" path="res://scenes/world/House.tscn" id="1_house"]
+[ext_resource type="PackedScene" uid="uid://d1waypoint3d01" path="res://scenes/world/WaypointShrine.tscn" id="2_waypoint"]
+[ext_resource type="Script" path="res://scripts/items/ItemPickup3D.gd" id="3_pickup"]
+[ext_resource type="Script" path="res://scripts/world/WaterPlane.gd" id="4_water"]
+[ext_resource type="Script" path="res://scripts/world/NPC.gd" id="5_npc"]
+[ext_resource type="PackedScene" path="res://assets/models/enemies/Frog.glb" id="6_frog"]
+[ext_resource type="PackedScene" uid="uid://c7t45yq8v8x3" path="res://assets/models/characters/Adventurer.glb" id="7_adventurer"]
+[ext_resource type="PackedScene" uid="uid://xe2hmrdnvhcw" path="res://assets/models/items/Potion1_Filled.glb" id="8_potion_model"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/Tier2Enemy.tscn" id="9_tier2"]
+[ext_resource type="PackedScene" uid="uid://m1marshboss3d01" path="res://scenes/enemies/MarshBoss.tscn" id="10_boss"]
+[ext_resource type="PackedScene" path="res://assets/models/world/Rock_Cluster.glb" id="11_rock"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_marsh"]
+sky_top_color = Color(0.18, 0.28, 0.22, 1)
+sky_horizon_color = Color(0.45, 0.52, 0.40, 1)
+ground_bottom_color = Color(0.12, 0.16, 0.10, 1)
+ground_horizon_color = Color(0.35, 0.42, 0.30, 1)
+
+[sub_resource type="Sky" id="Sky_marsh"]
+sky_material = SubResource("ProceduralSkyMaterial_marsh")
+
+[sub_resource type="Environment" id="Environment_marsh"]
+background_mode = 2
+sky = SubResource("Sky_marsh")
+ambient_light_source = 2
+ambient_light_color = Color(0.18, 0.24, 0.16, 1)
+ambient_light_energy = 0.6
+tonemap_mode = 2
+ssao_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.30, 0.38, 0.28, 1)
+fog_density = 0.006
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_marsh"]
+agent_radius = 0.4
+agent_height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_marsh_ground"]
+albedo_color = Color(0.15, 0.20, 0.12, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_marsh_ground"]
+material = SubResource("StandardMaterial3D_marsh_ground")
+size = Vector3(100, 1, 80)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_marsh_col"]
+size = Vector3(100, 1, 80)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_water"]
+transparency = 1
+albedo_color = Color(0.1, 0.4, 0.35, 0.75)
+roughness = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_water"]
+material = SubResource("StandardMaterial3D_water")
+size = Vector3(30, 0.5, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_water_col"]
+size = Vector3(30, 0.8, 30)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hermit"]
+radius = 0.5
+height = 1.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hermit_talk"]
+radius = 3.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_fins"]
+radius = 1.0
+
+[node name="SunkenMarsh" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_marsh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, -100, 25, 0)
+light_color = Color(0.85, 0.95, 0.75, 1)
+light_energy = 0.7
+shadow_enabled = true
+directional_shadow_max_distance = 60.0
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_marsh")
+
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, -0.5, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Ground"]
+mesh = SubResource("BoxMesh_marsh_ground")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground"]
+shape = SubResource("BoxShape3D_marsh_col")
+
+[node name="HouseMarsh" parent="." instance=ExtResource("1_house")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 1, 0)
+house_id = "house_marsh_1"
+house_name = "Bog Haven"
+
+[node name="WaypointMarsh" parent="." instance=ExtResource("2_waypoint")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -95, 1, 10)
+waypoint_id = &"waypoint_marsh"
+display_name = "Marsh Waypoint Shrine"
+
+[node name="WaterHazard" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75, 0.1, -15)
+script = ExtResource("4_water")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WaterHazard"]
+mesh = SubResource("BoxMesh_water")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WaterHazard"]
+shape = SubResource("BoxShape3D_water_col")
+
+[node name="NPCHermit" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -95, 0, 5)
+script = ExtResource("5_npc")
+npc_name = "Old Bog Hermit"
+hint_text = "The deep swamp water burns unless you have the Fins. Seek them in the northern reeds!"
+quest_id = "hermit_lostboots"
+dialogue_by_stage = ["The waters are venomous without Fins. Recover them from the northern reeds!", "You found the Fins! Now the sovereign of the deep cannot drown you."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NPCHermit"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_hermit")
+
+[node name="InteractionTrigger" type="CollisionShape3D" parent="NPCHermit"]
+shape = SubResource("SphereShape3D_hermit_talk")
+
+[node name="HermitVisual" parent="NPCHermit" instance=ExtResource("7_adventurer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="PickupFins" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 1, -20)
+script = ExtResource("3_pickup")
+item_type = 0
+item_id = "Fins"
+respawns_on_loop = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PickupFins"]
+shape = SubResource("SphereShape3D_fins")
+
+[node name="VisualModel" parent="PickupFins" instance=ExtResource("8_potion_model")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+
+[node name="BogGuardian" parent="." instance=ExtResource("9_tier2")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -85, 0, -15)
+
+[node name="MarshBoss" parent="." instance=ExtResource("10_boss")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 0, 0)
+
+[node name="Decorations" type="Node3D" parent="."]
+
+[node name="Rock1" parent="Decorations" instance=ExtResource("11_rock")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -92, 0, 8)
+
+[node name="Rock2" parent="Decorations" instance=ExtResource("11_rock")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -108, 0, -12)

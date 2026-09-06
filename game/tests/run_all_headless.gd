@@ -14,7 +14,12 @@ func _init() -> void:
 		"res://tests/test_collision_scene_health.gd",
 		"res://tests/test_game_enhancements.gd",
 		"res://tests/test_persistence_split.gd",
-		"res://tests/test_world_graph_solvability.gd"
+		"res://tests/test_world_graph_solvability.gd",
+		"res://tests/test_whispering_woods.gd",
+		"res://tests/test_sunken_marsh.gd",
+		"res://tests/test_old_quarry.gd",
+		"res://tests/test_frostpeak.gd",
+		"res://tests/test_the_hollow.gd"
 	]
 	
 	var total_passed = 0

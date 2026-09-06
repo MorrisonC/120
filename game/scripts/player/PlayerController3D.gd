@@ -211,6 +211,7 @@ func _start_attack() -> void:
 		tw.tween_callback(func(): slash_visual.visible = false)
 
 	# Check targets in attack area
+	var hit_connected := false
 	var targets = attack_area.get_overlapping_bodies()
 	for b in targets:
 		if b == self:
@@ -218,6 +219,7 @@ func _start_attack() -> void:
 		if b.has_method("take_hit"):
 			b.take_hit(1, global_position)
 			_play_sfx("hit")
+			hit_connected = true
 
 	var areas = attack_area.get_overlapping_areas()
 	for a in areas:
@@ -225,6 +227,10 @@ func _start_attack() -> void:
 			a.on_sliced()
 		if a.has_method("take_hit"):
 			a.take_hit(1, global_position)
+			hit_connected = true
+
+	if hit_connected:
+		_apply_hit_stop(0.06)
 
 func _start_spin_attack() -> void:
 	_change_state(State.ATTACK)
@@ -418,3 +424,12 @@ func _play_footstep() -> void:
 		elif global_position.x > 40.0:
 			sound = "footstep_stone"
 	_play_sfx(sound)
+
+func _apply_hit_stop(duration: float = 0.06) -> void:
+	if not is_inside_tree():
+		return
+	Engine.time_scale = 0.05
+	var tree = get_tree()
+	if tree:
+		var timer = tree.create_timer(duration, true, false, true)
+		timer.timeout.connect(func(): Engine.time_scale = 1.0)

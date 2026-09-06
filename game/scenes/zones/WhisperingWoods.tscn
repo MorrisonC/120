@@ -1,0 +1,222 @@
+[gd_scene format=3 uid="uid://w1whisperingwoods3d01"]
+
+[ext_resource type="Script" path="res://scripts/zones/WhisperingWoodsZone.gd" id="1_woods_zone"]
+[ext_resource type="PackedScene" uid="uid://c1house3dscene01" path="res://scenes/world/House.tscn" id="2_house"]
+[ext_resource type="PackedScene" uid="uid://d1waypoint3d01" path="res://scenes/world/WaypointShrine.tscn" id="3_waypoint"]
+[ext_resource type="Script" path="res://scripts/items/ItemPickup3D.gd" id="4_pickup"]
+[ext_resource type="Script" path="res://scripts/puzzles/PushBlock3D.gd" id="5_block"]
+[ext_resource type="Script" path="res://scripts/puzzles/PressurePlate3D.gd" id="6_plate"]
+[ext_resource type="Script" path="res://scripts/puzzles/ShortcutGate3D.gd" id="7_gate"]
+[ext_resource type="PackedScene" uid="uid://e1tier1enemy3d01" path="res://scenes/enemies/Tier1Enemy.tscn" id="8_enemy"]
+[ext_resource type="Script" path="res://scripts/world/BreakableProp3D.gd" id="9_prop"]
+[ext_resource type="Script" path="res://scripts/world/NPC.gd" id="10_npc"]
+[ext_resource type="PackedScene" uid="uid://c7t45yq8v8x3" path="res://assets/models/characters/Adventurer.glb" id="11_adventurer"]
+[ext_resource type="PackedScene" uid="uid://xe2hmrdnvhcw" path="res://assets/models/items/Potion1_Filled.glb" id="12_potion_model"]
+[ext_resource type="PackedScene" path="res://assets/models/foliage/Tree_Pine.glb" id="13_tree_pine"]
+[ext_resource type="PackedScene" path="res://assets/models/world/Rock_Cluster.glb" id="14_rock_cluster"]
+[ext_resource type="PackedScene" uid="uid://bvsqk8v3vubw8" path="res://assets/models/village/Crate.glb" id="15_crate_model"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_woods"]
+sky_top_color = Color(0.25, 0.45, 0.35, 1)
+sky_horizon_color = Color(0.65, 0.75, 0.60, 1)
+ground_bottom_color = Color(0.18, 0.25, 0.15, 1)
+ground_horizon_color = Color(0.45, 0.55, 0.40, 1)
+
+[sub_resource type="Sky" id="Sky_woods"]
+sky_material = SubResource("ProceduralSkyMaterial_woods")
+
+[sub_resource type="Environment" id="Environment_woods"]
+background_mode = 2
+sky = SubResource("Sky_woods")
+ambient_light_source = 2
+ambient_light_color = Color(0.22, 0.32, 0.22, 1)
+ambient_light_energy = 0.55
+tonemap_mode = 2
+ssao_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.40, 0.52, 0.42, 1)
+fog_density = 0.004
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_woods"]
+agent_radius = 0.4
+agent_height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_forest_ground"]
+albedo_color = Color(0.24, 0.32, 0.18, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BoxMesh_forest_ground"]
+material = SubResource("StandardMaterial3D_forest_ground")
+size = Vector3(80, 1, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_forest_col"]
+size = Vector3(80, 1, 100)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gate_visual"]
+size = Vector3(3.0, 3.5, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gate_col"]
+size = Vector3(3.0, 3.5, 0.4)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hunter"]
+radius = 0.5
+height = 1.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hunter_talk"]
+radius = 3.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_coffee"]
+radius = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_block"]
+size = Vector3(1.6, 1.6, 1.6)
+
+[node name="WhisperingWoods" type="Node3D"]
+script = ExtResource("1_woods_zone")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_woods")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 25, 100)
+light_color = Color(0.92, 0.96, 0.85, 1)
+light_energy = 0.8
+shadow_enabled = true
+directional_shadow_max_distance = 60.0
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_woods")
+
+[node name="Ground" type="StaticBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 95)
+collision_layer = 1
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Ground"]
+mesh = SubResource("BoxMesh_forest_ground")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ground"]
+shape = SubResource("BoxShape3D_forest_col")
+
+[node name="HouseWoods" parent="." instance=ExtResource("2_house")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 100)
+house_id = "house_woods_1"
+house_name = "Whispering Woods Lodge"
+
+[node name="WaypointWoods" parent="." instance=ExtResource("3_waypoint")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 115)
+waypoint_id = &"waypoint_woods"
+display_name = "Whispering Woods Shrine"
+
+[node name="WoodsEntranceGate" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 50)
+script = ExtResource("9_prop")
+prop_id = "woods_entrance_gate"
+health = 1
+drop_chance = 0.0
+required_item = "Sword"
+shortcut_id = "gate_woods_shortcut"
+
+[node name="VisualRoot" type="Node3D" parent="WoodsEntranceGate"]
+
+[node name="GateMesh" type="MeshInstance3D" parent="WoodsEntranceGate/VisualRoot"]
+mesh = SubResource("BoxMesh_gate_visual")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="WoodsEntranceGate"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WoodsEntranceGate/StaticBody3D"]
+shape = SubResource("BoxShape3D_gate_col")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WoodsEntranceGate"]
+shape = SubResource("BoxShape3D_gate_col")
+
+[node name="NPCHunter" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 95)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NPCHunter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_hunter")
+
+[node name="HunterModel" parent="NPCHunter" instance=ExtResource("11_adventurer")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+
+[node name="NPCArea" type="Area3D" parent="NPCHunter"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("10_npc")
+npc_name = "Ranger Teresa"
+hint_text = "The woods ahead crawl with venomous beasts. Clear the den up the ridge, traveler, and the path will be safe."
+quest_id = "hunter_wolves"
+dialogue_by_stage = ["The woods ahead crawl with venomous beasts. Clear the den up the ridge, traveler, and the path will be safe.", "You drove them back! The woods are calm once more. The ancient gate to the north yields only to a sharpened blade."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NPCHunter/NPCArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("SphereShape3D_hunter_talk")
+
+[node name="WolfDenEnemies" type="Node3D" parent="."]
+
+[node name="Wolf1" parent="WolfDenEnemies" instance=ExtResource("8_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 80)
+patrol_radius = 6.0
+
+[node name="Wolf2" parent="WolfDenEnemies" instance=ExtResource("8_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 85)
+patrol_radius = 6.0
+
+[node name="Wolf3" parent="WolfDenEnemies" instance=ExtResource("8_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 82)
+patrol_radius = 6.0
+
+[node name="CoffeePickup" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0.4, 90)
+script = ExtResource("4_pickup")
+item_id = "Coffee"
+display_name = "Strong Coffee (Push Power)"
+
+[node name="PotionModel" parent="CoffeePickup" instance=ExtResource("12_potion_model")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CoffeePickup"]
+shape = SubResource("SphereShape3D_coffee")
+
+[node name="CoffeePushBlock" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.8, 105)
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("5_block")
+block_id = "block_woods_shortcut"
+
+[node name="CrateModel" parent="CoffeePushBlock" instance=ExtResource("15_crate_model")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 0, -0.8, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CoffeePushBlock"]
+shape = SubResource("BoxShape3D_block")
+
+[node name="ForestFoliage" type="Node3D" parent="."]
+
+[node name="Pine1" parent="ForestFoliage" instance=ExtResource("13_tree_pine")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -8, 0, 75)
+
+[node name="Pine2" parent="ForestFoliage" instance=ExtResource("13_tree_pine")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 8, 0, 70)
+
+[node name="Pine3" parent="ForestFoliage" instance=ExtResource("13_tree_pine")]
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -18, 0, 80)
+
+[node name="Pine4" parent="ForestFoliage" instance=ExtResource("13_tree_pine")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 22, 0, 95)
+
+[node name="Pine5" parent="ForestFoliage" instance=ExtResource("13_tree_pine")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 5, 0, 120)
+
+[node name="Pine6" parent="ForestFoliage" instance=ExtResource("13_tree_pine")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -12, 0, 125)
+
+[node name="Rock1" parent="ForestFoliage" instance=ExtResource("14_rock_cluster")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -12, 0, 65)
+
+[node name="Rock2" parent="ForestFoliage" instance=ExtResource("14_rock_cluster")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 16, 0, 65)

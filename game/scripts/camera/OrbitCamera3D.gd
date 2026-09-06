@@ -15,11 +15,15 @@ var current_orbit_yaw: float = 0.0
 var _is_dragging_orbit: bool = false
 var room_override_camera: Camera3D = null
 
+@export var screen_shake_enabled: bool = true
 var trauma: float = 0.0
 var max_shake_offset: float = 0.35
 var trauma_decay: float = 3.0
 
 func add_trauma(amount: float) -> void:
+	if not screen_shake_enabled:
+		trauma = 0.0
+		return
 	trauma = clamp(trauma + amount, 0.0, 1.0)
 
 func _ready() -> void:

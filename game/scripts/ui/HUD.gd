@@ -71,9 +71,13 @@ func _process(delta: float) -> void:
 
 func _on_second_ticked(remaining: float) -> void:
 	if timer_label:
-		timer_label.text = "⧗ ( %d ) ⧖" % ceil(remaining)
-		if remaining <= 20.0:
-			timer_label.add_theme_color_override("font_color", Color(1.0, 0.25, 0.2))
+		timer_label.text = "[ %d ]" % ceil(remaining)
+		if remaining <= 15.0:
+			# Final 15 seconds high-urgency color pulsing
+			var flash_col = Color(1.0, 0.15, 0.15) if (int(remaining * 2) % 2 == 0) else Color(1.0, 0.6, 0.1)
+			timer_label.add_theme_color_override("font_color", flash_col)
+		elif remaining <= 20.0:
+			timer_label.add_theme_color_override("font_color", Color(1.0, 0.35, 0.2))
 		else:
 			timer_label.add_theme_color_override("font_color", Color(1.0, 0.78, 0.25))
 
@@ -91,11 +95,23 @@ func _update_hearts(current: int, max_hp: int) -> void:
 	for c in heart_container.get_children():
 		c.queue_free()
 
+	var hp_label = Label.new()
+	hp_label.text = "HP "
+	hp_label.add_theme_font_size_override("font_size", 20)
+	hp_label.add_theme_color_override("font_color", Color(1.0, 0.4, 0.4))
+	heart_container.add_child(hp_label)
+
 	for i in range(max_hp):
-		var heart = Label.new()
-		heart.text = "❤️" if i < current else "🖤"
-		heart.add_theme_font_size_override("font_size", 28)
-		heart_container.add_child(heart)
+		var bar = ColorRect.new()
+		bar.custom_minimum_size = Vector2(14, 20)
+		bar.color = Color(0.95, 0.20, 0.25) if i < current else Color(0.25, 0.25, 0.30, 0.6)
+		heart_container.add_child(bar)
+
+	# Pulse animation on heart container
+	var tw = create_tween()
+	if tw:
+		tw.tween_property(heart_container, "scale", Vector2(1.18, 1.18), 0.08)
+		tw.tween_property(heart_container, "scale", Vector2(1.0, 1.0), 0.1)
 
 func _on_item_collected(_item_id: String) -> void:
 	_update_items()
@@ -180,4 +196,4 @@ func _on_coin_collected(total_coins: int) -> void:
 
 func _update_coins(amount: int) -> void:
 	if coin_label:
-		coin_label.text = "  🪙 %d" % amount
+		coin_label.text = "  G: %d" % amount

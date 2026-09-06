@@ -6,6 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://b1player3dctrl01" path="res://scenes/player/Player.tscn" id="4_player"]
 [ext_resource type="Script" path="res://scripts/camera/OrbitCamera3D.gd" id="5_camera"]
 [ext_resource type="PackedScene" uid="uid://h1hud3dscene01" path="res://scenes/ui/HUD.tscn" id="6_hud"]
+[ext_resource type="PackedScene" uid="uid://w1whisperingwoods3d01" path="res://scenes/zones/WhisperingWoods.tscn" id="7_woods"]
+[ext_resource type="PackedScene" uid="uid://m1sunkenmarsh3d01" path="res://scenes/zones/SunkenMarsh.tscn" id="8_marsh"]
+[ext_resource type="PackedScene" uid="uid://q1oldquarry3d01" path="res://scenes/zones/OldQuarry.tscn" id="9_quarry"]
+[ext_resource type="PackedScene" uid="uid://f1frostpeak3d01" path="res://scenes/zones/Frostpeak.tscn" id="10_frost"]
+[ext_resource type="PackedScene" uid="uid://h1thehollow3d01" path="res://scenes/zones/TheHollow.tscn" id="11_hollow"]
 
 [node name="Main3D" type="Node3D"]
 script = ExtResource("1_main")
@@ -13,6 +18,16 @@ script = ExtResource("1_main")
 [node name="ActiveZones" type="Node3D" parent="."]
 
 [node name="OverworldVillage" parent="ActiveZones" instance=ExtResource("2_village")]
+
+[node name="WhisperingWoods" parent="ActiveZones" instance=ExtResource("7_woods")]
+
+[node name="SunkenMarsh" parent="ActiveZones" instance=ExtResource("8_marsh")]
+
+[node name="OldQuarry" parent="ActiveZones" instance=ExtResource("9_quarry")]
+
+[node name="Frostpeak" parent="ActiveZones" instance=ExtResource("10_frost")]
+
+[node name="TheHollow" parent="ActiveZones" instance=ExtResource("11_hollow")]
 
 [node name="AshenRuins" parent="ActiveZones" instance=ExtResource("3_ruins")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 0)

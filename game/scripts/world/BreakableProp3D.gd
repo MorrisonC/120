@@ -7,6 +7,8 @@ signal prop_broken(prop_id: String)
 @export var prop_id: String = "pot_1"
 @export var health: int = 1
 @export var drop_chance: float = 0.6 # 60% chance to drop loot
+@export var required_item: String = ""
+@export var shortcut_id: String = ""
 
 var current_health: int = 1
 var is_broken: bool = false
@@ -39,6 +41,15 @@ func _ready() -> void:
 	if tm != null:
 		tm.loop_expired.connect(_on_loop_expired)
 
+	if not shortcut_id.is_empty() and game_state != null and game_state.is_shortcut_open(shortcut_id):
+		is_broken = true
+		if visual_root:
+			visual_root.visible = false
+		if static_col:
+			static_col.set_deferred("disabled", true)
+		if hit_col:
+			hit_col.set_deferred("disabled", true)
+
 func _on_body_entered(body: Node3D) -> void:
 	# If player rolls into pot, smash it!
 	if is_broken:
@@ -49,6 +60,9 @@ func _on_body_entered(body: Node3D) -> void:
 func take_hit(damage: int, source_pos: Vector3) -> void:
 	if is_broken:
 		return
+	if not required_item.is_empty() and game_state != null and not game_state.has_item(required_item):
+		_play_sfx("hit_metal")
+		return
 	current_health -= damage
 	if current_health <= 0:
 		break_prop()
@@ -56,6 +70,10 @@ func take_hit(damage: int, source_pos: Vector3) -> void:
 func break_prop() -> void:
 	is_broken = true
 	prop_broken.emit(prop_id)
+
+	if not shortcut_id.is_empty() and game_state != null:
+		game_state.open_shortcut(shortcut_id)
+		_play_sfx("shortcut")
 
 	# Hide intact visual
 	if visual_root:
