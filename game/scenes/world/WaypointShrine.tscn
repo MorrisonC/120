@@ -1,29 +1,21 @@
 [gd_scene format=3 uid="uid://d1waypoint3d01"]
 
 [ext_resource type="Script" path="res://scripts/world/WaypointShrine.gd" id="1_wp"]
+[ext_resource type="Material" uid="uid://m_waypoint_pedestal" path="res://assets/materials/props/M_Waypoint_Pedestal.tres" id="2_pedestal_mat"]
+[ext_resource type="Material" uid="uid://m_waypoint_core" path="res://assets/materials/props/M_Waypoint_Core.tres" id="3_core_mat"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_plinth"]
 height = 1.2
 radius = 1.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pedestal"]
-albedo_color = Color(0.3, 0.32, 0.36, 1)
-roughness = 0.7
-
 [sub_resource type="CylinderMesh" id="CylinderMesh_pedestal"]
-material = SubResource("StandardMaterial3D_pedestal")
+material = ExtResource("2_pedestal_mat")
 top_radius = 0.9
 bottom_radius = 1.1
 height = 1.2
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_crystal"]
-albedo_color = Color(0.1, 0.8, 1, 1)
-emission_enabled = true
-emission = Color(0.1, 0.85, 1, 1)
-emission_energy_multiplier = 1.0
-roughness = 0.1
-
 [sub_resource type="BoxMesh" id="BoxMesh_crystal"]
+material = ExtResource("3_core_mat")
 size = Vector3(0.5, 0.8, 0.5)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_interact"]
@@ -53,7 +45,7 @@ mesh = SubResource("CylinderMesh_pedestal")
 
 [node name="CrystalMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 1.8, 0)
-material_override = SubResource("StandardMaterial3D_crystal")
+material_override = ExtResource("3_core_mat")
 mesh = SubResource("BoxMesh_crystal")
 
 [node name="CrystalLight" type="OmniLight3D" parent="."]
