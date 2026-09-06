@@ -23,6 +23,57 @@ var hit_stun_timer: float = 0.0
 
 var anim_player: AnimationPlayer = null
 
+func _setup_animation_loops() -> void:
+	if not anim_player:
+		return
+	for anim_name in anim_player.get_animation_list():
+		var anim = anim_player.get_animation(anim_name)
+		if anim:
+			var lower = String(anim_name).to_lower()
+			if "idle" in lower or "walk" in lower or "run" in lower or "flying" in lower or "gallop" in lower:
+				anim.loop_mode = Animation.LOOP_LINEAR
+
+func play_anim(anim_type: String, custom_blend: float = 0.15) -> void:
+	if not anim_player:
+		return
+	var target_anim = _find_best_anim_name(anim_type)
+	if target_anim != "" and anim_player.current_animation != target_anim:
+		anim_player.play(target_anim, custom_blend)
+
+func _find_best_anim_name(anim_type: String, visited: Array = []) -> String:
+	if not anim_player:
+		return ""
+	var list = anim_player.get_animation_list()
+	if list.size() == 0:
+		return ""
+
+	var lower_type = anim_type.to_lower()
+	if lower_type in visited:
+		return String(list[0])
+	visited.append(lower_type)
+
+	var matches = []
+	for anim_name in list:
+		var lower_name = String(anim_name).to_lower()
+		if lower_type in lower_name:
+			matches.append(String(anim_name))
+
+	if matches.size() > 0:
+		for m in matches:
+			if "armature" in m.to_lower() or "human" in m.to_lower() or "rat" in m.to_lower() or "spider" in m.to_lower() or "frog" in m.to_lower() or "wasp" in m.to_lower():
+				return m
+		return matches[0]
+
+	# Fallbacks based on type
+	if lower_type == "walk":
+		return _find_best_anim_name("run", visited)
+	elif lower_type == "run":
+		return _find_best_anim_name("walk", visited)
+	elif lower_type == "attack":
+		return _find_best_anim_name("jump", visited)
+
+	return String(list[0])
+
 func _ready() -> void:
 	spawn_position = global_position
 	current_health = max_health
@@ -30,12 +81,8 @@ func _ready() -> void:
 	collision_mask = 3 # Environment + Player
 
 	anim_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
-	if anim_player:
-		for anim in anim_player.get_animation_list():
-			var anim_str = String(anim).to_lower()
-			if "run" in anim_str or "walk" in anim_str or "idle" in anim_str:
-				anim_player.play(anim)
-				break
+	_setup_animation_loops()
+	play_anim("idle")
 
 	var tm = get_node_or_null("/root/TimeManager")
 	if tm != null:
@@ -61,24 +108,31 @@ func _physics_process(delta: float) -> void:
 func _process_ai(delta: float) -> void:
 	if not is_instance_valid(target_player):
 		_find_player()
-		return
 
-	var dist = global_position.distance_to(target_player.global_position)
-	if dist <= attack_reach:
-		_start_telegraph()
-	elif dist <= detection_radius:
-		var dir = (target_player.global_position - global_position).normalized()
-		dir.y = 0.0
-		velocity.x = dir.x * move_speed
-		velocity.z = dir.z * move_speed
-		
-		var target_angle = atan2(-dir.x, -dir.z)
-		mesh_root.rotation.y = lerp_angle(mesh_root.rotation.y, target_angle, 10.0 * delta)
-		move_and_slide()
+	if is_instance_valid(target_player):
+		var dist = global_position.distance_to(target_player.global_position)
+		if dist <= attack_reach:
+			_start_telegraph()
+			return
+		elif dist <= detection_radius:
+			var dir = (target_player.global_position - global_position).normalized()
+			dir.y = 0.0
+			velocity.x = dir.x * move_speed
+			velocity.z = dir.z * move_speed
+
+			var target_angle = atan2(-dir.x, -dir.z)
+			mesh_root.rotation.y = lerp_angle(mesh_root.rotation.y, target_angle, 10.0 * delta)
+			play_anim("run")
+			move_and_slide()
+			return
+
+	if velocity.length_squared() > 0.01:
+		play_anim("walk")
 	else:
-		velocity.x = 0.0
-		velocity.z = 0.0
-		move_and_slide()
+		play_anim("idle")
+	velocity.x = 0.0
+	velocity.z = 0.0
+	move_and_slide()
 
 func _find_player() -> void:
 	var players = get_tree().get_nodes_in_group("player")
@@ -88,6 +142,7 @@ func _find_player() -> void:
 func _start_telegraph() -> void:
 	is_telegraphing = true
 	telegraph_timer = telegraph_duration
+	play_anim("attack", 0.05)
 	if telegraph_light:
 		telegraph_light.visible = true
 		telegraph_light.light_energy = 2.0
@@ -110,6 +165,7 @@ func _execute_attack() -> void:
 func take_hit(damage: int, source_pos: Vector3) -> void:
 	current_health -= damage
 	hit_stun_timer = 0.25
+	play_anim("jump") # Hit reaction jump/twitch
 	
 	var knockback = (global_position - source_pos).normalized()
 	knockback.y = 0.0
@@ -163,9 +219,16 @@ func _play_sfx(sound_name: String) -> void:
 		am.play_sfx(sound_name)
 
 func _on_defeated() -> void:
-	visible = false
 	collision_layer = 0
 	set_physics_process(false)
+	var death_anim = _find_best_anim_name("death")
+	if death_anim != "" and anim_player:
+		anim_player.play(death_anim, 0.1)
+		var tw = create_tween()
+		tw.tween_interval(1.2)
+		tw.tween_callback(func(): visible = false)
+	else:
+		visible = false
 
 func _on_loop_expired() -> void:
 	# Reset state and position on each loop

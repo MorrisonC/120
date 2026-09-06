@@ -20,12 +20,20 @@ func _ready() -> void:
 func take_damage(amount: int, _knockback_dir: Vector3 = Vector3.ZERO) -> void:
 	if is_armored:
 		_play_sfx("hit_metal") # Armored clank
+		if mesh_root:
+			var tw = create_tween()
+			tw.tween_property(mesh_root, "scale", Vector3(2.6, 2.3, 2.6), 0.05)
+			tw.tween_property(mesh_root, "scale", Vector3(2.5, 2.5, 2.5), 0.1)
 		return
 	super.take_damage(amount)
 
 func take_hit(damage: int, source_pos: Vector3) -> void:
 	if is_armored:
 		_play_sfx("hit_metal")
+		if mesh_root:
+			var tw = create_tween()
+			tw.tween_property(mesh_root, "scale", Vector3(2.6, 2.3, 2.6), 0.05)
+			tw.tween_property(mesh_root, "scale", Vector3(2.5, 2.5, 2.5), 0.1)
 		return
 	super.take_hit(damage, source_pos)
 
