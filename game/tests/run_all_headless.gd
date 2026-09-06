@@ -19,7 +19,8 @@ func _init() -> void:
 		"res://tests/test_sunken_marsh.gd",
 		"res://tests/test_old_quarry.gd",
 		"res://tests/test_frostpeak.gd",
-		"res://tests/test_the_hollow.gd"
+		"res://tests/test_the_hollow.gd",
+		"res://tests/test_touch_controls.gd"
 	]
 	
 	var total_passed = 0
@@ -52,8 +53,6 @@ func _init() -> void:
 				print("  ✗ ", r.get("test"), " FAILED: ", fail_msg)
 				all_failures.append({"suite": s_name, "test": r.get("test"), "msg": fail_msg})
 		
-	# suite is RefCounted and will automatically free
-	
 	print("\n==================================================")
 	print("TEST RUN SUMMARY:")
 	print("Total Suites Run: ", test_files.size())

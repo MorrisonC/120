@@ -28,6 +28,8 @@ var is_invulnerable: bool = false
 var invulnerability_timer: float = 0.0
 var footstep_timer: float = 0.0
 
+var touch_input_vector: Vector2 = Vector2.ZERO
+
 @onready var mesh_root: Node3D = $MeshRoot
 @onready var attack_area: Area3D = $AttackPivot/AttackArea
 @onready var interaction_area: Area3D = $InteractionArea
@@ -102,7 +104,7 @@ func _process_locomotion(delta: float) -> void:
 	else:
 		velocity.y = 0.0
 
-	# Input reading
+	# Input reading (Keyboard/Gamepad + Touch Virtual Joystick)
 	var input_vec = Vector2.ZERO
 	if Input.is_action_pressed("move_forward"):
 		input_vec.y -= 1.0
@@ -112,7 +114,11 @@ func _process_locomotion(delta: float) -> void:
 		input_vec.x -= 1.0
 	if Input.is_action_pressed("move_right"):
 		input_vec.x += 1.0
-	input_vec = input_vec.normalized()
+
+	if input_vec.length_squared() > 0.0:
+		input_vec = input_vec.normalized()
+	elif touch_input_vector.length_squared() > 0.0:
+		input_vec = touch_input_vector
 
 	# Handle attack holding & charging
 	if Input.is_action_pressed("attack"):
