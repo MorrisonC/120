@@ -29,3 +29,23 @@ func test_pressure_plate_mask_detects_player_and_puzzle_blocks() -> void:
 	assert_true((plate.collision_mask & 2) != 0, "Pressure plate must detect player (layer 2)")
 	assert_true((plate.collision_mask & 4) != 0, "Pressure plate must detect puzzle blocks (layer 4)")
 	plate.free()
+
+func test_player_scene_3d_structure() -> void:
+	var player_scene = load("res://scenes/player/Player.tscn")
+	assert_true(player_scene != null, "Player.tscn scene must exist and load")
+	var player_inst = player_scene.instantiate()
+	assert_true(player_inst is CharacterBody3D, "Player scene root must be CharacterBody3D")
+	var col_shape = player_inst.get_node_or_null("CollisionShape3D")
+	assert_true(col_shape != null, "Player must have CollisionShape3D")
+	assert_true(col_shape.shape != null, "Player CollisionShape3D must have a valid shape resource")
+	player_inst.free()
+
+func test_tier1_enemy_3d_structure() -> void:
+	var enemy_scene = load("res://scenes/enemies/Tier1Enemy.tscn")
+	assert_true(enemy_scene != null, "Tier1Enemy.tscn scene must exist and load")
+	var enemy_inst = enemy_scene.instantiate()
+	assert_true(enemy_inst is CharacterBody3D, "Tier1Enemy scene root must be CharacterBody3D")
+	var col_shape = enemy_inst.get_node_or_null("CollisionShape3D")
+	assert_true(col_shape != null, "Tier1Enemy must have CollisionShape3D")
+	assert_true(col_shape.shape != null, "Tier1Enemy CollisionShape3D must have a valid shape resource")
+	enemy_inst.free()
