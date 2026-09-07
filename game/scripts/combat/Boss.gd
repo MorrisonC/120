@@ -18,6 +18,10 @@ var target_player: CharacterBody3D = null
 var is_enraged: bool = false
 var spawn_position: Vector3 = Vector3.ZERO
 
+var is_vulnerable: bool:
+	get:
+		return current_state != State.BURROW and current_state != State.DEAD
+
 # Internal action counters & helpers
 var hop_target_rot: float = 0.0
 var spit_count: int = 0
