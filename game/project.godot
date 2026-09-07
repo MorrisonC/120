@@ -22,6 +22,7 @@ config/features=PackedStringArray("4.7", "Forward Plus")
 
 TimeManager="*res://scripts/core/TimeManager.gd"
 GameState="*res://scripts/core/GameState.gd"
+QuestManager="*res://scripts/core/QuestManager.gd"
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 WorldGraph="*res://scripts/core/WorldGraph.gd"
 AudioManager="*res://scripts/core/AudioManager.gd"
