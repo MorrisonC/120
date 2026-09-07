@@ -11,9 +11,21 @@
 [ext_resource type="PackedScene" uid="uid://q1oldquarry3d01" path="res://scenes/zones/OldQuarry.tscn" id="9_quarry"]
 [ext_resource type="PackedScene" uid="uid://f1frostpeak3d01" path="res://scenes/zones/Frostpeak.tscn" id="10_frost"]
 [ext_resource type="PackedScene" uid="uid://h1thehollow3d01" path="res://scenes/zones/TheHollow.tscn" id="11_hollow"]
+[ext_resource type="Environment" uid="uid://m_world_environment" path="res://assets/materials/world/M_WorldEnvironment.tres" id="12_env"]
 
 [node name="Main3D" type="Node3D"]
 script = ExtResource("1_main")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("12_env")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 25, 0)
+light_color = Color(1.0, 0.96, 0.90, 1)
+light_energy = 0.85
+shadow_enabled = true
+shadow_bias = 0.04
+directional_shadow_max_distance = 80.0
 
 [node name="ActiveZones" type="Node3D" parent="."]
 

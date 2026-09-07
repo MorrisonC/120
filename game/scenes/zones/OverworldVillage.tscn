@@ -24,7 +24,6 @@
 [ext_resource type="Script" path="res://scripts/world/ZoneTransitionArea3D.gd" id="23_transition"]
 [ext_resource type="Material" uid="uid://m_terrain_grass" path="res://assets/materials/terrain/M_Terrain_Grass.tres" id="24_grass_mat"]
 [ext_resource type="Material" uid="uid://m_terrain_dirt" path="res://assets/materials/terrain/M_Terrain_Dirt.tres" id="25_dirt_mat"]
-[ext_resource type="Environment" uid="uid://m_world_environment" path="res://assets/materials/world/M_WorldEnvironment.tres" id="26_world_env"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_ground"]
 agent_radius = 0.4
@@ -76,17 +75,6 @@ size = Vector3(30, 0.2, 6)
 size = Vector3(30, 0.2, 6)
 
 [node name="OverworldVillage" type="Node3D"]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("26_world_env")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 20, 0)
-light_color = Color(1.0, 0.95, 0.88, 1)
-light_energy = 0.8
-shadow_enabled = true
-shadow_bias = 0.05
-directional_shadow_max_distance = 60.0
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_ground")
@@ -166,7 +154,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("CapsuleShape3D_npc")
 
 [node name="FarmerModel" parent="NPCElder" instance=ExtResource("7_farmer_model")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(-0.6, 0, 0, 0, 0.6, 0, 0, 0, -0.6, 0, 0, 0)
 
 [node name="NPCArea" type="Area3D" parent="NPCElder"]
 collision_layer = 16
