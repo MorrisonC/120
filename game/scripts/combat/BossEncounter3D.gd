@@ -1,4 +1,4 @@
-extends EnemyBase3D
+extends "res://scripts/combat/EnemyBase3D.gd"
 
 class_name BossEncounter3D
 
