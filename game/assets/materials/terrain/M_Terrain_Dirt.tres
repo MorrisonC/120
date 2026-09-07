@@ -4,8 +4,7 @@
 
 [resource]
 resource_name = "M_Terrain_Dirt"
-albedo_color = Color(0.43, 0.34, 0.23, 1)
+albedo_color = Color(0.48, 0.38, 0.26, 1)
 albedo_texture = ExtResource("1_dirt")
 roughness = 0.9
-uv1_scale = Vector3(0.2, 0.2, 0.2)
-uv1_triplanar = true
+uv1_scale = Vector3(8, 8, 8)

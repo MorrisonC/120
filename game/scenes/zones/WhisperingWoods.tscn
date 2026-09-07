@@ -17,27 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://bvsqk8v3vubw8" path="res://assets/models/village/Crate.glb" id="15_crate_model"]
 [ext_resource type="Script" path="res://scripts/world/ZoneTransitionArea3D.gd" id="16_transition"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_woods"]
-sky_top_color = Color(0.25, 0.45, 0.35, 1)
-sky_horizon_color = Color(0.65, 0.75, 0.60, 1)
-ground_bottom_color = Color(0.18, 0.25, 0.15, 1)
-ground_horizon_color = Color(0.45, 0.55, 0.40, 1)
-
-[sub_resource type="Sky" id="Sky_woods"]
-sky_material = SubResource("ProceduralSkyMaterial_woods")
-
-[sub_resource type="Environment" id="Environment_woods"]
-background_mode = 2
-sky = SubResource("Sky_woods")
-ambient_light_source = 2
-ambient_light_color = Color(0.22, 0.32, 0.22, 1)
-ambient_light_energy = 0.35
-tonemap_mode = 3
-ssao_enabled = true
-fog_enabled = true
-fog_light_color = Color(0.40, 0.52, 0.42, 1)
-fog_density = 0.004
-
 [sub_resource type="NavigationMesh" id="NavigationMesh_woods"]
 agent_radius = 0.4
 agent_height = 1.8
@@ -78,16 +57,6 @@ size = Vector3(8, 3, 2)
 [node name="WhisperingWoods" type="Node3D"]
 script = ExtResource("1_woods_zone")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_woods")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 25, 100)
-light_color = Color(0.92, 0.96, 0.85, 1)
-light_energy = 0.55
-shadow_enabled = true
-directional_shadow_max_distance = 60.0
-
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_woods")
 
@@ -105,7 +74,7 @@ shape = SubResource("BoxShape3D_forest_col")
 [node name="HouseWoods" parent="." instance=ExtResource("2_house")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 100)
 house_id = "house_woods_1"
-house_name = "Whispering Woods Lodge"
+display_name = "Whispering Woods Lodge"
 
 [node name="WaypointWoods" parent="." instance=ExtResource("3_waypoint")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 115)
@@ -146,7 +115,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_hunter")
 
 [node name="HunterModel" parent="NPCHunter" instance=ExtResource("11_adventurer")]
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+transform = Transform3D(-0.6, 0, 0, 0, 0.6, 0, 0, 0, -0.6, 0, 0, 0)
 
 [node name="NPCArea" type="Area3D" parent="NPCHunter"]
 collision_layer = 16

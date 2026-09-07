@@ -8,6 +8,11 @@ All links verified live. Re-check licenses at download time.
 
 ## 3D Environment & Prototype Asset Packs (CC0)
 
+- **Kenney — Furniture Kit** (CC0)
+  https://kenney.nl/assets/furniture-kit
+  Direct zip: https://kenney.nl/media/pages/assets/furniture-kit/440e0608a4-1677580847/kenney_furniture-kit.zip
+  Downloaded GLTF interior furniture models (bed, table, chair, bookcase, cabinet, rug, lamp) into `game/assets/models/props/interior/`.
+
 - **Kenney — Space Kit** (CC0)
   https://kenney.nl/assets/space-kit
   Direct zip: https://kenney.nl/media/pages/assets/space-kit/20874c75ac-1677698978/kenney_space-kit.zip

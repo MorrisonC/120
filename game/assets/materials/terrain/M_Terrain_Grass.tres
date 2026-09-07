@@ -4,8 +4,7 @@
 
 [resource]
 resource_name = "M_Terrain_Grass"
-albedo_color = Color(0.28, 0.45, 0.20, 1)
+albedo_color = Color(0.28, 0.48, 0.22, 1)
 albedo_texture = ExtResource("1_grass")
-roughness = 0.8
-uv1_scale = Vector3(0.2, 0.2, 0.2)
-uv1_triplanar = true
+roughness = 0.85
+uv1_scale = Vector3(10, 10, 10)
