@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-09-07T16:55:32.260Z",
+  "console_errors": [],
+  "keyboard_inputs_sent": 10,
+  "touch_inputs_sent": 4,
+  "touch_taps_attempted": 3,
+  "frame_evaluations": [
+    {
+      "frame": "initial_spawn",
+      "avg": 60.93431351273148,
+      "ratio": 0.4348958333333333,
+      "nonZero": 400800,
+      "isBlack": false
+    },
+    {
+      "frame": "after_keyboard_nav",
+      "avg": 60.97975513599537,
+      "ratio": 0.43405164930555556,
+      "nonZero": 400022,
+      "isBlack": false
+    },
+    {
+      "frame": "after_touch_inputs",
+      "avg": 61.10683195891204,
+      "ratio": 0.4355707465277778,
+      "nonZero": 401422,
+      "isBlack": false
+    }
+  ],
+  "session_duration_ms": 73673,
+  "overall_status": "PASSED"
+}

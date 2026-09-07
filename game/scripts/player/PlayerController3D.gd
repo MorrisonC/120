@@ -23,6 +23,8 @@ var current_stamina: float = 100.0
 var roll_timer: float = 0.0
 var attack_timer: float = 0.0
 var hit_timer: float = 0.0
+var attack_buffered: bool = false
+var attack_buffer_timer: float = 0.0
 var roll_direction: Vector3 = Vector3.FORWARD
 var is_invulnerable: bool = false
 var invulnerability_timer: float = 0.0
@@ -350,9 +352,23 @@ func _start_spin_attack() -> void:
 				a.take_hit(2, global_position)
 
 func _process_attack(delta: float) -> void:
+	if Input.is_action_just_pressed("attack"):
+		attack_buffered = true
+		attack_buffer_timer = 0.2
+
+	if attack_buffer_timer > 0.0:
+		attack_buffer_timer -= delta
+		if attack_buffer_timer <= 0.0:
+			attack_buffered = false
+
 	attack_timer -= delta
 	if attack_timer <= 0.0:
-		_change_state(State.IDLE)
+		if attack_buffered:
+			attack_buffered = false
+			attack_buffer_timer = 0.0
+			_start_attack()
+		else:
+			_change_state(State.IDLE)
 
 func _start_roll(input_vec: Vector2) -> void:
 	_change_state(State.ROLL)

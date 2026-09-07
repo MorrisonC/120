@@ -24,7 +24,7 @@ var interact_touch_index: int = -1
 var attack_btn_center: Vector2 = Vector2.ZERO
 var roll_btn_center: Vector2 = Vector2.ZERO
 var interact_btn_center: Vector2 = Vector2.ZERO
-var btn_radius: float = 40.0
+var btn_radius: float = 55.0
 
 func _ready() -> void:
 	set_anchors_preset(PRESET_FULL_RECT)
@@ -67,7 +67,7 @@ func _handle_screen_touch(event: InputEventScreenTouch) -> void:
 			return
 
 		# Check Attack Button
-		if pos.distance_to(attack_btn_center) <= btn_radius * 1.3:
+		if pos.distance_to(attack_btn_center) <= btn_radius * 1.5:
 			attack_touch_index = idx
 			Input.action_press("attack")
 			attack_pressed.emit()
@@ -75,7 +75,7 @@ func _handle_screen_touch(event: InputEventScreenTouch) -> void:
 			return
 
 		# Check Roll/Dash Button
-		if pos.distance_to(roll_btn_center) <= btn_radius * 1.3:
+		if pos.distance_to(roll_btn_center) <= btn_radius * 1.5:
 			roll_touch_index = idx
 			Input.action_press("roll_dash")
 			roll_pressed.emit()
@@ -83,7 +83,7 @@ func _handle_screen_touch(event: InputEventScreenTouch) -> void:
 			return
 
 		# Check Interact Button
-		if pos.distance_to(interact_btn_center) <= btn_radius * 1.3:
+		if pos.distance_to(interact_btn_center) <= btn_radius * 1.5:
 			interact_touch_index = idx
 			Input.action_press("interact")
 			interact_pressed.emit()
