@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://m1marshboss3d01"]
+[gd_scene format=3 uid="uid://bosscontroller3d01"]
 
-[ext_resource type="Script" path="res://scripts/combat/MarshBoss.gd" id="1_boss"]
+[ext_resource type="Script" path="res://scripts/combat/Boss.gd" id="1_boss"]
 [ext_resource type="PackedScene" path="res://assets/models/enemies/Frog.glb" id="2_frog"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
@@ -13,7 +13,7 @@ size = Vector3(2.8, 2.0, 2.8)
 [sub_resource type="BoxShape3D" id="BoxShape3D_hurtbox"]
 size = Vector3(3.0, 2.2, 3.0)
 
-[node name="MarshBoss" type="CharacterBody3D" groups=["boss", "enemies"]]
+[node name="Boss" type="CharacterBody3D" groups=["boss", "enemies"]]
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_boss")
