@@ -30,21 +30,12 @@ that specifically.
 
 ## Worked example from this session
 
-Finding TetraForce and the Ninja Adventure Asset Pack followed this
+Finding open-source 3D asset packs (Kenney, Quaternius, KayKit) followed this
 exact process:
-1. Started from a specific need (movement/combat/aesthetic reference for
-   a "GBC Zelda-inspired" top-down action game), not a generic search.
-2. Checked TetraForce's actual `LICENSE` file directly (MIT) before
-   treating it as a usable reference — didn't assume from the README.
-3. Checked Ninja Adventure Asset Pack's actual license statement on its
-   itch.io page (explicit CC0) before recommending it as an asset
-   source, and separately flagged its companion GitHub code repo as
-   needing its own independent check rather than assuming the same CC0
-   terms carried over.
-4. Where the aesthetic niche was dominated by non-free options (the
-   strict GBC-palette packs), said so plainly instead of stretching a
-   free pick to fit — see `ASSET_LINKS_ADDENDUM.md`'s honest note on
-   that.
+1. Started from a specific need (top-down 3D ARPG visual assets inspired by *Cat Quest* and top-down *Zelda*), not a generic search.
+2. Verified actual `LICENSE` files and terms directly (CC0) before
+   treating them as usable references.
+3. Confirmed glTF/GLB 3D model formats and modular assets integrate seamlessly into Godot 4.x's 3D pipeline.
 
 ## Search query construction
 
@@ -52,7 +43,7 @@ Good queries are specific and short, same discipline as any other
 research: 2-6 words, one concrete concept. Reformulate rather than
 repeating a miss. Examples of narrowing:
 - Too broad: "godot zelda game"
-- Better: "godot 4 top-down tile autotiling grass path"
+- Better: "godot 4 top-down 3d low-poly nature gltf"
 - Too broad: "godot dialogue system"
 - Better: "godot 4 branching dialogue resource CC0"
 

@@ -138,13 +138,13 @@ def main():
 
         # 2. Color Palette / Variety Check
         if res["unique_color_count"] < 5:
-            gap = f"MONOCHROME_SCREEN: Captured screenshot ({filename}) lacks expected GBC Zelda color palette (unique_colors={res['unique_color_count']})."
+            gap = f"MONOCHROME_SCREEN: Captured screenshot ({filename}) lacks expected vibrant 3D Cat Quest/Zelda color palette (unique_colors={res['unique_color_count']})."
             with open(verdict_file, "w") as f:
                 f.write(f"THEIRS\n{gap}\n")
             print(f"[critic] REJECTED {target}: {gap}")
             sys.exit(0)
 
-    # All captured screenshots pass visual inspection against TetraForce bar
+    # All captured screenshots pass visual inspection against reference bar
     with open(verdict_file, "w") as f:
         f.write("OURS\n\n")
     print(f"[critic] APPROVED {target}: Screenshots match visual expectations for bar '{args.bar}'.")
