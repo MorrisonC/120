@@ -81,3 +81,12 @@
 - [x] Execute Playwright E2E Web captures and visually verify landscape rendering against top-down Zelda RPG standards.
 - [x] Verify all 8 GUT test suites pass headlessly.
 - [x] Complete pre-commit steps.
+
+## 3D World Cohesion & Gated Progression Overhaul (Cat Quest Style) - COMPLETED
+- [x] Ingest and map low-poly glTF/GLB 3D models into categorized directories (`nature/`, `town/`, `props/`, `ruins/`, `dungeon/`, `characters/`, `enemies/`).
+- [x] Scrub legacy 1-bit duotone retro references across documentation (`README.md`, `ASSETS.md`, `asset_manifest.json`).
+- [x] Implement `QuestManager.gd` autoload and `user://world_save.cfg` state persistence across loops.
+- [x] Create `GateBarrier3D` roadblock node/script and `NoticeBoardUI` village micro-quest system.
+- [x] Build contiguous 3D `Overworld.tscn` master map connecting Zones 0 through 4 with gated roadblocks.
+- [x] Verify WebGL export via Playwright E2E tests and captured screenshot telemetry.
+- [x] Complete pre-commit steps.
