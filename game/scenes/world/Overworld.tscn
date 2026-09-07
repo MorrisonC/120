@@ -1,0 +1,87 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/props/GateBarrier3D.tscn" id="1_gate"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(200, 1, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_grass"]
+albedo_color = Color(0.2, 0.55, 0.25, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+material = SubResource("StandardMaterial3D_grass")
+size = Vector3(200, 1, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_zone1"]
+albedo_color = Color(0.35, 0.5, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_zone1"]
+material = SubResource("StandardMaterial3D_zone1")
+size = Vector3(40, 0.2, 40)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_zone2"]
+albedo_color = Color(0.15, 0.35, 0.25, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_zone2"]
+material = SubResource("StandardMaterial3D_zone2")
+size = Vector3(40, 0.2, 40)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_zone3"]
+albedo_color = Color(0.6, 0.5, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_zone3"]
+material = SubResource("StandardMaterial3D_zone3")
+size = Vector3(40, 0.2, 40)
+
+[node name="Overworld" type="Node3D"]
+
+[node name="StaticBody3D_Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D_Ground"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D_Ground"]
+mesh = SubResource("BoxMesh_floor")
+
+[node name="Zone0_HearthVillage" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Zone1_MillstoneFields" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -50)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Zone1_MillstoneFields"]
+mesh = SubResource("BoxMesh_zone1")
+
+[node name="Gate1_Brambles" parent="." instance=ExtResource("1_gate")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+required_flag = "has_machete"
+unlock_flag = "brambles_cleared"
+prompt_message = "Thick brambles block the way. Needs Machete."
+
+[node name="Zone2_WhisperingFen" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -50)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Zone2_WhisperingFen"]
+mesh = SubResource("BoxMesh_zone2")
+
+[node name="Gate2_SinkingMire" parent="." instance=ExtResource("1_gate")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -50)
+required_flag = "has_lead_boots"
+unlock_flag = "mire_crossed"
+prompt_message = "Sinking mire blocks the way. Needs Lead Boots."
+
+[node name="Zone3_AshenDunes" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Zone3_AshenDunes"]
+mesh = SubResource("BoxMesh_zone3")
+
+[node name="Gate3_ClockworkPortcullis" parent="." instance=ExtResource("1_gate")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 25)
+required_flag = "spire_gate_open"
+unlock_flag = "portcullis_unlocked"
+prompt_message = "Sealed Portcullis blocks the way. Needs Brass Gear."
+
+[node name="Zone4_ClockworkSpire" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50)
