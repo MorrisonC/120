@@ -2,9 +2,9 @@ extends Node3D
 
 class_name Main3D
 
-@onready var player: PlayerController3D = $Player
-@onready var orbit_camera: OrbitCamera3D = $OrbitCamera
-@onready var hud: HUD = $HUD
+@onready var player: Node3D = $Player
+@onready var orbit_camera: Camera3D = $OrbitCamera
+@onready var hud: CanvasLayer = $HUD
 
 func _ready() -> void:
 	if is_instance_valid(player) and is_instance_valid(orbit_camera):

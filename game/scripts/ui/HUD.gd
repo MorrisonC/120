@@ -16,7 +16,7 @@ class_name HUD
 @onready var dialogue_panel: Panel = find_child("DialogueModal", true, false)
 @onready var dialogue_text: Label = find_child("DialogueText", true, false)
 
-var touch_controls: TouchControls = null
+var touch_controls: Control = null
 
 var _banner_timer: float = 0.0
 var _vignette_pulse: float = 0.0

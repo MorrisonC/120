@@ -1,4 +1,4 @@
-extends BossEncounter3D
+extends "res://scripts/combat/BossEncounter3D.gd"
 
 class_name QuarryBoss
 
