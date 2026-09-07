@@ -32,6 +32,10 @@ func _on_body_entered(body: Node3D) -> void:
 			if bookmark_particles:
 				bookmark_particles.emitting = true
 
+		# Teleport player into house interior
+		body.global_position = Vector3(200.0, 0.5, 3.0)
+		_play_sfx("door_open")
+
 func _play_sfx(sound_name: String) -> void:
 	var am = get_node_or_null("/root/AudioManager")
 	if am and am.has_method("play_sfx"):

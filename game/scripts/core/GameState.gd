@@ -53,8 +53,9 @@ var capabilities: Dictionary = {
 	"can_swim": false,
 	"can_climb": false,
 	"has_warmth": false,
-	"can_dash": false,
-	"has_sword": false
+	"can_dash": true,
+	"can_attack": true,
+	"has_sword": true
 }
 
 func _init() -> void:
@@ -83,13 +84,15 @@ func update_capabilities_from_items() -> void:
 	capabilities.can_swim = false
 	capabilities.can_climb = false
 	capabilities.has_warmth = false
-	capabilities.can_dash = false
-	capabilities.has_sword = false
+	capabilities.can_dash = true
+	capabilities.can_attack = true
+	capabilities.has_sword = true
 
 	for item in run_state.unlocked_items:
 		match item:
 			"Sword":
 				capabilities.has_sword = true
+				capabilities.can_attack = true
 			"Boots":
 				move_speed_modifier = 1.35
 			"Coffee":

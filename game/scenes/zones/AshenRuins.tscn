@@ -275,13 +275,6 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 3.5, 0, -5)
 [node name="DungeonTrap1" parent="." instance=ExtResource("15_beartrap")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -3, 0, 12)
 
-[node name="DungeonLight" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 15, 0)
-visible = false
-light_color = Color(0.65, 0.7, 0.85, 1)
-light_energy = 0.6
-shadow_enabled = true
-
 [node name="PreviewCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 12, 16)
 fov = 65.0
