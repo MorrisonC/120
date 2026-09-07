@@ -52,3 +52,9 @@ All visual 3D assets used in Loopkeeper 3D follow a **3D Stylized Low-Poly / Cel
   * Author: Kay Lousberg
   * License: CC0 (Public Domain)
   * Role: Animated skeleton warriors, archers, and mages to serve as zoned patrol enemies and dungeon sentinels.
+
+* **Quaternius Ultimate Monsters Pack (glTF)**
+  * URL: https://quaternius.com/packs/ultimatemonsters.html
+  * Author: Quaternius
+  * License: CC0 (Public Domain)
+  * Role: 3D Starter Boss and monster models (`res://assets/models/enemies/`), rig and animation clips for crawling, hopping, burrowing, and spitting attacks.

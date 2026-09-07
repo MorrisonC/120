@@ -9,6 +9,7 @@ func _init() -> void:
 	var test_files = [
 		"res://tests/test_loop_rules.gd",
 		"res://tests/test_boss_encounter.gd",
+		"res://tests/test_first_boss.gd",
 		"res://tests/test_puzzles.gd",
 		"res://tests/test_items_and_respawn.gd",
 		"res://tests/test_collision_scene_health.gd",
