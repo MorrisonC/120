@@ -42,7 +42,8 @@ else
 fi
 
 echo "[capture_web_e2e] Serving on port ${SERVE_PORT}..."
-( cd "$WEB_BUILD_DIR" && python3 -m http.server "$SERVE_PORT" >/tmp/120_serve.log 2>&1 & echo $! > /tmp/120_serve.pid )
+node "${SKILL_ROOT}/scripts/serve_with_headers.js" "$SERVE_PORT" "$WEB_BUILD_DIR" >/tmp/120_serve.log 2>&1 &
+echo $! > /tmp/120_serve.pid
 sleep 2
 trap 'kill "$(cat /tmp/120_serve.pid)" 2>/dev/null || true' EXIT
 

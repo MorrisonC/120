@@ -1,11 +1,11 @@
 {
   "mode": "sanity",
-  "timestamp": "2026-08-22T04:42:39.093Z",
+  "timestamp": "2026-09-07T17:47:47.371Z",
   "black_screen_detected": false,
   "black_screen_metrics": {
-    "avg": 0.2054466869212963,
-    "ratio": 0.0015885416666666667,
-    "nonZero": 1464,
+    "avg": 47.36745153356482,
+    "ratio": 0.3822580295138889,
+    "nonZero": 352289,
     "isBlack": false
   },
   "any_frame_changed": true,

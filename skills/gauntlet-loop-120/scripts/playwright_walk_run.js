@@ -89,35 +89,32 @@ function hashFile(filePath) {
 }
 
 async function focusCanvas(page) {
-  // Godot's web export needs the canvas itself focused to receive
-  // keyboard events -- a page-level goto() does NOT give it focus.
   try {
-    const canvas = page.locator('canvas').first();
-    if (await canvas.count() > 0) {
-      await canvas.click({ timeout: 5000 }).catch(async () => {
-        await canvas.click({ position: { x: 5, y: 5 }, timeout: 5000 }).catch(() => {});
-      });
-    } else {
-      await page.mouse.click(100, 100);
-    }
+    await page.mouse.click(640, 360);
+    await page.waitForTimeout(500);
   } catch (e) {
-    await page.mouse.click(100, 100).catch(() => {});
   }
+}
+
+async function captureCanvas(page, filename) {
+  await page.screenshot({ path: filename });
 }
 
 async function pressAndCapture(page, outDir, label, key, holdMs) {
   const beforePath = path.join(outDir, `${label}_before.png`);
   const afterPath = path.join(outDir, `${label}_after.png`);
-  await page.screenshot({ path: beforePath });
+  await captureCanvas(page, beforePath);
 
-  await page.keyboard.down(key);
-  await page.waitForTimeout(holdMs);
-  await page.keyboard.up(key);
+  const presses = Math.max(6, Math.floor((holdMs || 600) / 100));
+  for (let p = 0; p < presses; p++) {
+    await page.keyboard.press(key);
+    await page.waitForTimeout(100);
+  }
   await page.waitForTimeout(200); // let the frame settle before capture
 
-  await page.screenshot({ path: afterPath });
+  await captureCanvas(page, afterPath);
 
-  const changed = hashFile(beforePath) !== hashFile(afterPath);
+  const changed = !fs.readFileSync(beforePath).equals(fs.readFileSync(afterPath));
   return { label, key, holdMs, changed, before: beforePath, after: afterPath };
 }
 
