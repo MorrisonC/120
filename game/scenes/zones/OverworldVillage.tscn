@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://v1villagezone3d01"]
 
 [ext_resource type="PackedScene" uid="uid://c1house3dscene01" path="res://scenes/world/House.tscn" id="1_house"]
+[ext_resource type="PackedScene" uid="uid://c1houseinterior3dscene01" path="res://scenes/world/HouseInterior.tscn" id="1_house_interior"]
 [ext_resource type="PackedScene" uid="uid://d1waypoint3d01" path="res://scenes/world/WaypointShrine.tscn" id="2_waypoint"]
 [ext_resource type="Script" path="res://scripts/items/ItemPickup3D.gd" id="3_pickup"]
 [ext_resource type="Script" path="res://scripts/world/NPC.gd" id="4_npc"]
@@ -98,6 +99,8 @@ mesh = SubResource("BoxMesh_path")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 house_id = "house_village_1"
 display_name = "Starting Cabin"
+
+[node name="HouseInterior" parent="." instance=ExtResource("1_house_interior")]
 
 [node name="VillageWaypoint" parent="." instance=ExtResource("2_waypoint")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 6)

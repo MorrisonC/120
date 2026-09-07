@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://c1houseinterior3dscene01"]
+
+[ext_resource type="Script" path="res://scripts/world/HouseExitDoor.gd" id="1_exit"]
+[ext_resource type="PackedScene" path="res://assets/models/props/interior/floorFull.glb" id="2_floor"]
+[ext_resource type="PackedScene" path="res://assets/models/props/interior/wall.glb" id="3_wall"]
+[ext_resource type="PackedScene" path="res://assets/models/props/interior/wallDoorway.glb" id="4_wall_door"]
+[ext_resource type="PackedScene" path="res://assets/models/props/interior/bedSingle.glb" id="5_bed"]
+[ext_resource type="PackedScene" path="res://assets/models/props/interior/table.glb" id="6_table"]
+[ext_resource type="PackedScene" path="res://assets/models/props/interior/chair.glb" id="7_chair"]
+[ext_resource type="PackedScene" path="res://assets/models/props/interior/bookcaseOpen.glb" id="8_bookcase"]
+[ext_resource type="PackedScene" path="res://assets/models/props/interior/rugRectangle.glb" id="9_rug"]
+[ext_resource type="PackedScene" path="res://assets/models/props/interior/pottedPlant.glb" id="10_plant"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(10, 0.2, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_back"]
+size = Vector3(10, 3, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_side"]
+size = Vector3(0.4, 3, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_exit_trigger"]
+size = Vector3(2, 2, 1)
+
+[node name="HouseInterior" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 0, 0)
+
+[node name="FloorStatic" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloorStatic"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("BoxShape3D_floor")
+
+[node name="WallsStatic" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="WallNorth" type="CollisionShape3D" parent="WallsStatic"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -5)
+shape = SubResource("BoxShape3D_wall_back")
+
+[node name="WallSouthLeft" type="CollisionShape3D" parent="WallsStatic"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1.5, 5)
+shape = SubResource("BoxShape3D_wall_back")
+
+[node name="WallSouthRight" type="CollisionShape3D" parent="WallsStatic"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.5, 5)
+shape = SubResource("BoxShape3D_wall_back")
+
+[node name="WallWest" type="CollisionShape3D" parent="WallsStatic"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.5, 0)
+shape = SubResource("BoxShape3D_wall_side")
+
+[node name="WallEast" type="CollisionShape3D" parent="WallsStatic"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.5, 0)
+shape = SubResource("BoxShape3D_wall_side")
+
+[node name="FloorMesh" parent="." instance=ExtResource("2_floor")]
+transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0)
+
+[node name="Bed" parent="." instance=ExtResource("5_bed")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -3.2, 0, -3.5)
+
+[node name="Table" parent="." instance=ExtResource("6_table")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 2.5, 0, -2.5)
+
+[node name="Chair" parent="." instance=ExtResource("7_chair")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 2.5, 0, -1.2)
+
+[node name="Bookcase" parent="." instance=ExtResource("8_bookcase")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, -3.5, 0, 1.0)
+
+[node name="Rug" parent="." instance=ExtResource("9_rug")]
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0.01, -0.5)
+
+[node name="Plant" parent="." instance=ExtResource("10_plant")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 3.8, 0, 3.5)
+
+[node name="WarmLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+light_color = Color(1, 0.85, 0.55, 1)
+light_energy = 1.2
+omni_range = 8.0
+
+[node name="ExitDoor" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4.5)
+script = ExtResource("1_exit")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ExitDoor"]
+shape = SubResource("BoxShape3D_exit_trigger")

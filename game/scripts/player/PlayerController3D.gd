@@ -189,7 +189,13 @@ func _process_locomotion(delta: float) -> void:
 		input_vec = touch_input_vector
 
 	# Handle attack holding & charging
-	if Input.is_action_pressed("attack"):
+	var can_attack = game_state == null or game_state.capabilities.get("can_attack", true)
+	if can_attack and Input.is_action_just_pressed("attack") and current_state != State.ATTACK:
+		_start_attack()
+		attack_hold_time = 0.0
+		is_charged = false
+
+	if can_attack and Input.is_action_pressed("attack"):
 		attack_hold_time += delta
 		if attack_hold_time >= 0.35 and not is_charged:
 			is_charged = true
@@ -198,16 +204,14 @@ func _process_locomotion(delta: float) -> void:
 			_play_sfx("waypoint_activate")
 
 	if Input.is_action_just_released("attack"):
-		var cost = 12.0 if (game_state != null and game_state.has_stamina_ring()) else 25.0
-		if is_charged and current_stamina >= cost:
-			_start_spin_attack()
-		else:
-			_start_attack()
+		if is_charged:
+			var cost = 12.0 if (game_state != null and game_state.has_stamina_ring()) else 25.0
+			if current_stamina >= cost:
+				_start_spin_attack()
 		attack_hold_time = 0.0
 		is_charged = false
 		if charge_particles:
 			charge_particles.emitting = false
-		return
 
 	# Handle roll/dash with Stamina Ring perk
 	var can_dash = game_state != null and game_state.capabilities.can_dash
