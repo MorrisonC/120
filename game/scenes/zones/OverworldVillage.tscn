@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://scripts/world/NPC.gd" id="4_npc"]
 [ext_resource type="PackedScene" uid="uid://bydhco4cpm0na" path="res://assets/models/items/Sword.glb" id="5_sword_model"]
 [ext_resource type="PackedScene" uid="uid://xe2hmrdnvhcw" path="res://assets/models/items/Potion1_Filled.glb" id="6_potion_model"]
-[ext_resource type="PackedScene" uid="uid://e5m3v5mdrdyl" path="res://assets/models/characters/Farmer.glb" id="7_farmer_model"]
+[ext_resource type="PackedScene" uid="uid://cocd8am8digor" path="res://assets/models/characters/KnightCharacter.glb" id="7_farmer_model"]
 [ext_resource type="PackedScene" uid="uid://de6muynuvbe0p" path="res://assets/models/animals/ShibaInu.glb" id="8_dog_model"]
 [ext_resource type="PackedScene" path="res://assets/models/environment/village/Well.glb" id="9_well_model"]
 [ext_resource type="PackedScene" path="res://assets/models/environment/village/MarketStand_1.glb" id="10_market_model"]
