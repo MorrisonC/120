@@ -33,9 +33,11 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_update_positions)
 
 func _update_positions() -> void:
-	var viewport_size = get_viewport_rect().size
-	if viewport_size == Vector2.ZERO:
-		viewport_size = Vector2(1280, 720)
+	var viewport_size := Vector2(1280, 720)
+	if is_inside_tree():
+		var rect_size := get_viewport_rect().size
+		if rect_size != Vector2.ZERO:
+			viewport_size = rect_size
 
 	joystick_center = Vector2(viewport_size.x * 0.15, viewport_size.y * 0.78)
 	if not joystick_active:
@@ -60,7 +62,6 @@ func _handle_screen_touch(event: InputEventScreenTouch) -> void:
 		if not joystick_active and pos.distance_to(joystick_center) <= joystick_radius * 2.0:
 			joystick_active = true
 			joystick_touch_index = idx
-			joystick_center = pos
 			joystick_current_pos = pos
 			_update_joystick_vector()
 			queue_redraw()

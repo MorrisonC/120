@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://scripts/world/WaterPlane.gd" id="4_water"]
 [ext_resource type="Script" path="res://scripts/world/NPC.gd" id="5_npc"]
 [ext_resource type="PackedScene" path="res://assets/models/enemies/Frog.glb" id="6_frog"]
-[ext_resource type="PackedScene" uid="uid://c7t45yq8v8x3" path="res://assets/models/characters/Adventurer.glb" id="7_adventurer"]
+[ext_resource type="PackedScene" path="res://assets/models/characters/Adventurer.glb" id="7_adventurer"]
 [ext_resource type="PackedScene" uid="uid://xe2hmrdnvhcw" path="res://assets/models/items/Potion1_Filled.glb" id="8_potion_model"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/Tier2Enemy.tscn" id="9_tier2"]
 [ext_resource type="PackedScene" uid="uid://m1marshboss3d01" path="res://scenes/enemies/MarshBoss.tscn" id="10_boss"]

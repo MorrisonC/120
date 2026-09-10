@@ -18,6 +18,17 @@ var target_player: CharacterBody3D = null
 var is_enraged: bool = false
 var spawn_position: Vector3 = Vector3.ZERO
 
+var custom_game_state: Node = null
+var game_state: Node:
+	get:
+		if custom_game_state != null:
+			return custom_game_state
+		if not is_inside_tree():
+			return null
+		return get_node_or_null("/root/GameState")
+	set(value):
+		custom_game_state = value
+
 var is_vulnerable: bool:
 	get:
 		return current_state != State.BURROW and current_state != State.DEAD
@@ -332,7 +343,7 @@ func _on_hit_box_body_entered(body: Node3D) -> void:
 func _on_defeated() -> void:
 	collision_layer = 0
 	set_physics_process(false)
-	var gs = get_node_or_null("/root/GameState")
+	var gs = game_state
 	if gs and gs.has_method("clear_boss"):
 		gs.clear_boss(boss_id)
 

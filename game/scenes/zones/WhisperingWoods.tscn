@@ -10,11 +10,11 @@
 [ext_resource type="PackedScene" uid="uid://e1tier1enemy3d01" path="res://scenes/enemies/Tier1Enemy.tscn" id="8_enemy"]
 [ext_resource type="Script" path="res://scripts/world/BreakableProp3D.gd" id="9_prop"]
 [ext_resource type="Script" path="res://scripts/world/NPC.gd" id="10_npc"]
-[ext_resource type="PackedScene" uid="uid://c7t45yq8v8x3" path="res://assets/models/characters/Adventurer.glb" id="11_adventurer"]
+[ext_resource type="PackedScene" path="res://assets/models/characters/Adventurer.glb" id="11_adventurer"]
 [ext_resource type="PackedScene" uid="uid://xe2hmrdnvhcw" path="res://assets/models/items/Potion1_Filled.glb" id="12_potion_model"]
 [ext_resource type="PackedScene" path="res://assets/models/foliage/Tree_Pine.glb" id="13_tree_pine"]
 [ext_resource type="PackedScene" path="res://assets/models/world/Rock_Cluster.glb" id="14_rock_cluster"]
-[ext_resource type="PackedScene" uid="uid://bvsqk8v3vubw8" path="res://assets/models/village/Crate.glb" id="15_crate_model"]
+[ext_resource type="PackedScene" path="res://assets/models/village/Crate.glb" id="15_crate_model"]
 [ext_resource type="Script" path="res://scripts/world/ZoneTransitionArea3D.gd" id="16_transition"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_woods"]
