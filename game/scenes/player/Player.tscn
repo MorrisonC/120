@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b1player3dctrl01"]
 
 [ext_resource type="Script" path="res://scripts/player/PlayerController3D.gd" id="1_pc"]
-[ext_resource type="PackedScene" uid="uid://cocd8am8digor" path="res://assets/models/characters/KnightCharacter.glb" id="2_knight_model"]
+[ext_resource type="PackedScene" path="res://assets/models/characters/KnightCharacter.glb" id="2_knight_model"]
 [ext_resource type="PackedScene" uid="uid://dn0d2qedxox72" path="res://assets/models/vfx/SlashArc.glb" id="3_slash_arc"]
 [ext_resource type="PackedScene" uid="uid://sgok0plmavxv" path="res://assets/models/characters/CowboyHat.glb" id="4_cowboy_hat"]
 

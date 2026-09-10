@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://f1tier2enemy3d01"]
 
 [ext_resource type="Script" path="res://scripts/combat/Tier2ShieldEnemy.gd" id="1_shield_enemy"]
-[ext_resource type="PackedScene" uid="uid://cocd8am8digor" path="res://assets/models/characters/KnightCharacter.glb" id="2_knight_model"]
+[ext_resource type="PackedScene" path="res://assets/models/characters/KnightCharacter.glb" id="2_knight_model"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_col"]
 radius = 0.45

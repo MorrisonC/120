@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://d1waypoint3d01" path="res://scenes/world/WaypointShrine.tscn" id="2_waypoint"]
 [ext_resource type="Script" path="res://scripts/items/ItemPickup3D.gd" id="3_pickup"]
 [ext_resource type="Script" path="res://scripts/world/NPC.gd" id="4_npc"]
-[ext_resource type="PackedScene" uid="uid://c7t45yq8v8x3" path="res://assets/models/characters/Adventurer.glb" id="5_adventurer"]
+[ext_resource type="PackedScene" path="res://assets/models/characters/Adventurer.glb" id="5_adventurer"]
 [ext_resource type="PackedScene" uid="uid://xe2hmrdnvhcw" path="res://assets/models/items/Potion1_Filled.glb" id="6_potion"]
 [ext_resource type="PackedScene" uid="uid://e1tier1enemy3d01" path="res://scenes/enemies/Tier1Enemy.tscn" id="7_tier1"]
 [ext_resource type="PackedScene" uid="uid://q1quarryboss3d01" path="res://scenes/enemies/QuarryBoss.tscn" id="8_boss"]

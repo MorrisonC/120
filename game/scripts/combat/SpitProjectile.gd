@@ -1,7 +1,7 @@
 extends Area3D
 
 var velocity: Vector3 = Vector3.ZERO
-var gravity: float = 22.0
+var gravity_strength: float = 22.0
 var damage: int = 1
 var lifetime: float = 5.0
 
@@ -12,10 +12,10 @@ func _ready() -> void:
 
 func set_velocity(initial_vel: Vector3, grav: float = 22.0) -> void:
 	velocity = initial_vel
-	gravity = grav
+	gravity_strength = grav
 
 func _physics_process(delta: float) -> void:
-	velocity.y -= gravity * delta
+	velocity.y -= gravity_strength * delta
 	global_position += velocity * delta
 
 	lifetime -= delta
@@ -62,9 +62,9 @@ func _spawn_impact_vfx() -> void:
 	p.emission_sphere_radius = 0.2
 	p.initial_velocity_min = 1.5
 	p.initial_velocity_max = 4.0
-	p.global_position = global_position
 	get_parent().add_child(p)
-	var ptw = create_tween()
+	p.global_position = global_position
+	var ptw = p.create_tween()
 	if ptw:
 		ptw.tween_interval(0.4)
 		ptw.tween_callback(p.queue_free)
