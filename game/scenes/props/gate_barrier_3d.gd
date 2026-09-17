@@ -6,7 +6,7 @@ class_name GateBarrier3D
 @export var prompt_message: String = "Thick brambles block the way. Needs Machete."
 
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
-@onready var mesh_instance: MeshInstance3D = $MeshInstance3D
+@onready var mesh_instance: Node3D = $MeshInstance3D if has_node("MeshInstance3D") else ($GateModel if has_node("GateModel") else null)
 @onready var prompt_label_3d: Label3D = $Label3D
 
 func _ready() -> void:

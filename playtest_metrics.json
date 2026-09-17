@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-07T16:55:32.260Z",
+  "timestamp": "2026-09-17T14:16:43.378Z",
   "console_errors": [],
   "keyboard_inputs_sent": 10,
   "touch_inputs_sent": 4,
@@ -7,26 +7,26 @@
   "frame_evaluations": [
     {
       "frame": "initial_spawn",
-      "avg": 60.93431351273148,
-      "ratio": 0.4348958333333333,
-      "nonZero": 400800,
+      "avg": 60.89537217881944,
+      "ratio": 0.4347233072916667,
+      "nonZero": 400641,
       "isBlack": false
     },
     {
       "frame": "after_keyboard_nav",
-      "avg": 60.97975513599537,
-      "ratio": 0.43405164930555556,
-      "nonZero": 400022,
+      "avg": 61.067322410300925,
+      "ratio": 0.43487521701388887,
+      "nonZero": 400781,
       "isBlack": false
     },
     {
       "frame": "after_touch_inputs",
-      "avg": 61.10683195891204,
-      "ratio": 0.4355707465277778,
-      "nonZero": 401422,
+      "avg": 61.102741970486115,
+      "ratio": 0.4354839409722222,
+      "nonZero": 401342,
       "isBlack": false
     }
   ],
-  "session_duration_ms": 73673,
+  "session_duration_ms": 79080,
   "overall_status": "PASSED"
 }
