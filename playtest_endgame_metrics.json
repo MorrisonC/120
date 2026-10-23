@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-10-23T14:44:20.001Z",
+  "console_errors": [],
+  "screenshots": [
+    {
+      "name": "shot_1_start.png",
+      "avg": 60.93160300925926,
+      "ratio": 0.43477647569444444,
+      "nonZero": 400690,
+      "isBlack": false
+    },
+    {
+      "name": "shot_2_woods.png",
+      "avg": 62.77989836516204,
+      "ratio": 0.44200086805555555,
+      "nonZero": 407348,
+      "isBlack": false
+    },
+    {
+      "name": "shot_3_quarry_marsh.png",
+      "avg": 63.56530454282407,
+      "ratio": 0.45065104166666664,
+      "nonZero": 415320,
+      "isBlack": false
+    },
+    {
+      "name": "shot_4_frostpeak.png",
+      "avg": 65.06054289641203,
+      "ratio": 0.45598090277777775,
+      "nonZero": 420232,
+      "isBlack": false
+    },
+    {
+      "name": "shot_5_ashen_ruins.png",
+      "avg": 63.70416015625,
+      "ratio": 0.4507606336805556,
+      "nonZero": 415421,
+      "isBlack": false
+    },
+    {
+      "name": "shot_6_endgame.png",
+      "avg": 63.40843786168981,
+      "ratio": 0.44965928819444445,
+      "nonZero": 414406,
+      "isBlack": false
+    }
+  ],
+  "overall_status": "PASSED"
+}
