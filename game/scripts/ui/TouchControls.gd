@@ -147,19 +147,19 @@ func _draw() -> void:
 	draw_circle(joystick_current_pos, joystick_radius * 0.4, handle_col)
 
 	# Draw Attack Button
-	var atk_col = Color(0.9, 0.2, 0.2, 0.7) if attack_touch_index != -1 else Color(0.8, 0.2, 0.2, 0.4)
+	var atk_col = Color(0.9, 0.2, 0.2, 0.8) if attack_touch_index != -1 else Color(0.8, 0.2, 0.2, 0.5)
 	draw_circle(attack_btn_center, btn_radius, atk_col)
-	draw_arc(attack_btn_center, btn_radius, 0, TAU, 24, Color(1.0, 0.6, 0.6, 0.8), 2.0)
-	draw_string(ThemeDB.fallback_font, attack_btn_center + Vector2(-22, 6), "SWORD", HORIZONTAL_ALIGNMENT_CENTER, -1, 14, Color.WHITE)
+	draw_arc(attack_btn_center, btn_radius, 0, TAU, 24, Color(1.0, 0.7, 0.7, 0.9), 2.5)
+	draw_string(ThemeDB.fallback_font, attack_btn_center + Vector2(-22, 5), "SWORD", HORIZONTAL_ALIGNMENT_CENTER, -1, 14, Color.WHITE)
 
 	# Draw Roll / Dash Button
-	var roll_col = Color(0.2, 0.7, 0.9, 0.7) if roll_touch_index != -1 else Color(0.2, 0.6, 0.8, 0.4)
+	var roll_col = Color(0.2, 0.7, 0.9, 0.8) if roll_touch_index != -1 else Color(0.2, 0.6, 0.8, 0.5)
 	draw_circle(roll_btn_center, btn_radius * 0.85, roll_col)
-	draw_arc(roll_btn_center, btn_radius * 0.85, 0, TAU, 24, Color(0.6, 0.9, 1.0, 0.8), 2.0)
+	draw_arc(roll_btn_center, btn_radius * 0.85, 0, TAU, 24, Color(0.7, 0.95, 1.0, 0.9), 2.5)
 	draw_string(ThemeDB.fallback_font, roll_btn_center + Vector2(-16, 5), "DASH", HORIZONTAL_ALIGNMENT_CENTER, -1, 12, Color.WHITE)
 
 	# Draw Interact Button
-	var int_col = Color(0.9, 0.7, 0.2, 0.7) if interact_touch_index != -1 else Color(0.8, 0.6, 0.2, 0.4)
+	var int_col = Color(0.9, 0.7, 0.2, 0.8) if interact_touch_index != -1 else Color(0.8, 0.6, 0.2, 0.5)
 	draw_circle(interact_btn_center, btn_radius * 0.85, int_col)
-	draw_arc(interact_btn_center, btn_radius * 0.85, 0, TAU, 24, Color(1.0, 0.9, 0.6, 0.8), 2.0)
+	draw_arc(interact_btn_center, btn_radius * 0.85, 0, TAU, 24, Color(1.0, 0.95, 0.7, 0.9), 2.5)
 	draw_string(ThemeDB.fallback_font, interact_btn_center + Vector2(-26, 5), "INTERACT", HORIZONTAL_ALIGNMENT_CENTER, -1, 11, Color.WHITE)
